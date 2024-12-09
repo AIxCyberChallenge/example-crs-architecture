@@ -1,0 +1,2270 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Mock Scantron",
+    "contact": {},
+    "version": "1.0"
+  },
+  "paths": {
+    "/v1/task/{task_id}/patch/": {
+      "post": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "description": "submit a patch for testing",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["patch"],
+        "summary": "Submit Patch",
+        "parameters": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "description": "Task ID",
+            "name": "task_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Payload",
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/types.PatchSubmission"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/types.PatchSubmissionResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/task/{task_id}/patch/{patch_id}": {
+      "get": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "description": "yield the status of patch testing",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["patch"],
+        "summary": "Patch Status",
+        "parameters": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "description": "Task ID",
+            "name": "task_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "format": "uuid",
+            "description": "Patch ID",
+            "name": "patch_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/types.PatchSubmissionResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/task/{task_id}/sarif/{sarif_id}": {
+      "post": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "description": "submit a sarif assessment",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["sarif"],
+        "summary": "Submit Sarif Assessment",
+        "parameters": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "description": "Task ID",
+            "name": "task_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "format": "uuid",
+            "description": "SARIF ID",
+            "name": "sarif_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Submission body",
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/types.SarifAssessmentSubmission"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/types.SarifAssessmentResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/task/{task_id}/vuln/": {
+      "post": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "description": "submit a vulnerability for testing",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["vulnerability"],
+        "summary": "Submit Vulnerability",
+        "parameters": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "description": "Task ID",
+            "name": "task_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Submission body",
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/types.VulnSubmission"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/types.VulnSubmissionResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/task/{task_id}/vuln/{vuln_id}": {
+      "get": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "description": "yield the status of vuln testing",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["vulnerability"],
+        "summary": "Vulnerability Status",
+        "parameters": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "description": "Task ID",
+            "name": "task_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "format": "uuid",
+            "description": "Vuln ID",
+            "name": "vuln_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/types.VulnSubmissionResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "sarif.Address": {
+      "type": "object",
+      "properties": {
+        "absoluteAddress": {
+          "type": "integer"
+        },
+        "fullyQualifiedName": {
+          "type": "string"
+        },
+        "index": {
+          "type": "integer"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "length": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "offsetFromParent": {
+          "type": "integer"
+        },
+        "parentIndex": {
+          "type": "integer"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "relativeAddress": {
+          "type": "integer"
+        }
+      }
+    },
+    "sarif.Artifact": {
+      "type": "object",
+      "properties": {
+        "contents": {
+          "$ref": "#/definitions/sarif.ArtifactContent"
+        },
+        "description": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "encoding": {
+          "type": "string"
+        },
+        "hashes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "lastModifiedTimeUtc": {
+          "type": "string"
+        },
+        "length": {
+          "type": "integer"
+        },
+        "location": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        },
+        "mimeType": {
+          "type": "string"
+        },
+        "offset": {
+          "type": "integer"
+        },
+        "parentIndex": {
+          "type": "integer"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceLanguage": {
+          "type": "string"
+        }
+      }
+    },
+    "sarif.ArtifactChange": {
+      "type": "object",
+      "properties": {
+        "artifactLocation": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "replacements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Replacement"
+          }
+        }
+      }
+    },
+    "sarif.ArtifactContent": {
+      "type": "object",
+      "properties": {
+        "binary": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "rendered": {
+          "$ref": "#/definitions/sarif.MultiformatMessageString"
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "sarif.ArtifactLocation": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "index": {
+          "type": "integer"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "uriBaseId": {
+          "type": "string"
+        }
+      }
+    },
+    "sarif.Attachment": {
+      "type": "object",
+      "properties": {
+        "artifactLocation": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        },
+        "description": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "rectangles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Rectangle"
+          }
+        }
+      }
+    },
+    "sarif.CodeFlow": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "threadFlows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ThreadFlow"
+          }
+        }
+      }
+    },
+    "sarif.ConfigurationOverride": {
+      "type": "object",
+      "properties": {
+        "configuration": {
+          "$ref": "#/definitions/sarif.ReportingConfiguration"
+        },
+        "descriptor": {
+          "$ref": "#/definitions/sarif.ReportingDescriptorReference"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.Conversion": {
+      "type": "object",
+      "properties": {
+        "analysisToolLogFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ArtifactLocation"
+          }
+        },
+        "invocation": {
+          "$ref": "#/definitions/sarif.Invocation"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "tool": {
+          "$ref": "#/definitions/sarif.Tool"
+        }
+      }
+    },
+    "sarif.Edge": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "sourceNodeId": {
+          "type": "string"
+        },
+        "targetNodeId": {
+          "type": "string"
+        }
+      }
+    },
+    "sarif.EdgeTraversal": {
+      "type": "object",
+      "properties": {
+        "edgeId": {
+          "type": "string"
+        },
+        "finalState": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/sarif.MultiformatMessageString"
+          }
+        },
+        "message": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "stepOverEdgeCount": {
+          "type": "integer"
+        }
+      }
+    },
+    "sarif.Exception": {
+      "type": "object",
+      "properties": {
+        "innerExceptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Exception"
+          }
+        },
+        "kind": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "stack": {
+          "$ref": "#/definitions/sarif.Stack"
+        }
+      }
+    },
+    "sarif.ExternalProperties": {
+      "type": "object",
+      "properties": {
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Address"
+          }
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Artifact"
+          }
+        },
+        "conversion": {
+          "$ref": "#/definitions/sarif.Conversion"
+        },
+        "driver": {
+          "$ref": "#/definitions/sarif.ToolComponent"
+        },
+        "extensions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ToolComponent"
+          }
+        },
+        "externalizedProperties": {
+          "$ref": "#/definitions/sarif.PropertyBag"
+        },
+        "graphs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Graph"
+          }
+        },
+        "guid": {
+          "type": "string"
+        },
+        "invocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Invocation"
+          }
+        },
+        "logicalLocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.LogicalLocation"
+          }
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ToolComponent"
+          }
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Result"
+          }
+        },
+        "runGuid": {
+          "type": "string"
+        },
+        "schema": {
+          "type": "string"
+        },
+        "taxonomies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ToolComponent"
+          }
+        },
+        "threadFlowLocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ThreadFlowLocation"
+          }
+        },
+        "translations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ToolComponent"
+          }
+        },
+        "version": {
+          "type": "string"
+        },
+        "webRequests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.WebRequest"
+          }
+        },
+        "webResponses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.WebResponse"
+          }
+        }
+      }
+    },
+    "sarif.ExternalPropertyFileReference": {
+      "type": "object",
+      "properties": {
+        "guid": {
+          "type": "string"
+        },
+        "itemCount": {
+          "type": "integer"
+        },
+        "location": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.ExternalPropertyFileReferences": {
+      "type": "object",
+      "properties": {
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+          }
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+          }
+        },
+        "conversion": {
+          "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+        },
+        "driver": {
+          "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+        },
+        "extensions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+          }
+        },
+        "externalizedProperties": {
+          "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+        },
+        "graphs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+          }
+        },
+        "invocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+          }
+        },
+        "logicalLocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+          }
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+          }
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+          }
+        },
+        "taxonomies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+          }
+        },
+        "threadFlowLocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+          }
+        },
+        "translations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+          }
+        },
+        "webRequests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+          }
+        },
+        "webResponses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalPropertyFileReference"
+          }
+        }
+      }
+    },
+    "sarif.Fix": {
+      "type": "object",
+      "properties": {
+        "artifactChanges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ArtifactChange"
+          }
+        },
+        "description": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.Graph": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Edge"
+          }
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Node"
+          }
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.GraphTraversal": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "edgeTraversals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.EdgeTraversal"
+          }
+        },
+        "immutableState": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/sarif.MultiformatMessageString"
+          }
+        },
+        "initialState": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/sarif.MultiformatMessageString"
+          }
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "resultGraphIndex": {
+          "type": "integer"
+        },
+        "runGraphIndex": {
+          "type": "integer"
+        }
+      }
+    },
+    "sarif.Invocation": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "string"
+        },
+        "arguments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "commandLine": {
+          "type": "string"
+        },
+        "endTimeUtc": {
+          "type": "string"
+        },
+        "environmentVariables": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "executableLocation": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        },
+        "executionSuccessful": {
+          "type": "boolean"
+        },
+        "exitCode": {
+          "type": "integer"
+        },
+        "exitCodeDescription": {
+          "type": "string"
+        },
+        "exitSignalName": {
+          "type": "string"
+        },
+        "exitSignalNumber": {
+          "type": "integer"
+        },
+        "machine": {
+          "type": "string"
+        },
+        "notificationConfigurationOverrides": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ConfigurationOverride"
+          }
+        },
+        "processId": {
+          "type": "integer"
+        },
+        "processStartFailureMessage": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "responseFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ArtifactLocation"
+          }
+        },
+        "ruleConfigurationOverrides": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ConfigurationOverride"
+          }
+        },
+        "startTimeUtc": {
+          "type": "string"
+        },
+        "stderr": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        },
+        "stdin": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        },
+        "stdout": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        },
+        "stdoutStderr": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        },
+        "toolConfigurationNotifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Notification"
+          }
+        },
+        "toolExecutionNotifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Notification"
+          }
+        },
+        "workingDirectory": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        }
+      }
+    },
+    "sarif.Location": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Region"
+          }
+        },
+        "id": {
+          "type": "integer"
+        },
+        "logicalLocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.LogicalLocation"
+          }
+        },
+        "message": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "physicalLocation": {
+          "$ref": "#/definitions/sarif.PhysicalLocation"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.LocationRelationship"
+          }
+        }
+      }
+    },
+    "sarif.LocationRelationship": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "kinds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "target": {
+          "type": "integer"
+        }
+      }
+    },
+    "sarif.LogicalLocation": {
+      "type": "object",
+      "properties": {
+        "decoratedName": {
+          "type": "string"
+        },
+        "fullyQualifiedName": {
+          "type": "string"
+        },
+        "index": {
+          "type": "integer"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parentIndex": {
+          "type": "integer"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.Message": {
+      "type": "object",
+      "properties": {
+        "arguments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "id": {
+          "type": "string"
+        },
+        "markdown": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "sarif.MessageStrings": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/sarif.MultiformatMessageString"
+      }
+    },
+    "sarif.MultiformatMessageString": {
+      "type": "object",
+      "properties": {
+        "markdown": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "sarif.Node": {
+      "type": "object",
+      "properties": {
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Node"
+          }
+        },
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "location": {
+          "$ref": "#/definitions/sarif.Location"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.Notification": {
+      "type": "object",
+      "properties": {
+        "associatedRule": {
+          "$ref": "#/definitions/sarif.ReportingDescriptorReference"
+        },
+        "descriptor": {
+          "$ref": "#/definitions/sarif.ReportingDescriptorReference"
+        },
+        "exception": {
+          "$ref": "#/definitions/sarif.Exception"
+        },
+        "level": {
+          "type": "string"
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Location"
+          }
+        },
+        "message": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "threadId": {
+          "type": "integer"
+        },
+        "timeUtc": {
+          "type": "string"
+        }
+      }
+    },
+    "sarif.PhysicalLocation": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "$ref": "#/definitions/sarif.Address"
+        },
+        "artifactLocation": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        },
+        "contextRegion": {
+          "$ref": "#/definitions/sarif.Region"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "region": {
+          "$ref": "#/definitions/sarif.Region"
+        }
+      }
+    },
+    "sarif.Properties": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "sarif.PropertyBag": {
+      "type": "object",
+      "properties": {
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.Rectangle": {
+      "type": "object",
+      "properties": {
+        "bottom": {
+          "type": "number"
+        },
+        "left": {
+          "type": "number"
+        },
+        "message": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "right": {
+          "type": "number"
+        },
+        "top": {
+          "type": "number"
+        }
+      }
+    },
+    "sarif.Region": {
+      "type": "object",
+      "properties": {
+        "byteLength": {
+          "type": "integer"
+        },
+        "byteOffset": {
+          "type": "integer"
+        },
+        "charLength": {
+          "type": "integer"
+        },
+        "charOffset": {
+          "type": "integer"
+        },
+        "endColumn": {
+          "type": "integer"
+        },
+        "endLine": {
+          "type": "integer"
+        },
+        "message": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "snippet": {
+          "$ref": "#/definitions/sarif.ArtifactContent"
+        },
+        "sourceLanguage": {
+          "type": "string"
+        },
+        "startColumn": {
+          "type": "integer"
+        },
+        "startLine": {
+          "type": "integer"
+        }
+      }
+    },
+    "sarif.Replacement": {
+      "type": "object",
+      "properties": {
+        "deletedRegion": {
+          "$ref": "#/definitions/sarif.Region"
+        },
+        "insertedContent": {
+          "$ref": "#/definitions/sarif.ArtifactContent"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.Report": {
+      "type": "object",
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "inlineExternalProperties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ExternalProperties"
+          }
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "runs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Run"
+          }
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "sarif.ReportingConfiguration": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "level": {
+          "type": "string"
+        },
+        "parameters": {
+          "$ref": "#/definitions/sarif.PropertyBag"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "rank": {
+          "type": "number"
+        }
+      }
+    },
+    "sarif.ReportingDescriptor": {
+      "type": "object",
+      "properties": {
+        "defaultConfiguration": {
+          "$ref": "#/definitions/sarif.ReportingConfiguration"
+        },
+        "deprecatedGuids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "deprecatedIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "deprecatedNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fullDescription": {
+          "$ref": "#/definitions/sarif.MultiformatMessageString"
+        },
+        "help": {
+          "$ref": "#/definitions/sarif.MultiformatMessageString"
+        },
+        "helpUri": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "messageStrings": {
+          "$ref": "#/definitions/sarif.MessageStrings"
+        },
+        "name": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "shortDescription": {
+          "$ref": "#/definitions/sarif.MultiformatMessageString"
+        }
+      }
+    },
+    "sarif.ReportingDescriptorReference": {
+      "type": "object",
+      "properties": {
+        "guid": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "index": {
+          "type": "integer"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "toolComponent": {
+          "$ref": "#/definitions/sarif.ToolComponentReference"
+        }
+      }
+    },
+    "sarif.Result": {
+      "type": "object",
+      "properties": {
+        "analysisTarget": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Attachment"
+          }
+        },
+        "baselineState": {
+          "type": "string"
+        },
+        "codeFlows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.CodeFlow"
+          }
+        },
+        "correlationGuid": {
+          "type": "string"
+        },
+        "fingerprints": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "fixes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Fix"
+          }
+        },
+        "graphTraversals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.GraphTraversal"
+          }
+        },
+        "graphs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Graph"
+          }
+        },
+        "guid": {
+          "type": "string"
+        },
+        "hostedViewerUri": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string"
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Location"
+          }
+        },
+        "message": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "occurrenceCount": {
+          "type": "integer"
+        },
+        "partialFingerprints": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "provenance": {
+          "$ref": "#/definitions/sarif.ResultProvenance"
+        },
+        "rank": {
+          "type": "number"
+        },
+        "relatedLocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Location"
+          }
+        },
+        "rule": {
+          "$ref": "#/definitions/sarif.ReportingDescriptorReference"
+        },
+        "ruleId": {
+          "type": "string"
+        },
+        "ruleIndex": {
+          "type": "integer"
+        },
+        "stacks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Stack"
+          }
+        },
+        "suppressions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Suppression"
+          }
+        },
+        "taxa": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ReportingDescriptorReference"
+          }
+        },
+        "webRequest": {
+          "$ref": "#/definitions/sarif.WebRequest"
+        },
+        "webResponse": {
+          "$ref": "#/definitions/sarif.WebResponse"
+        },
+        "workItemUris": {
+          "description": "can be null",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "sarif.ResultProvenance": {
+      "type": "object",
+      "properties": {
+        "conversionSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.PhysicalLocation"
+          }
+        },
+        "firstDetectionRunGuid": {
+          "type": "string"
+        },
+        "firstDetectionTimeUtc": {
+          "type": "string"
+        },
+        "invocationIndex": {
+          "type": "integer"
+        },
+        "lastDetectionRunGuid": {
+          "type": "string"
+        },
+        "lastDetectionTimeUtc": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.Run": {
+      "type": "object",
+      "properties": {
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Address"
+          }
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Artifact"
+          }
+        },
+        "automationDetails": {
+          "$ref": "#/definitions/sarif.RunAutomationDetails"
+        },
+        "baselineGuid": {
+          "type": "string"
+        },
+        "columnKind": {},
+        "conversion": {
+          "$ref": "#/definitions/sarif.Conversion"
+        },
+        "defaultEncoding": {
+          "type": "string"
+        },
+        "defaultSourceLanguage": {
+          "type": "string"
+        },
+        "externalPropertyFileReferences": {
+          "$ref": "#/definitions/sarif.ExternalPropertyFileReferences"
+        },
+        "graphs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Graph"
+          }
+        },
+        "invocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Invocation"
+          }
+        },
+        "language": {
+          "type": "string"
+        },
+        "logicalLocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.LogicalLocation"
+          }
+        },
+        "newlineSequences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "originalUriBaseIds": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/sarif.ArtifactLocation"
+          }
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ToolComponent"
+          }
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "redactionTokens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.Result"
+          }
+        },
+        "runAggregates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.RunAutomationDetails"
+          }
+        },
+        "specialLocations": {
+          "$ref": "#/definitions/sarif.SpecialLocations"
+        },
+        "taxonomies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ToolComponent"
+          }
+        },
+        "threadFlowLocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ThreadFlowLocation"
+          }
+        },
+        "tool": {
+          "$ref": "#/definitions/sarif.Tool"
+        },
+        "translations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ToolComponent"
+          }
+        },
+        "versionControlProvenance": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.VersionControlDetails"
+          }
+        },
+        "webRequests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.WebRequest"
+          }
+        },
+        "webResponses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.WebResponse"
+          }
+        }
+      }
+    },
+    "sarif.RunAutomationDetails": {
+      "type": "object",
+      "properties": {
+        "correlationGuid": {
+          "type": "string"
+        },
+        "description": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "guid": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.SpecialLocations": {
+      "type": "object",
+      "properties": {
+        "displayBase": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.Stack": {
+      "type": "object",
+      "properties": {
+        "frames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.StackFrame"
+          }
+        },
+        "message": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.StackFrame": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "$ref": "#/definitions/sarif.Location"
+        },
+        "module": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "threadId": {
+          "type": "integer"
+        }
+      }
+    },
+    "sarif.Suppression": {
+      "type": "object",
+      "properties": {
+        "guid": {
+          "type": "string"
+        },
+        "justification": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "location": {
+          "$ref": "#/definitions/sarif.Location"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "sarif.ThreadFlow": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "immutableState": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/sarif.MultiformatMessageString"
+          }
+        },
+        "initialState": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/sarif.MultiformatMessageString"
+          }
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ThreadFlowLocation"
+          }
+        },
+        "message": {
+          "$ref": "#/definitions/sarif.Message"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.ThreadFlowLocation": {
+      "type": "object",
+      "properties": {
+        "executionOrder": {
+          "type": "integer"
+        },
+        "executionTimeUtc": {
+          "type": "string"
+        },
+        "importance": {},
+        "index": {
+          "type": "integer"
+        },
+        "kinds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "location": {
+          "$ref": "#/definitions/sarif.Location"
+        },
+        "module": {
+          "type": "string"
+        },
+        "nestingLevel": {
+          "type": "integer"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "stack": {
+          "$ref": "#/definitions/sarif.Stack"
+        },
+        "state": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/sarif.MultiformatMessageString"
+          }
+        },
+        "taxa": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ReportingDescriptorReference"
+          }
+        },
+        "webRequest": {
+          "$ref": "#/definitions/sarif.WebRequest"
+        },
+        "webResponse": {
+          "$ref": "#/definitions/sarif.WebResponse"
+        }
+      }
+    },
+    "sarif.Tool": {
+      "type": "object",
+      "properties": {
+        "driver": {
+          "$ref": "#/definitions/sarif.ToolComponent"
+        },
+        "extensions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ToolComponent"
+          }
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.ToolComponent": {
+      "type": "object",
+      "properties": {
+        "associatedComponent": {
+          "$ref": "#/definitions/sarif.ToolComponentReference"
+        },
+        "contents": {
+          "type": "array",
+          "items": {}
+        },
+        "dottedQuadFileVersion": {
+          "type": "string"
+        },
+        "downloadUri": {
+          "type": "string"
+        },
+        "fullDescription": {
+          "$ref": "#/definitions/sarif.MultiformatMessageString"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "globalMessageStrings": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/sarif.MultiformatMessageString"
+          }
+        },
+        "guid": {
+          "type": "string"
+        },
+        "informationUri": {
+          "type": "string"
+        },
+        "isComprehensive": {
+          "type": "boolean"
+        },
+        "language": {
+          "type": "string"
+        },
+        "localizedDataSemanticVersion": {
+          "type": "string"
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ArtifactLocation"
+          }
+        },
+        "minimumRequiredLocalizedDataSemanticVersion": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "notifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ReportingDescriptor"
+          }
+        },
+        "organization": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string"
+        },
+        "productSuite": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "releaseDateUtc": {
+          "type": "string"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ReportingDescriptor"
+          }
+        },
+        "semanticVersion": {
+          "type": "string"
+        },
+        "shortDescription": {
+          "$ref": "#/definitions/sarif.MultiformatMessageString"
+        },
+        "supportedTaxonomies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ToolComponentReference"
+          }
+        },
+        "taxa": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sarif.ReportingDescriptor"
+          }
+        },
+        "translationMetadata": {
+          "description": "The tool component version, in whatever format the component natively provides.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/sarif.TranslationMetadata"
+            }
+          ]
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "sarif.ToolComponentReference": {
+      "type": "object",
+      "properties": {
+        "guid": {
+          "type": "string"
+        },
+        "index": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        }
+      }
+    },
+    "sarif.TranslationMetadata": {
+      "type": "object",
+      "properties": {
+        "downloadUri": {
+          "type": "string"
+        },
+        "fullDescription": {
+          "$ref": "#/definitions/sarif.MultiformatMessageString"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "informationUri": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "shortDescription": {
+          "$ref": "#/definitions/sarif.MultiformatMessageString"
+        }
+      }
+    },
+    "sarif.VersionControlDetails": {
+      "type": "object",
+      "properties": {
+        "asOfTimeUtc": {
+          "type": "string"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "mappedTo": {
+          "$ref": "#/definitions/sarif.ArtifactLocation"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "repositoryUri": {
+          "type": "string"
+        },
+        "revisionId": {
+          "type": "string"
+        },
+        "revisionTag": {
+          "type": "string"
+        }
+      }
+    },
+    "sarif.WebRequest": {
+      "type": "object",
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/sarif.ArtifactContent"
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "index": {
+          "type": "integer"
+        },
+        "method": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "sarif.WebResponse": {
+      "type": "object",
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/sarif.ArtifactContent"
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "index": {
+          "type": "integer"
+        },
+        "noResponseReceived": {
+          "type": "boolean"
+        },
+        "properties": {
+          "$ref": "#/definitions/sarif.Properties"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "reasonPhrase": {
+          "type": "string"
+        },
+        "statusCode": {
+          "type": "integer"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "types.Error": {
+      "type": "object",
+      "required": ["message"],
+      "properties": {
+        "fields": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "types.PatchSubmission": {
+      "type": "object",
+      "required": ["patch", "vuln_id"],
+      "properties": {
+        "description": {
+          "description": "Optional plain text string describing the vulnerability",
+          "type": "string"
+        },
+        "patch": {
+          "description": "100kb Max Size",
+          "type": "string",
+          "format": "base64"
+        },
+        "vuln_id": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "types.PatchSubmissionResponse": {
+      "type": "object",
+      "required": ["patch_id", "status"],
+      "properties": {
+        "patch_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "accepted",
+            "invalid",
+            "passed",
+            "failed",
+            "deadline_exceeded"
+          ]
+        }
+      }
+    },
+    "types.SarifAssessmentResponse": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["accepted"]
+        }
+      }
+    },
+    "types.SarifAssessmentSubmission": {
+      "type": "object",
+      "required": ["assessment", "description"],
+      "properties": {
+        "assessment": {
+          "type": "string",
+          "enum": ["valid", "invalid"]
+        },
+        "description": {
+          "description": "Plain text reasoning for the assesment",
+          "type": "string"
+        }
+      }
+    },
+    "types.VulnSubmission": {
+      "type": "object",
+      "required": ["architecture", "data_file", "harness_name", "sanitizer"],
+      "properties": {
+        "architecture": {
+          "type": "string"
+        },
+        "data_file": {
+          "description": "2mb max size",
+          "type": "string"
+        },
+        "harness_name": {
+          "type": "string"
+        },
+        "sanitizer": {
+          "type": "string"
+        },
+        "sarif": {
+          "$ref": "#/definitions/sarif.Report"
+        }
+      }
+    },
+    "types.VulnSubmissionResponse": {
+      "type": "object",
+      "required": ["status", "vuln_id"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "accepted",
+            "invalid",
+            "passed",
+            "failed",
+            "deadline_exceeded"
+          ]
+        },
+        "vuln_id": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "BasicAuth": {
+      "type": "basic"
+    }
+  }
+}

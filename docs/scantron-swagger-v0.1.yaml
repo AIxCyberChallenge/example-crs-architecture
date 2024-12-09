@@ -1,0 +1,1536 @@
+definitions:
+  sarif.Address:
+    properties:
+      absoluteAddress:
+        type: integer
+      fullyQualifiedName:
+        type: string
+      index:
+        type: integer
+      kind:
+        type: string
+      length:
+        type: integer
+      name:
+        type: string
+      offsetFromParent:
+        type: integer
+      parentIndex:
+        type: integer
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      relativeAddress:
+        type: integer
+    type: object
+  sarif.Artifact:
+    properties:
+      contents:
+        $ref: "#/definitions/sarif.ArtifactContent"
+      description:
+        $ref: "#/definitions/sarif.Message"
+      encoding:
+        type: string
+      hashes:
+        additionalProperties:
+          type: string
+        type: object
+      lastModifiedTimeUtc:
+        type: string
+      length:
+        type: integer
+      location:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+      mimeType:
+        type: string
+      offset:
+        type: integer
+      parentIndex:
+        type: integer
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      roles:
+        items:
+          type: string
+        type: array
+      sourceLanguage:
+        type: string
+    type: object
+  sarif.ArtifactChange:
+    properties:
+      artifactLocation:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      replacements:
+        items:
+          $ref: "#/definitions/sarif.Replacement"
+        type: array
+    type: object
+  sarif.ArtifactContent:
+    properties:
+      binary:
+        type: string
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      rendered:
+        $ref: "#/definitions/sarif.MultiformatMessageString"
+      text:
+        type: string
+    type: object
+  sarif.ArtifactLocation:
+    properties:
+      description:
+        $ref: "#/definitions/sarif.Message"
+      index:
+        type: integer
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      uri:
+        type: string
+      uriBaseId:
+        type: string
+    type: object
+  sarif.Attachment:
+    properties:
+      artifactLocation:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+      description:
+        $ref: "#/definitions/sarif.Message"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      rectangles:
+        items:
+          $ref: "#/definitions/sarif.Rectangle"
+        type: array
+    type: object
+  sarif.CodeFlow:
+    properties:
+      message:
+        $ref: "#/definitions/sarif.Message"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      threadFlows:
+        items:
+          $ref: "#/definitions/sarif.ThreadFlow"
+        type: array
+    type: object
+  sarif.ConfigurationOverride:
+    properties:
+      configuration:
+        $ref: "#/definitions/sarif.ReportingConfiguration"
+      descriptor:
+        $ref: "#/definitions/sarif.ReportingDescriptorReference"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.Conversion:
+    properties:
+      analysisToolLogFiles:
+        items:
+          $ref: "#/definitions/sarif.ArtifactLocation"
+        type: array
+      invocation:
+        $ref: "#/definitions/sarif.Invocation"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      tool:
+        $ref: "#/definitions/sarif.Tool"
+    type: object
+  sarif.Edge:
+    properties:
+      id:
+        type: string
+      label:
+        $ref: "#/definitions/sarif.Message"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      sourceNodeId:
+        type: string
+      targetNodeId:
+        type: string
+    type: object
+  sarif.EdgeTraversal:
+    properties:
+      edgeId:
+        type: string
+      finalState:
+        additionalProperties:
+          $ref: "#/definitions/sarif.MultiformatMessageString"
+        type: object
+      message:
+        $ref: "#/definitions/sarif.Message"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      stepOverEdgeCount:
+        type: integer
+    type: object
+  sarif.Exception:
+    properties:
+      innerExceptions:
+        items:
+          $ref: "#/definitions/sarif.Exception"
+        type: array
+      kind:
+        type: string
+      message:
+        type: string
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      stack:
+        $ref: "#/definitions/sarif.Stack"
+    type: object
+  sarif.ExternalProperties:
+    properties:
+      addresses:
+        items:
+          $ref: "#/definitions/sarif.Address"
+        type: array
+      artifacts:
+        items:
+          $ref: "#/definitions/sarif.Artifact"
+        type: array
+      conversion:
+        $ref: "#/definitions/sarif.Conversion"
+      driver:
+        $ref: "#/definitions/sarif.ToolComponent"
+      extensions:
+        items:
+          $ref: "#/definitions/sarif.ToolComponent"
+        type: array
+      externalizedProperties:
+        $ref: "#/definitions/sarif.PropertyBag"
+      graphs:
+        items:
+          $ref: "#/definitions/sarif.Graph"
+        type: array
+      guid:
+        type: string
+      invocations:
+        items:
+          $ref: "#/definitions/sarif.Invocation"
+        type: array
+      logicalLocations:
+        items:
+          $ref: "#/definitions/sarif.LogicalLocation"
+        type: array
+      policies:
+        items:
+          $ref: "#/definitions/sarif.ToolComponent"
+        type: array
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      results:
+        items:
+          $ref: "#/definitions/sarif.Result"
+        type: array
+      runGuid:
+        type: string
+      schema:
+        type: string
+      taxonomies:
+        items:
+          $ref: "#/definitions/sarif.ToolComponent"
+        type: array
+      threadFlowLocations:
+        items:
+          $ref: "#/definitions/sarif.ThreadFlowLocation"
+        type: array
+      translations:
+        items:
+          $ref: "#/definitions/sarif.ToolComponent"
+        type: array
+      version:
+        type: string
+      webRequests:
+        items:
+          $ref: "#/definitions/sarif.WebRequest"
+        type: array
+      webResponses:
+        items:
+          $ref: "#/definitions/sarif.WebResponse"
+        type: array
+    type: object
+  sarif.ExternalPropertyFileReference:
+    properties:
+      guid:
+        type: string
+      itemCount:
+        type: integer
+      location:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.ExternalPropertyFileReferences:
+    properties:
+      addresses:
+        items:
+          $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+        type: array
+      artifacts:
+        items:
+          $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+        type: array
+      conversion:
+        $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+      driver:
+        $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+      extensions:
+        items:
+          $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+        type: array
+      externalizedProperties:
+        $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+      graphs:
+        items:
+          $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+        type: array
+      invocations:
+        items:
+          $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+        type: array
+      logicalLocations:
+        items:
+          $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+        type: array
+      policies:
+        items:
+          $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+        type: array
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      results:
+        items:
+          $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+        type: array
+      taxonomies:
+        items:
+          $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+        type: array
+      threadFlowLocations:
+        items:
+          $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+        type: array
+      translations:
+        items:
+          $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+        type: array
+      webRequests:
+        items:
+          $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+        type: array
+      webResponses:
+        items:
+          $ref: "#/definitions/sarif.ExternalPropertyFileReference"
+        type: array
+    type: object
+  sarif.Fix:
+    properties:
+      artifactChanges:
+        items:
+          $ref: "#/definitions/sarif.ArtifactChange"
+        type: array
+      description:
+        $ref: "#/definitions/sarif.Message"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.Graph:
+    properties:
+      description:
+        $ref: "#/definitions/sarif.Message"
+      edges:
+        items:
+          $ref: "#/definitions/sarif.Edge"
+        type: array
+      nodes:
+        items:
+          $ref: "#/definitions/sarif.Node"
+        type: array
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.GraphTraversal:
+    properties:
+      description:
+        $ref: "#/definitions/sarif.Message"
+      edgeTraversals:
+        items:
+          $ref: "#/definitions/sarif.EdgeTraversal"
+        type: array
+      immutableState:
+        additionalProperties:
+          $ref: "#/definitions/sarif.MultiformatMessageString"
+        type: object
+      initialState:
+        additionalProperties:
+          $ref: "#/definitions/sarif.MultiformatMessageString"
+        type: object
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      resultGraphIndex:
+        type: integer
+      runGraphIndex:
+        type: integer
+    type: object
+  sarif.Invocation:
+    properties:
+      account:
+        type: string
+      arguments:
+        items:
+          type: string
+        type: array
+      commandLine:
+        type: string
+      endTimeUtc:
+        type: string
+      environmentVariables:
+        additionalProperties:
+          type: string
+        type: object
+      executableLocation:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+      executionSuccessful:
+        type: boolean
+      exitCode:
+        type: integer
+      exitCodeDescription:
+        type: string
+      exitSignalName:
+        type: string
+      exitSignalNumber:
+        type: integer
+      machine:
+        type: string
+      notificationConfigurationOverrides:
+        items:
+          $ref: "#/definitions/sarif.ConfigurationOverride"
+        type: array
+      processId:
+        type: integer
+      processStartFailureMessage:
+        type: string
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      responseFiles:
+        items:
+          $ref: "#/definitions/sarif.ArtifactLocation"
+        type: array
+      ruleConfigurationOverrides:
+        items:
+          $ref: "#/definitions/sarif.ConfigurationOverride"
+        type: array
+      startTimeUtc:
+        type: string
+      stderr:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+      stdin:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+      stdout:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+      stdoutStderr:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+      toolConfigurationNotifications:
+        items:
+          $ref: "#/definitions/sarif.Notification"
+        type: array
+      toolExecutionNotifications:
+        items:
+          $ref: "#/definitions/sarif.Notification"
+        type: array
+      workingDirectory:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+    type: object
+  sarif.Location:
+    properties:
+      annotations:
+        items:
+          $ref: "#/definitions/sarif.Region"
+        type: array
+      id:
+        type: integer
+      logicalLocations:
+        items:
+          $ref: "#/definitions/sarif.LogicalLocation"
+        type: array
+      message:
+        $ref: "#/definitions/sarif.Message"
+      physicalLocation:
+        $ref: "#/definitions/sarif.PhysicalLocation"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      relationships:
+        items:
+          $ref: "#/definitions/sarif.LocationRelationship"
+        type: array
+    type: object
+  sarif.LocationRelationship:
+    properties:
+      description:
+        $ref: "#/definitions/sarif.Message"
+      kinds:
+        items:
+          type: string
+        type: array
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      target:
+        type: integer
+    type: object
+  sarif.LogicalLocation:
+    properties:
+      decoratedName:
+        type: string
+      fullyQualifiedName:
+        type: string
+      index:
+        type: integer
+      kind:
+        type: string
+      name:
+        type: string
+      parentIndex:
+        type: integer
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.Message:
+    properties:
+      arguments:
+        items:
+          type: string
+        type: array
+      id:
+        type: string
+      markdown:
+        type: string
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      text:
+        type: string
+    type: object
+  sarif.MessageStrings:
+    additionalProperties:
+      $ref: "#/definitions/sarif.MultiformatMessageString"
+    type: object
+  sarif.MultiformatMessageString:
+    properties:
+      markdown:
+        type: string
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      text:
+        type: string
+    type: object
+  sarif.Node:
+    properties:
+      children:
+        items:
+          $ref: "#/definitions/sarif.Node"
+        type: array
+      id:
+        type: string
+      label:
+        $ref: "#/definitions/sarif.Message"
+      location:
+        $ref: "#/definitions/sarif.Location"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.Notification:
+    properties:
+      associatedRule:
+        $ref: "#/definitions/sarif.ReportingDescriptorReference"
+      descriptor:
+        $ref: "#/definitions/sarif.ReportingDescriptorReference"
+      exception:
+        $ref: "#/definitions/sarif.Exception"
+      level:
+        type: string
+      locations:
+        items:
+          $ref: "#/definitions/sarif.Location"
+        type: array
+      message:
+        $ref: "#/definitions/sarif.Message"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      threadId:
+        type: integer
+      timeUtc:
+        type: string
+    type: object
+  sarif.PhysicalLocation:
+    properties:
+      address:
+        $ref: "#/definitions/sarif.Address"
+      artifactLocation:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+      contextRegion:
+        $ref: "#/definitions/sarif.Region"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      region:
+        $ref: "#/definitions/sarif.Region"
+    type: object
+  sarif.Properties:
+    additionalProperties: true
+    type: object
+  sarif.PropertyBag:
+    properties:
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.Rectangle:
+    properties:
+      bottom:
+        type: number
+      left:
+        type: number
+      message:
+        $ref: "#/definitions/sarif.Message"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      right:
+        type: number
+      top:
+        type: number
+    type: object
+  sarif.Region:
+    properties:
+      byteLength:
+        type: integer
+      byteOffset:
+        type: integer
+      charLength:
+        type: integer
+      charOffset:
+        type: integer
+      endColumn:
+        type: integer
+      endLine:
+        type: integer
+      message:
+        $ref: "#/definitions/sarif.Message"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      snippet:
+        $ref: "#/definitions/sarif.ArtifactContent"
+      sourceLanguage:
+        type: string
+      startColumn:
+        type: integer
+      startLine:
+        type: integer
+    type: object
+  sarif.Replacement:
+    properties:
+      deletedRegion:
+        $ref: "#/definitions/sarif.Region"
+      insertedContent:
+        $ref: "#/definitions/sarif.ArtifactContent"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.Report:
+    properties:
+      $schema:
+        type: string
+      inlineExternalProperties:
+        items:
+          $ref: "#/definitions/sarif.ExternalProperties"
+        type: array
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      runs:
+        items:
+          $ref: "#/definitions/sarif.Run"
+        type: array
+      version:
+        type: string
+    type: object
+  sarif.ReportingConfiguration:
+    properties:
+      enabled:
+        type: boolean
+      level:
+        type: string
+      parameters:
+        $ref: "#/definitions/sarif.PropertyBag"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      rank:
+        type: number
+    type: object
+  sarif.ReportingDescriptor:
+    properties:
+      defaultConfiguration:
+        $ref: "#/definitions/sarif.ReportingConfiguration"
+      deprecatedGuids:
+        items:
+          type: string
+        type: array
+      deprecatedIds:
+        items:
+          type: string
+        type: array
+      deprecatedNames:
+        items:
+          type: string
+        type: array
+      fullDescription:
+        $ref: "#/definitions/sarif.MultiformatMessageString"
+      help:
+        $ref: "#/definitions/sarif.MultiformatMessageString"
+      helpUri:
+        type: string
+      id:
+        type: string
+      messageStrings:
+        $ref: "#/definitions/sarif.MessageStrings"
+      name:
+        type: string
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      shortDescription:
+        $ref: "#/definitions/sarif.MultiformatMessageString"
+    type: object
+  sarif.ReportingDescriptorReference:
+    properties:
+      guid:
+        type: string
+      id:
+        type: string
+      index:
+        type: integer
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      toolComponent:
+        $ref: "#/definitions/sarif.ToolComponentReference"
+    type: object
+  sarif.Result:
+    properties:
+      analysisTarget:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+      attachments:
+        items:
+          $ref: "#/definitions/sarif.Attachment"
+        type: array
+      baselineState:
+        type: string
+      codeFlows:
+        items:
+          $ref: "#/definitions/sarif.CodeFlow"
+        type: array
+      correlationGuid:
+        type: string
+      fingerprints:
+        additionalProperties: true
+        type: object
+      fixes:
+        items:
+          $ref: "#/definitions/sarif.Fix"
+        type: array
+      graphTraversals:
+        items:
+          $ref: "#/definitions/sarif.GraphTraversal"
+        type: array
+      graphs:
+        items:
+          $ref: "#/definitions/sarif.Graph"
+        type: array
+      guid:
+        type: string
+      hostedViewerUri:
+        type: string
+      kind:
+        type: string
+      level:
+        type: string
+      locations:
+        items:
+          $ref: "#/definitions/sarif.Location"
+        type: array
+      message:
+        $ref: "#/definitions/sarif.Message"
+      occurrenceCount:
+        type: integer
+      partialFingerprints:
+        additionalProperties: true
+        type: object
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      provenance:
+        $ref: "#/definitions/sarif.ResultProvenance"
+      rank:
+        type: number
+      relatedLocations:
+        items:
+          $ref: "#/definitions/sarif.Location"
+        type: array
+      rule:
+        $ref: "#/definitions/sarif.ReportingDescriptorReference"
+      ruleId:
+        type: string
+      ruleIndex:
+        type: integer
+      stacks:
+        items:
+          $ref: "#/definitions/sarif.Stack"
+        type: array
+      suppressions:
+        items:
+          $ref: "#/definitions/sarif.Suppression"
+        type: array
+      taxa:
+        items:
+          $ref: "#/definitions/sarif.ReportingDescriptorReference"
+        type: array
+      webRequest:
+        $ref: "#/definitions/sarif.WebRequest"
+      webResponse:
+        $ref: "#/definitions/sarif.WebResponse"
+      workItemUris:
+        description: can be null
+        items:
+          type: string
+        type: array
+    type: object
+  sarif.ResultProvenance:
+    properties:
+      conversionSources:
+        items:
+          $ref: "#/definitions/sarif.PhysicalLocation"
+        type: array
+      firstDetectionRunGuid:
+        type: string
+      firstDetectionTimeUtc:
+        type: string
+      invocationIndex:
+        type: integer
+      lastDetectionRunGuid:
+        type: string
+      lastDetectionTimeUtc:
+        type: string
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.Run:
+    properties:
+      addresses:
+        items:
+          $ref: "#/definitions/sarif.Address"
+        type: array
+      artifacts:
+        items:
+          $ref: "#/definitions/sarif.Artifact"
+        type: array
+      automationDetails:
+        $ref: "#/definitions/sarif.RunAutomationDetails"
+      baselineGuid:
+        type: string
+      columnKind: {}
+      conversion:
+        $ref: "#/definitions/sarif.Conversion"
+      defaultEncoding:
+        type: string
+      defaultSourceLanguage:
+        type: string
+      externalPropertyFileReferences:
+        $ref: "#/definitions/sarif.ExternalPropertyFileReferences"
+      graphs:
+        items:
+          $ref: "#/definitions/sarif.Graph"
+        type: array
+      invocations:
+        items:
+          $ref: "#/definitions/sarif.Invocation"
+        type: array
+      language:
+        type: string
+      logicalLocations:
+        items:
+          $ref: "#/definitions/sarif.LogicalLocation"
+        type: array
+      newlineSequences:
+        items:
+          type: string
+        type: array
+      originalUriBaseIds:
+        additionalProperties:
+          $ref: "#/definitions/sarif.ArtifactLocation"
+        type: object
+      policies:
+        items:
+          $ref: "#/definitions/sarif.ToolComponent"
+        type: array
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      redactionTokens:
+        items:
+          type: string
+        type: array
+      results:
+        items:
+          $ref: "#/definitions/sarif.Result"
+        type: array
+      runAggregates:
+        items:
+          $ref: "#/definitions/sarif.RunAutomationDetails"
+        type: array
+      specialLocations:
+        $ref: "#/definitions/sarif.SpecialLocations"
+      taxonomies:
+        items:
+          $ref: "#/definitions/sarif.ToolComponent"
+        type: array
+      threadFlowLocations:
+        items:
+          $ref: "#/definitions/sarif.ThreadFlowLocation"
+        type: array
+      tool:
+        $ref: "#/definitions/sarif.Tool"
+      translations:
+        items:
+          $ref: "#/definitions/sarif.ToolComponent"
+        type: array
+      versionControlProvenance:
+        items:
+          $ref: "#/definitions/sarif.VersionControlDetails"
+        type: array
+      webRequests:
+        items:
+          $ref: "#/definitions/sarif.WebRequest"
+        type: array
+      webResponses:
+        items:
+          $ref: "#/definitions/sarif.WebResponse"
+        type: array
+    type: object
+  sarif.RunAutomationDetails:
+    properties:
+      correlationGuid:
+        type: string
+      description:
+        $ref: "#/definitions/sarif.Message"
+      guid:
+        type: string
+      id:
+        type: string
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.SpecialLocations:
+    properties:
+      displayBase:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.Stack:
+    properties:
+      frames:
+        items:
+          $ref: "#/definitions/sarif.StackFrame"
+        type: array
+      message:
+        $ref: "#/definitions/sarif.Message"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.StackFrame:
+    properties:
+      location:
+        $ref: "#/definitions/sarif.Location"
+      module:
+        type: string
+      parameters:
+        items:
+          type: string
+        type: array
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      threadId:
+        type: integer
+    type: object
+  sarif.Suppression:
+    properties:
+      guid:
+        type: string
+      justification:
+        type: string
+      kind:
+        type: string
+      location:
+        $ref: "#/definitions/sarif.Location"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      status:
+        type: string
+    type: object
+  sarif.ThreadFlow:
+    properties:
+      id:
+        type: string
+      immutableState:
+        additionalProperties:
+          $ref: "#/definitions/sarif.MultiformatMessageString"
+        type: object
+      initialState:
+        additionalProperties:
+          $ref: "#/definitions/sarif.MultiformatMessageString"
+        type: object
+      locations:
+        items:
+          $ref: "#/definitions/sarif.ThreadFlowLocation"
+        type: array
+      message:
+        $ref: "#/definitions/sarif.Message"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.ThreadFlowLocation:
+    properties:
+      executionOrder:
+        type: integer
+      executionTimeUtc:
+        type: string
+      importance: {}
+      index:
+        type: integer
+      kinds:
+        items:
+          type: string
+        type: array
+      location:
+        $ref: "#/definitions/sarif.Location"
+      module:
+        type: string
+      nestingLevel:
+        type: integer
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      stack:
+        $ref: "#/definitions/sarif.Stack"
+      state:
+        additionalProperties:
+          $ref: "#/definitions/sarif.MultiformatMessageString"
+        type: object
+      taxa:
+        items:
+          $ref: "#/definitions/sarif.ReportingDescriptorReference"
+        type: array
+      webRequest:
+        $ref: "#/definitions/sarif.WebRequest"
+      webResponse:
+        $ref: "#/definitions/sarif.WebResponse"
+    type: object
+  sarif.Tool:
+    properties:
+      driver:
+        $ref: "#/definitions/sarif.ToolComponent"
+      extensions:
+        items:
+          $ref: "#/definitions/sarif.ToolComponent"
+        type: array
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.ToolComponent:
+    properties:
+      associatedComponent:
+        $ref: "#/definitions/sarif.ToolComponentReference"
+      contents:
+        items: {}
+        type: array
+      dottedQuadFileVersion:
+        type: string
+      downloadUri:
+        type: string
+      fullDescription:
+        $ref: "#/definitions/sarif.MultiformatMessageString"
+      fullName:
+        type: string
+      globalMessageStrings:
+        additionalProperties:
+          $ref: "#/definitions/sarif.MultiformatMessageString"
+        type: object
+      guid:
+        type: string
+      informationUri:
+        type: string
+      isComprehensive:
+        type: boolean
+      language:
+        type: string
+      localizedDataSemanticVersion:
+        type: string
+      locations:
+        items:
+          $ref: "#/definitions/sarif.ArtifactLocation"
+        type: array
+      minimumRequiredLocalizedDataSemanticVersion:
+        type: string
+      name:
+        type: string
+      notifications:
+        items:
+          $ref: "#/definitions/sarif.ReportingDescriptor"
+        type: array
+      organization:
+        type: string
+      product:
+        type: string
+      productSuite:
+        type: string
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      releaseDateUtc:
+        type: string
+      rules:
+        items:
+          $ref: "#/definitions/sarif.ReportingDescriptor"
+        type: array
+      semanticVersion:
+        type: string
+      shortDescription:
+        $ref: "#/definitions/sarif.MultiformatMessageString"
+      supportedTaxonomies:
+        items:
+          $ref: "#/definitions/sarif.ToolComponentReference"
+        type: array
+      taxa:
+        items:
+          $ref: "#/definitions/sarif.ReportingDescriptor"
+        type: array
+      translationMetadata:
+        allOf:
+          - $ref: "#/definitions/sarif.TranslationMetadata"
+        description:
+          The tool component version, in whatever format the component
+          natively provides.
+      version:
+        type: string
+    type: object
+  sarif.ToolComponentReference:
+    properties:
+      guid:
+        type: string
+      index:
+        type: integer
+      name:
+        type: string
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+    type: object
+  sarif.TranslationMetadata:
+    properties:
+      downloadUri:
+        type: string
+      fullDescription:
+        $ref: "#/definitions/sarif.MultiformatMessageString"
+      fullName:
+        type: string
+      informationUri:
+        type: string
+      name:
+        type: string
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      shortDescription:
+        $ref: "#/definitions/sarif.MultiformatMessageString"
+    type: object
+  sarif.VersionControlDetails:
+    properties:
+      asOfTimeUtc:
+        type: string
+      branch:
+        type: string
+      mappedTo:
+        $ref: "#/definitions/sarif.ArtifactLocation"
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      repositoryUri:
+        type: string
+      revisionId:
+        type: string
+      revisionTag:
+        type: string
+    type: object
+  sarif.WebRequest:
+    properties:
+      body:
+        $ref: "#/definitions/sarif.ArtifactContent"
+      headers:
+        additionalProperties:
+          type: string
+        type: object
+      index:
+        type: integer
+      method:
+        type: string
+      parameters:
+        additionalProperties:
+          type: string
+        type: object
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      protocol:
+        type: string
+      target:
+        type: string
+      version:
+        type: string
+    type: object
+  sarif.WebResponse:
+    properties:
+      body:
+        $ref: "#/definitions/sarif.ArtifactContent"
+      headers:
+        additionalProperties:
+          type: string
+        type: object
+      index:
+        type: integer
+      noResponseReceived:
+        type: boolean
+      properties:
+        $ref: "#/definitions/sarif.Properties"
+      protocol:
+        type: string
+      reasonPhrase:
+        type: string
+      statusCode:
+        type: integer
+      version:
+        type: string
+    type: object
+  types.Error:
+    properties:
+      fields:
+        additionalProperties:
+          type: string
+        type: object
+      message:
+        type: string
+    required:
+      - message
+    type: object
+  types.PatchSubmission:
+    properties:
+      description:
+        description: Optional plain text string describing the vulnerability
+        type: string
+      patch:
+        description: 100kb Max Size
+        format: base64
+        type: string
+      vuln_id:
+        format: uuid
+        type: string
+    required:
+      - patch
+      - vuln_id
+    type: object
+  types.PatchSubmissionResponse:
+    properties:
+      patch_id:
+        format: uuid
+        type: string
+      status:
+        enum:
+          - accepted
+          - invalid
+          - passed
+          - failed
+          - deadline_exceeded
+        type: string
+    required:
+      - patch_id
+      - status
+    type: object
+  types.SarifAssessmentResponse:
+    properties:
+      status:
+        enum:
+          - accepted
+        type: string
+    required:
+      - status
+    type: object
+  types.SarifAssessmentSubmission:
+    properties:
+      assessment:
+        enum:
+          - valid
+          - invalid
+        type: string
+      description:
+        description: Plain text reasoning for the assesment
+        type: string
+    required:
+      - assessment
+      - description
+    type: object
+  types.VulnSubmission:
+    properties:
+      architecture:
+        type: string
+      data_file:
+        description: 2mb max size
+        type: string
+      harness_name:
+        type: string
+      sanitizer:
+        type: string
+      sarif:
+        $ref: "#/definitions/sarif.Report"
+    required:
+      - architecture
+      - data_file
+      - harness_name
+      - sanitizer
+    type: object
+  types.VulnSubmissionResponse:
+    properties:
+      status:
+        enum:
+          - accepted
+          - invalid
+          - passed
+          - failed
+          - deadline_exceeded
+        type: string
+      vuln_id:
+        format: uuid
+        type: string
+    required:
+      - status
+      - vuln_id
+    type: object
+info:
+  contact: {}
+  title: Mock Scantron
+  version: "1.0"
+paths:
+  /v1/task/{task_id}/patch/:
+    post:
+      consumes:
+        - application/json
+      description: submit a patch for testing
+      parameters:
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Payload
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: "#/definitions/types.PatchSubmission"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/types.PatchSubmissionResponse"
+        "400":
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/types.Error"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/types.Error"
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/types.Error"
+      security:
+        - BasicAuth: []
+      summary: Submit Patch
+      tags:
+        - patch
+  /v1/task/{task_id}/patch/{patch_id}:
+    get:
+      consumes:
+        - application/json
+      description: yield the status of patch testing
+      parameters:
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Patch ID
+          format: uuid
+          in: path
+          name: patch_id
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/types.PatchSubmissionResponse"
+        "400":
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/types.Error"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/types.Error"
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/types.Error"
+      security:
+        - BasicAuth: []
+      summary: Patch Status
+      tags:
+        - patch
+  /v1/task/{task_id}/sarif/{sarif_id}:
+    post:
+      consumes:
+        - application/json
+      description: submit a sarif assessment
+      parameters:
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: SARIF ID
+          format: uuid
+          in: path
+          name: sarif_id
+          required: true
+          type: string
+        - description: Submission body
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: "#/definitions/types.SarifAssessmentSubmission"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/types.SarifAssessmentResponse"
+        "400":
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/types.Error"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/types.Error"
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/types.Error"
+      security:
+        - BasicAuth: []
+      summary: Submit Sarif Assessment
+      tags:
+        - sarif
+  /v1/task/{task_id}/vuln/:
+    post:
+      consumes:
+        - application/json
+      description: submit a vulnerability for testing
+      parameters:
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Submission body
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: "#/definitions/types.VulnSubmission"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/types.VulnSubmissionResponse"
+        "400":
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/types.Error"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/types.Error"
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/types.Error"
+      security:
+        - BasicAuth: []
+      summary: Submit Vulnerability
+      tags:
+        - vulnerability
+  /v1/task/{task_id}/vuln/{vuln_id}:
+    get:
+      consumes:
+        - application/json
+      description: yield the status of vuln testing
+      parameters:
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Vuln ID
+          format: uuid
+          in: path
+          name: vuln_id
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/types.VulnSubmissionResponse"
+        "400":
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/types.Error"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/types.Error"
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/types.Error"
+      security:
+        - BasicAuth: []
+      summary: Vulnerability Status
+      tags:
+        - vulnerability
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
