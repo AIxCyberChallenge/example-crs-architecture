@@ -106,7 +106,7 @@ definitions:
     type: object
 info:
   contact: {}
-  title: Mock Scantron
+  title: Example Competition API
   version: "1.0"
 paths:
   /v1/task/{task_id}/patch/:

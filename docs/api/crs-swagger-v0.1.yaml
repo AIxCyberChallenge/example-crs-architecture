@@ -137,7 +137,7 @@ definitions:
     type: object
 info:
   contact: {}
-  title: Mock CRS
+  title: Example CRS API
   version: "1.0"
 paths:
   /status/:
