@@ -10,15 +10,15 @@ NOTE: The JSON and YAML documents contain the same information and are generated
 The provided Mock Competition API (scantron) will serve the swagger UI at `/swagger/index.html`. The spec is served at `/swagger/doc.json`
 Competitors may find it useful to do something similar for their CRS.
 
-Most webserver frameworks will have a package that can be used to help serve the UI. If this is not possible or you do not wish to use a 3rd party package,
+Most webserver frameworks will have a package that can be used to help serve the UI. If this is not possible or you do not wish to use a third-party package,
 the source can be downloaded from [https://github.com/swagger-api/swagger-ui/releases](https://github.com/swagger-api/swagger-ui/releases).
-After unpacking the archive using tar or zip, the precompiled source can be found in the `dist` directory.
+After unpacking the archive using tar or ZIP, the precompiled source can be found in the `dist` directory.
 
 If you do not wish to integrate the UI directly into the CRS system it is still possible to use for development.
 
 - Using the same method described above, download and unpack the release.
 - Place any number of swagger specs inside the `swagger-ui/dist` folder.
-- Start a basic webserver from the `swagger-ui/dist` folder. For example the built in Python 3 webserver:
+- Start a basic webserver from the `swagger-ui/dist` folder. For example the built-in Python 3 webserver:
 
 ```bash
 # PWD: swagger-ui/dist
@@ -28,7 +28,7 @@ python -m http.server
 - Change the path to the swagger file at the top of your page to the desired file. For example, `/competition-swagger-v0.1.json` if you placed
   a swagger spec called `competition-swagger-v0.1.json` at `swagger-ui/dist/competition-swagger-v0.1.json`.
 - This will only allow viewing the documentation. Experimenting with the API endpoints requires a running API server serving the spec file.
-  If the spec is served from the API server and it supports CORs, it is possible to specify the full URL to the spec in the box.
+  If the spec is served from the API server and it supports CORS, it is possible to specify the full URL to the spec in the box.
   This will allow you to experiment with the API using the `Try it Out` button.
 
 ## Generating a Client or Server
