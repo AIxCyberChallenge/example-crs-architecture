@@ -7,7 +7,7 @@ NOTE: The JSON and YAML documents contain the same information and are generated
 
 ## Viewing the UI
 
-The provided Mock Competition API (scantron) will serve the swagger UI at `/swagger/index.html`. The spec is served at `/swagger/doc.json`
+The provided Example Competition API will serve the swagger UI at `/swagger/index.html`. The spec is served at `/swagger/doc.json`
 Competitors may find it useful to do something similar for their CRS.
 
 Most webserver frameworks will have a package that can be used to help serve the UI. If this is not possible or you do not wish to use a third-party package,
