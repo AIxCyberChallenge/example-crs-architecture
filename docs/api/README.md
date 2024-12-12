@@ -5,6 +5,15 @@
 
 NOTE: The JSON and YAML documents contain the same information and are generated from the same source.
 
+These files describe the CRS API and the Example Competition API. [Swagger](https://swagger.io/blog/api-strategy/difference-between-swagger-and-openapi/) is an ecosystem built around the [OpenAPI](https://www.openapis.org/what-is-openapi)
+specification with which it is possible to render a UI documenting the API, to generate client code to interact with the API, and to generate
+server code to be the API. In essence, the OpenAPI specification is a standard way of documenting HTTP APIs. This allows tools built to consume the description
+to be portable across APIs.
+
+The different components can be used as needed for different applications. The Example Competition API specification
+is generated using inline code comments and served under the `/swagger/` path. A web framework specific third-party dependency that included the
+swagger-ui was used to provide the endpoints.
+
 ## Viewing the UI
 
 The provided Example Competition API will serve the swagger UI at `/swagger/index.html`. The spec is served at `/swagger/doc.json`
