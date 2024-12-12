@@ -309,6 +309,16 @@
     }
   },
   "definitions": {
+    "types.Assessment": {
+      "type": "string",
+      "enum": ["valid", "invalid"],
+      "x-enum-varnames": ["AssessmentValid", "AssessmentInvalid"]
+    },
+    "types.AssessmentStatus": {
+      "type": "string",
+      "enum": ["accepted"],
+      "x-enum-varnames": ["AssessmentStatusAccepted"]
+    },
     "types.Error": {
       "type": "object",
       "required": ["message"],
@@ -352,14 +362,7 @@
           "format": "uuid"
         },
         "status": {
-          "type": "string",
-          "enum": [
-            "accepted",
-            "invalid",
-            "passed",
-            "failed",
-            "deadline_exceeded"
-          ]
+          "$ref": "#/definitions/types.SubmissionStatus"
         }
       }
     },
@@ -368,8 +371,7 @@
       "required": ["status"],
       "properties": {
         "status": {
-          "type": "string",
-          "enum": ["accepted"]
+          "$ref": "#/definitions/types.AssessmentStatus"
         }
       }
     },
@@ -378,14 +380,24 @@
       "required": ["assessment", "description"],
       "properties": {
         "assessment": {
-          "type": "string",
-          "enum": ["valid", "invalid"]
+          "$ref": "#/definitions/types.Assessment"
         },
         "description": {
           "description": "Plain text reasoning for the assesment",
           "type": "string"
         }
       }
+    },
+    "types.SubmissionStatus": {
+      "type": "string",
+      "enum": ["accepted", "invalid", "passed", "failed", "deadline_exceeded"],
+      "x-enum-varnames": [
+        "SubmissionStatusAccepted",
+        "SubmissionStatusInvalid",
+        "SubmissionStatusPassed",
+        "SubmissionStatusFailed",
+        "SubmissionStatusDeadlineExceeded"
+      ]
     },
     "types.VulnSubmission": {
       "type": "object",
@@ -416,14 +428,7 @@
       "required": ["status", "vuln_id"],
       "properties": {
         "status": {
-          "type": "string",
-          "enum": [
-            "accepted",
-            "invalid",
-            "passed",
-            "failed",
-            "deadline_exceeded"
-          ]
+          "$ref": "#/definitions/types.SubmissionStatus"
         },
         "vuln_id": {
           "type": "string",

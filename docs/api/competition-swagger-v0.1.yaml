@@ -1,4 +1,18 @@
 definitions:
+  types.Assessment:
+    enum:
+      - valid
+      - invalid
+    type: string
+    x-enum-varnames:
+      - AssessmentValid
+      - AssessmentInvalid
+  types.AssessmentStatus:
+    enum:
+      - accepted
+    type: string
+    x-enum-varnames:
+      - AssessmentStatusAccepted
   types.Error:
     properties:
       fields:
@@ -32,13 +46,7 @@ definitions:
         format: uuid
         type: string
       status:
-        enum:
-          - accepted
-          - invalid
-          - passed
-          - failed
-          - deadline_exceeded
-        type: string
+        $ref: "#/definitions/types.SubmissionStatus"
     required:
       - patch_id
       - status
@@ -46,19 +54,14 @@ definitions:
   types.SarifAssessmentResponse:
     properties:
       status:
-        enum:
-          - accepted
-        type: string
+        $ref: "#/definitions/types.AssessmentStatus"
     required:
       - status
     type: object
   types.SarifAssessmentSubmission:
     properties:
       assessment:
-        enum:
-          - valid
-          - invalid
-        type: string
+        $ref: "#/definitions/types.Assessment"
       description:
         description: Plain text reasoning for the assesment
         type: string
@@ -66,6 +69,20 @@ definitions:
       - assessment
       - description
     type: object
+  types.SubmissionStatus:
+    enum:
+      - accepted
+      - invalid
+      - passed
+      - failed
+      - deadline_exceeded
+    type: string
+    x-enum-varnames:
+      - SubmissionStatusAccepted
+      - SubmissionStatusInvalid
+      - SubmissionStatusPassed
+      - SubmissionStatusFailed
+      - SubmissionStatusDeadlineExceeded
   types.VulnSubmission:
     properties:
       architecture:
@@ -90,13 +107,7 @@ definitions:
   types.VulnSubmissionResponse:
     properties:
       status:
-        enum:
-          - accepted
-          - invalid
-          - passed
-          - failed
-          - deadline_exceeded
-        type: string
+        $ref: "#/definitions/types.SubmissionStatus"
       vuln_id:
         format: uuid
         type: string

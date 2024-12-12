@@ -131,13 +131,21 @@
           "type": "string"
         },
         "type": {
-          "type": "string",
-          "enum": ["repo", "fuzz-tooling", "diff"]
+          "$ref": "#/definitions/types.SourceType"
         },
         "url": {
           "type": "string"
         }
       }
+    },
+    "types.SourceType": {
+      "type": "string",
+      "enum": ["repo", "fuzz-tooling", "diff"],
+      "x-enum-varnames": [
+        "SourceTypeRepo",
+        "SourceTypeFuzzTooling",
+        "SourceTypeDiff"
+      ]
     },
     "types.Status": {
       "type": "object",
@@ -227,10 +235,14 @@
           "format": "uuid"
         },
         "type": {
-          "type": "string",
-          "enum": ["full", "delta"]
+          "$ref": "#/definitions/types.TaskType"
         }
       }
+    },
+    "types.TaskType": {
+      "type": "string",
+      "enum": ["full", "delta"],
+      "x-enum-varnames": ["TaskTypeFull", "TaskTypeDelta"]
     },
     "types.VulnBroadcast": {
       "type": "object",

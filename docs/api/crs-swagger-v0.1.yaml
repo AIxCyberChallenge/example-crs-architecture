@@ -4,11 +4,7 @@ definitions:
       sha256:
         type: string
       type:
-        enum:
-          - repo
-          - fuzz-tooling
-          - diff
-        type: string
+        $ref: "#/definitions/types.SourceType"
       url:
         type: string
     required:
@@ -16,6 +12,16 @@ definitions:
       - type
       - url
     type: object
+  types.SourceType:
+    enum:
+      - repo
+      - fuzz-tooling
+      - diff
+    type: string
+    x-enum-varnames:
+      - SourceTypeRepo
+      - SourceTypeFuzzTooling
+      - SourceTypeDiff
   types.Status:
     properties:
       details:
@@ -93,16 +99,21 @@ definitions:
         format: uuid
         type: string
       type:
-        enum:
-          - full
-          - delta
-        type: string
+        $ref: "#/definitions/types.TaskType"
     required:
       - deadline
       - source
       - task_id
       - type
     type: object
+  types.TaskType:
+    enum:
+      - full
+      - delta
+    type: string
+    x-enum-varnames:
+      - TaskTypeFull
+      - TaskTypeDelta
   types.VulnBroadcast:
     properties:
       message_id:
