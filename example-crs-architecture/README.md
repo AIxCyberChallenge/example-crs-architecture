@@ -27,18 +27,18 @@ The standard `azure` networking profile is used.
 
 #### Login to Azure
 
-`az login` - will open authentication in a browser
+`az login --tenant aixcc.tech` - will open authentication in a browser
 
 Show current tenant and subscription name:
 
-`az account show --output table`
+`az account show --query "{SubscriptionID:id, Tenant:tenantId}" --output table`
 
 Example output:
 
 ```bash
-EnvironmentName    HomeTenantId                          IsDefault    Name              State    TenantId
------------------  ------------------------------------  -----------  ----------------  -------  ------------------------------------
-AzureCloud         fr456gh7-f3ec-df56-4567-1234567890ab  True         my-subscription  Enabled  fr456gh7-f3ec-df56-4567-1234567890ab
+SubscriptionID                        Tenant
+------------------------------------  ------------------------------------
+<YOUR-SUBSCRIPTION-ID>                c67d49bd-f3ec-4c7f-b9ec-653480365699
 ```
 
 ### Service Principal Account
@@ -106,7 +106,7 @@ This can help with collaboration, security, recovery and scalability. To do this
 The following is an example of how to create the resources needed for remote state configuration.
 These resources will be used in the `backend.tf` configuration file.
 
-- Create remote state resrouce group.
+- Create remote state resource group.
 
 ```bash
 az group create --name example-tfstate-rg --location eastus
@@ -118,7 +118,7 @@ az group create --name example-tfstate-rg --location eastus
 az storage account create --resource-group example-tfstate-rg --name exampleserviceaccountname --sku Standard_LRS --encryption-services blob
 ```
 
-- Create sotrage container for remote state
+- Create storage container for remote state
 
 ```bash
 az storage container create --name tfstate --account-name exampleserviceaccountname --auth-mode login
@@ -126,7 +126,7 @@ az storage container create --name tfstate --account-name exampleserviceaccountn
 
 ### backend.tf
 
-Reaplace the values for `resource_group_name`, `storage_account_name`, `container_name` with the ones you created above.
+Replace the values for `resource_group_name`, `storage_account_name`, `container_name` with the ones you created above.
 
 ```bash
 terraform {
@@ -141,7 +141,7 @@ terraform {
 
 ## Deploy
 
-- Log into your Azure tenant with `az login`
+- Log into your Azure tenant with `az login --tenant aixcc.tech`
 - Clone this repository if needed: `git clone git@github.com:aixcc-finals/example-crs-architecture.git /<local_dir>`
 - Make any required changes to `backend.tf`, `main.tf`, and `variables.tf`
 - Export the environment variables for your [SPA Configuration](#service-principal-account) if needed.
@@ -156,7 +156,6 @@ A handful of outputs will be provided based on `outputs.tf` when the apply compl
 
 - `terraform state list` - lists all resources in the deployment.
 - `terraform state show '<resource>'` - replace `<resource>` with the resource you want to view from the `list` command
-- `terraform state pull` - pulls the current remote state from `backend.tf` configuration
 
 ## Destroy
 
