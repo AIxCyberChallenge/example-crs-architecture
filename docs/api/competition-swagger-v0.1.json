@@ -65,7 +65,7 @@
         }
       }
     },
-    "/v1/task/{task_id}/patch/{patch_id}": {
+    "/v1/task/{task_id}/patch/{patch_id}/": {
       "get": {
         "security": [
           {
@@ -123,7 +123,7 @@
         }
       }
     },
-    "/v1/task/{task_id}/sarif/{sarif_id}": {
+    "/v1/task/{task_id}/sarif/{sarif_id}/": {
       "post": {
         "security": [
           {
@@ -249,7 +249,7 @@
         }
       }
     },
-    "/v1/task/{task_id}/vuln/{vuln_id}": {
+    "/v1/task/{task_id}/vuln/{vuln_id}/": {
       "get": {
         "security": [
           {

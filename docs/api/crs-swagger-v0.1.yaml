@@ -214,7 +214,7 @@ paths:
       summary: Submit Task
       tags:
         - task
-  /v1/task/{task_id}:
+  /v1/task/{task_id}/:
     delete:
       consumes:
         - application/json
