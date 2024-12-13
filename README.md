@@ -16,6 +16,7 @@ This repository is currently under development. Documentation and examples are b
 | CRS API Spec v0.1                                    | ✅     |
 | Telemetry Spec                                       | ❌ WIP |
 | End-to-end example webservice that implements specs  | ❌ WIP |
+| Example Challenge Generation & Testing script        | ❌ WIP |
 
 ## Contributing
 
