@@ -126,7 +126,7 @@ az storage container create --name tfstate --account-name exampleserviceaccountn
 
 ### backend.tf
 
-Reaplace the values for `resource_group_name`, `storage_account_name`, `container_name` with the ones you created above.
+Replace the values for `resource_group_name`, `storage_account_name`, `container_name` with the ones you created above.
 
 ```bash
 terraform {
