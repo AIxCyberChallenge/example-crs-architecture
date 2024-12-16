@@ -89,7 +89,7 @@
         }
       }
     },
-    "/v1/task/{task_id}": {
+    "/v1/task/{task_id}/": {
       "delete": {
         "security": [
           {
