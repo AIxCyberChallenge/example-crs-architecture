@@ -38,7 +38,7 @@ $ pip install -e .[tests]
 
 #### Usage
 
-** Game Client **
+**Game Client**
 
 The `mock_server` from `maintainer-interfaces` may be used to test the game client API.
 
@@ -56,7 +56,7 @@ $ cd test
 $ pytest -s test_patch_api.py
 ```
 
-** CRS Web Server **
+**CRS Web Server**
 
 The CRS Web server can be started using the following commands:
 ```bash
