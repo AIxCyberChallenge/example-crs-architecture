@@ -26,11 +26,9 @@ class TypesAssessmentStatus(str, Enum):
     """
     allowed enum values
     """
-    ACCEPTED = 'accepted'
+    ACCEPTED = "accepted"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of TypesAssessmentStatus from a JSON string"""
         return cls(json.loads(json_str))
-
-

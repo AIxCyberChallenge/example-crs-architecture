@@ -22,23 +22,33 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class TypesVulnSubmission(BaseModel):
     """
     TypesVulnSubmission
-    """ # noqa: E501
+    """  # noqa: E501
+
     architecture: StrictStr
     data_file: StrictStr = Field(description="2mb max size")
     harness_name: StrictStr
     sanitizer: StrictStr
-    sarif: Optional[Dict[str, Any]] = Field(default=None, description="SARIF Report compliant with \"https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json\"")
-    __properties: ClassVar[List[str]] = ["architecture", "data_file", "harness_name", "sanitizer", "sarif"]
+    sarif: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description='SARIF Report compliant with "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json"',
+    )
+    __properties: ClassVar[List[str]] = [
+        "architecture",
+        "data_file",
+        "harness_name",
+        "sanitizer",
+        "sarif",
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -64,8 +74,7 @@ class TypesVulnSubmission(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -83,13 +92,13 @@ class TypesVulnSubmission(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "architecture": obj.get("architecture"),
-            "data_file": obj.get("data_file"),
-            "harness_name": obj.get("harness_name"),
-            "sanitizer": obj.get("sanitizer"),
-            "sarif": obj.get("sarif")
-        })
+        _obj = cls.model_validate(
+            {
+                "architecture": obj.get("architecture"),
+                "data_file": obj.get("data_file"),
+                "harness_name": obj.get("harness_name"),
+                "sanitizer": obj.get("sanitizer"),
+                "sarif": obj.get("sarif"),
+            }
+        )
         return _obj
-
-

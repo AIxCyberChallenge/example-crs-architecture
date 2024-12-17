@@ -14,7 +14,10 @@
 
 import unittest
 
-from my_crs.openapi_client.models.types_submission_status import TypesSubmissionStatus
+from my_crs.openapi_client.models.types_submission_status import (
+    TypesSubmissionStatus,
+)
+
 
 class TestTypesSubmissionStatus(unittest.TestCase):
     """TypesSubmissionStatus unit test stubs"""
@@ -29,5 +32,6 @@ class TestTypesSubmissionStatus(unittest.TestCase):
         """Test TypesSubmissionStatus"""
         # inst = TypesSubmissionStatus()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

@@ -19,14 +19,18 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List
-from my_crs.openapi_client.models.types_submission_status import TypesSubmissionStatus
+from my_crs.openapi_client.models.types_submission_status import (
+    TypesSubmissionStatus,
+)
 from typing import Optional, Set
 from typing_extensions import Self
+
 
 class TypesPatchSubmissionResponse(BaseModel):
     """
     TypesPatchSubmissionResponse
-    """ # noqa: E501
+    """  # noqa: E501
+
     patch_id: StrictStr
     status: TypesSubmissionStatus
     __properties: ClassVar[List[str]] = ["patch_id", "status"]
@@ -36,7 +40,6 @@ class TypesPatchSubmissionResponse(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -62,8 +65,7 @@ class TypesPatchSubmissionResponse(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -81,10 +83,7 @@ class TypesPatchSubmissionResponse(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "patch_id": obj.get("patch_id"),
-            "status": obj.get("status")
-        })
+        _obj = cls.model_validate(
+            {"patch_id": obj.get("patch_id"), "status": obj.get("status")}
+        )
         return _obj
-
-

@@ -34,12 +34,28 @@ from my_crs.openapi_client.exceptions import ApiException
 
 # import models into sdk package
 from my_crs.openapi_client.models.types_assessment import TypesAssessment
-from my_crs.openapi_client.models.types_assessment_status import TypesAssessmentStatus
+from my_crs.openapi_client.models.types_assessment_status import (
+    TypesAssessmentStatus,
+)
 from my_crs.openapi_client.models.types_error import TypesError
-from my_crs.openapi_client.models.types_patch_submission import TypesPatchSubmission
-from my_crs.openapi_client.models.types_patch_submission_response import TypesPatchSubmissionResponse
-from my_crs.openapi_client.models.types_sarif_assessment_response import TypesSarifAssessmentResponse
-from my_crs.openapi_client.models.types_sarif_assessment_submission import TypesSarifAssessmentSubmission
-from my_crs.openapi_client.models.types_submission_status import TypesSubmissionStatus
-from my_crs.openapi_client.models.types_vuln_submission import TypesVulnSubmission
-from my_crs.openapi_client.models.types_vuln_submission_response import TypesVulnSubmissionResponse
+from my_crs.openapi_client.models.types_patch_submission import (
+    TypesPatchSubmission,
+)
+from my_crs.openapi_client.models.types_patch_submission_response import (
+    TypesPatchSubmissionResponse,
+)
+from my_crs.openapi_client.models.types_sarif_assessment_response import (
+    TypesSarifAssessmentResponse,
+)
+from my_crs.openapi_client.models.types_sarif_assessment_submission import (
+    TypesSarifAssessmentSubmission,
+)
+from my_crs.openapi_client.models.types_submission_status import (
+    TypesSubmissionStatus,
+)
+from my_crs.openapi_client.models.types_vuln_submission import (
+    TypesVulnSubmission,
+)
+from my_crs.openapi_client.models.types_vuln_submission_response import (
+    TypesVulnSubmissionResponse,
+)

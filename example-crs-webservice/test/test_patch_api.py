@@ -69,5 +69,5 @@ class TestPatchApi(unittest.TestCase):
         self.api.v1_task_task_id_patch_post(task_id=task_id, payload=payload)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

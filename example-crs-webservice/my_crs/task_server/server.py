@@ -15,10 +15,10 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from my_crs.task_server.models.types import Status, Task, VulnBroadcast
 
 app = FastAPI(
-    title='Example CRS API',
+    title="Example CRS API",
     contact={},
-    version='1.0',
-    servers=[{'url': '/'}],
+    version="1.0",
+    servers=[{"url": "/"}],
 )
 
 
@@ -35,13 +35,15 @@ def check_auth(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
     Reference: https://fastapi.tiangolo.com/advanced/security/http-basic-auth/
     """
     current_username_bytes = credentials.username.encode("utf8")
-    correct_username_bytes = b"api_key_id" # FIXME: Change username as desired
+    correct_username_bytes = b"api_key_id"  # FIXME: Change username as desired
     is_correct_username = secrets.compare_digest(
         current_username_bytes, correct_username_bytes
     )
 
     current_password_bytes = credentials.password.encode("utf8")
-    correct_password_bytes = b"api_key_token" # FIXME: Change password as desired and use hash
+    correct_password_bytes = (
+        b"api_key_token"  # FIXME: Change password as desired and use hash
+    )
     is_correct_password = secrets.compare_digest(
         current_password_bytes, correct_password_bytes
     )
@@ -55,7 +57,7 @@ def check_auth(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
     return credentials.username
 
 
-@app.get('/status/', response_model=Status, tags=['status'])
+@app.get("/status/", response_model=Status, tags=["status"])
 def get_status_() -> Status:
     """
     CRS Status
@@ -63,10 +65,10 @@ def get_status_() -> Status:
     pass
 
 
-@app.post('/v1/sarif/', response_model=str, tags=['sarif'])
+@app.post("/v1/sarif/", response_model=str, tags=["sarif"])
 def post_v1_sarif_(
     credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)],
-    body: VulnBroadcast
+    body: VulnBroadcast,
 ) -> str:
     """
     Submit Sarif Broadcast
@@ -75,10 +77,10 @@ def post_v1_sarif_(
 
 
 @app.post(
-    '/v1/task/',
+    "/v1/task/",
     response_model=None,
-    responses={'202': {'model': str}},
-    tags=['task'],
+    responses={"202": {"model": str}},
+    tags=["task"],
 )
 def post_v1_task_(
     credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)],
@@ -90,10 +92,10 @@ def post_v1_task_(
     pass
 
 
-@app.delete('/v1/task/{task_id}', response_model=str, tags=['task'])
+@app.delete("/v1/task/{task_id}", response_model=str, tags=["task"])
 def delete_v1_task_task_id(
     credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)],
-    task_id: UUID
+    task_id: UUID,
 ) -> str:
     """
     Cancel Task

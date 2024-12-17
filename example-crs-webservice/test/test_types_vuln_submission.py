@@ -14,7 +14,10 @@
 
 import unittest
 
-from my_crs.openapi_client.models.types_vuln_submission import TypesVulnSubmission
+from my_crs.openapi_client.models.types_vuln_submission import (
+    TypesVulnSubmission,
+)
+
 
 class TestTypesVulnSubmission(unittest.TestCase):
     """TypesVulnSubmission unit test stubs"""
@@ -27,9 +30,9 @@ class TestTypesVulnSubmission(unittest.TestCase):
 
     def make_instance(self, include_optional) -> TypesVulnSubmission:
         """Test TypesVulnSubmission
-            include_optional is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_optional is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # uncomment below to create an instance of `TypesVulnSubmission`
         """
         model = TypesVulnSubmission()
@@ -55,5 +58,6 @@ class TestTypesVulnSubmission(unittest.TestCase):
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

@@ -22,11 +22,16 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class TypesPatchSubmission(BaseModel):
     """
     TypesPatchSubmission
-    """ # noqa: E501
-    description: Optional[StrictStr] = Field(default=None, description="Optional plain text string describing the vulnerability")
+    """  # noqa: E501
+
+    description: Optional[StrictStr] = Field(
+        default=None,
+        description="Optional plain text string describing the vulnerability",
+    )
     patch: StrictStr = Field(description="100kb Max Size")
     vuln_id: StrictStr
     __properties: ClassVar[List[str]] = ["description", "patch", "vuln_id"]
@@ -36,7 +41,6 @@ class TypesPatchSubmission(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -62,8 +66,7 @@ class TypesPatchSubmission(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -81,11 +84,11 @@ class TypesPatchSubmission(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "description": obj.get("description"),
-            "patch": obj.get("patch"),
-            "vuln_id": obj.get("vuln_id")
-        })
+        _obj = cls.model_validate(
+            {
+                "description": obj.get("description"),
+                "patch": obj.get("patch"),
+                "vuln_id": obj.get("vuln_id"),
+            }
+        )
         return _obj
-
-

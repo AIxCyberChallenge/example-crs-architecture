@@ -16,6 +16,7 @@ import unittest
 
 from my_crs.openapi_client.models.types_assessment import TypesAssessment
 
+
 class TestTypesAssessment(unittest.TestCase):
     """TypesAssessment unit test stubs"""
 
@@ -29,5 +30,6 @@ class TestTypesAssessment(unittest.TestCase):
         """Test TypesAssessment"""
         # inst = TypesAssessment()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

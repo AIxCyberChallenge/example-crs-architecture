@@ -18,8 +18,12 @@ from typing_extensions import Annotated
 
 from pydantic import Field, StrictStr
 from typing_extensions import Annotated
-from my_crs.openapi_client.models.types_sarif_assessment_response import TypesSarifAssessmentResponse
-from my_crs.openapi_client.models.types_sarif_assessment_submission import TypesSarifAssessmentSubmission
+from my_crs.openapi_client.models.types_sarif_assessment_response import (
+    TypesSarifAssessmentResponse,
+)
+from my_crs.openapi_client.models.types_sarif_assessment_submission import (
+    TypesSarifAssessmentSubmission,
+)
 
 from my_crs.openapi_client.api_client import ApiClient, RequestSerialized
 from my_crs.openapi_client.api_response import ApiResponse
@@ -38,20 +42,22 @@ class SarifApi:
             api_client = ApiClient.get_default()
         self.api_client = api_client
 
-
     @validate_call
     def v1_task_task_id_sarif_sarif_id_post(
         self,
         task_id: Annotated[StrictStr, Field(description="Task ID")],
         sarif_id: Annotated[StrictStr, Field(description="SARIF ID")],
-        payload: Annotated[TypesSarifAssessmentSubmission, Field(description="Submission body")],
+        payload: Annotated[
+            TypesSarifAssessmentSubmission,
+            Field(description="Submission body"),
+        ],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
                 Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
+                Annotated[StrictFloat, Field(gt=0)],
+            ],
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -88,7 +94,7 @@ class SarifApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """ # noqa: E501
+        """  # noqa: E501
 
         _param = self._v1_task_task_id_sarif_sarif_id_post_serialize(
             task_id=task_id,
@@ -97,18 +103,17 @@ class SarifApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
+            _host_index=_host_index,
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "TypesSarifAssessmentResponse",
-            '400': "TypesError",
-            '401': "TypesError",
-            '500': "TypesError",
+            "200": "TypesSarifAssessmentResponse",
+            "400": "TypesError",
+            "401": "TypesError",
+            "500": "TypesError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
+            *_param, _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -116,20 +121,22 @@ class SarifApi:
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def v1_task_task_id_sarif_sarif_id_post_with_http_info(
         self,
         task_id: Annotated[StrictStr, Field(description="Task ID")],
         sarif_id: Annotated[StrictStr, Field(description="SARIF ID")],
-        payload: Annotated[TypesSarifAssessmentSubmission, Field(description="Submission body")],
+        payload: Annotated[
+            TypesSarifAssessmentSubmission,
+            Field(description="Submission body"),
+        ],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
                 Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
+                Annotated[StrictFloat, Field(gt=0)],
+            ],
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -166,7 +173,7 @@ class SarifApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """ # noqa: E501
+        """  # noqa: E501
 
         _param = self._v1_task_task_id_sarif_sarif_id_post_serialize(
             task_id=task_id,
@@ -175,18 +182,17 @@ class SarifApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
+            _host_index=_host_index,
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "TypesSarifAssessmentResponse",
-            '400': "TypesError",
-            '401': "TypesError",
-            '500': "TypesError",
+            "200": "TypesSarifAssessmentResponse",
+            "400": "TypesError",
+            "401": "TypesError",
+            "500": "TypesError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
+            *_param, _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -194,20 +200,22 @@ class SarifApi:
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def v1_task_task_id_sarif_sarif_id_post_without_preload_content(
         self,
         task_id: Annotated[StrictStr, Field(description="Task ID")],
         sarif_id: Annotated[StrictStr, Field(description="SARIF ID")],
-        payload: Annotated[TypesSarifAssessmentSubmission, Field(description="Submission body")],
+        payload: Annotated[
+            TypesSarifAssessmentSubmission,
+            Field(description="Submission body"),
+        ],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
                 Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
+                Annotated[StrictFloat, Field(gt=0)],
+            ],
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -244,7 +252,7 @@ class SarifApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """ # noqa: E501
+        """  # noqa: E501
 
         _param = self._v1_task_task_id_sarif_sarif_id_post_serialize(
             task_id=task_id,
@@ -253,21 +261,19 @@ class SarifApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
+            _host_index=_host_index,
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "TypesSarifAssessmentResponse",
-            '400': "TypesError",
-            '401': "TypesError",
-            '500': "TypesError",
+            "200": "TypesSarifAssessmentResponse",
+            "400": "TypesError",
+            "401": "TypesError",
+            "500": "TypesError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
+            *_param, _request_timeout=_request_timeout
         )
         return response_data.response
-
 
     def _v1_task_task_id_sarif_sarif_id_post_serialize(
         self,
@@ -282,23 +288,23 @@ class SarifApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
         _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+            str,
+            Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]],
         ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
         if task_id is not None:
-            _path_params['task_id'] = task_id
+            _path_params["task_id"] = task_id
         if sarif_id is not None:
-            _path_params['sarif_id'] = sarif_id
+            _path_params["sarif_id"] = sarif_id
         # process the query parameters
         # process the header parameters
         # process the form parameters
@@ -306,37 +312,28 @@ class SarifApi:
         if payload is not None:
             _body_params = payload
 
-
         # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
+        if "Accept" not in _header_params:
+            _header_params["Accept"] = self.api_client.select_header_accept(
+                ["application/json"]
             )
 
         # set the HTTP header `Content-Type`
         if _content_type:
-            _header_params['Content-Type'] = _content_type
+            _header_params["Content-Type"] = _content_type
         else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
+            _default_content_type = self.api_client.select_header_content_type(
+                ["application/json"]
             )
             if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
+                _header_params["Content-Type"] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = [
-            'BasicAuth'
-        ]
+        _auth_settings: List[str] = ["BasicAuth"]
 
         return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/v1/task/{task_id}/sarif/{sarif_id}/',
+            method="POST",
+            resource_path="/v1/task/{task_id}/sarif/{sarif_id}/",
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -346,7 +343,5 @@ class SarifApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
+            _request_auth=_request_auth,
         )
-
-

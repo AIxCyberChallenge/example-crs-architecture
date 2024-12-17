@@ -23,10 +23,12 @@ from my_crs.openapi_client.models.types_assessment import TypesAssessment
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class TypesSarifAssessmentSubmission(BaseModel):
     """
     TypesSarifAssessmentSubmission
-    """ # noqa: E501
+    """  # noqa: E501
+
     assessment: TypesAssessment
     description: StrictStr = Field(description="Plain text reasoning for the assesment")
     __properties: ClassVar[List[str]] = ["assessment", "description"]
@@ -36,7 +38,6 @@ class TypesSarifAssessmentSubmission(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -62,8 +63,7 @@ class TypesSarifAssessmentSubmission(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -81,10 +81,10 @@ class TypesSarifAssessmentSubmission(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "assessment": obj.get("assessment"),
-            "description": obj.get("description")
-        })
+        _obj = cls.model_validate(
+            {
+                "assessment": obj.get("assessment"),
+                "description": obj.get("description"),
+            }
+        )
         return _obj
-
-
