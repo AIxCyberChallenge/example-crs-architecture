@@ -7,12 +7,6 @@ definitions:
     x-enum-varnames:
       - AssessmentValid
       - AssessmentInvalid
-  types.AssessmentStatus:
-    enum:
-      - accepted
-    type: string
-    x-enum-varnames:
-      - AssessmentStatusAccepted
   types.Error:
     properties:
       fields:
@@ -54,7 +48,7 @@ definitions:
   types.SarifAssessmentResponse:
     properties:
       status:
-        $ref: "#/definitions/types.AssessmentStatus"
+        $ref: "#/definitions/types.SubmissionStatus"
     required:
       - status
     type: object
@@ -153,6 +147,10 @@ paths:
           description: Unauthorized
           schema:
             $ref: "#/definitions/types.Error"
+        "404":
+          description: Not Found
+          schema:
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
@@ -193,6 +191,10 @@ paths:
             $ref: "#/definitions/types.Error"
         "401":
           description: Unauthorized
+          schema:
+            $ref: "#/definitions/types.Error"
+        "404":
+          description: Not Found
           schema:
             $ref: "#/definitions/types.Error"
         "500":
@@ -243,6 +245,10 @@ paths:
           description: Unauthorized
           schema:
             $ref: "#/definitions/types.Error"
+        "404":
+          description: Not Found
+          schema:
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
@@ -285,6 +291,10 @@ paths:
           description: Unauthorized
           schema:
             $ref: "#/definitions/types.Error"
+        "404":
+          description: Not Found
+          schema:
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
@@ -325,6 +335,10 @@ paths:
             $ref: "#/definitions/types.Error"
         "401":
           description: Unauthorized
+          schema:
+            $ref: "#/definitions/types.Error"
+        "404":
+          description: Not Found
           schema:
             $ref: "#/definitions/types.Error"
         "500":

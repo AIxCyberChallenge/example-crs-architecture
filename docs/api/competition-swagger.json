@@ -56,6 +56,12 @@
               "$ref": "#/definitions/types.Error"
             }
           },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
           "500": {
             "description": "Internal Server Error",
             "schema": {
@@ -110,6 +116,12 @@
           },
           "401": {
             "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
             "schema": {
               "$ref": "#/definitions/types.Error"
             }
@@ -181,6 +193,12 @@
               "$ref": "#/definitions/types.Error"
             }
           },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
           "500": {
             "description": "Internal Server Error",
             "schema": {
@@ -236,6 +254,12 @@
           },
           "401": {
             "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
             "schema": {
               "$ref": "#/definitions/types.Error"
             }
@@ -298,6 +322,12 @@
               "$ref": "#/definitions/types.Error"
             }
           },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/types.Error"
+            }
+          },
           "500": {
             "description": "Internal Server Error",
             "schema": {
@@ -313,11 +343,6 @@
       "type": "string",
       "enum": ["valid", "invalid"],
       "x-enum-varnames": ["AssessmentValid", "AssessmentInvalid"]
-    },
-    "types.AssessmentStatus": {
-      "type": "string",
-      "enum": ["accepted"],
-      "x-enum-varnames": ["AssessmentStatusAccepted"]
     },
     "types.Error": {
       "type": "object",
@@ -371,7 +396,7 @@
       "required": ["status"],
       "properties": {
         "status": {
-          "$ref": "#/definitions/types.AssessmentStatus"
+          "$ref": "#/definitions/types.SubmissionStatus"
         }
       }
     },
