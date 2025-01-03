@@ -149,7 +149,7 @@ definitions:
 info:
   contact: {}
   title: Example CRS API
-  version: "1.0"
+  version: "0.1"
 paths:
   /status/:
     get:
