@@ -40,12 +40,13 @@ $ pip install -e .[tests]
 
 **Competition API Client**
 
-The `mock_server` from `maintainer-interfaces` may be used to test the Competition API.
+The `example-competition-api` provides a mock implementation of the competition API which will validate input formats and provide example outputs.
 
-After building the container images run the mock server using the following command:
+Run it using the container image:
 
 ```bash
-$ docker run --rm -p 1323:1323 /bin/sh ghcr.io/aixcc-finals/maintainer-interfaces/mock-scantron
+$ docker pull ghcr.io/aixcc-finals/example-crs-architecture/example-competition-api:v0.1
+$ docker run --rm -p 1323:1323 ghcr.io/aixcc-finals/example-crs-architecture/example-competition-api:v0.1
 ```
 
 Test the Competition API client example implemented in `test_patch_api.py`.
@@ -97,9 +98,9 @@ $ sed -i -e 's/from openapi_client./from <new-package-path>.openapi_client./' *.
 $ sed -i -e 's/import openapi_client./import <new-package-path>./' *.py
 ```
 
-The HTTP client code can be tested against the provided `mock_server` in the [maintainer-interfaces](https://github.com/aixcc-finals/maintainer-interfaces/tree/main/scantron/mock_server) repository.
+The HTTP client code can be tested against the provided `example-competition-api` available as a Docker container at `ghcr.io/aixcc-finals/example-crs-architecture/example-competition-api:v0.1`.  This container provides a mock Competition API on port 1323.
 
-Example code for how to interact with the `mock_server` has been added under `test/test_patch_api.py`.
+Example code for how to interact with the `example-competition-api` has been added under `test/test_patch_api.py`.
 
 **CRS API Web Server**
 
