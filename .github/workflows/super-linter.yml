@@ -35,4 +35,4 @@ jobs:
           VALIDATE_JSCPD: false
           LINTER_RULES_PATH: .github/linters
           MARKDOWN_CONFIG_FILE: .markdownlint.json
-          IGNORE_GENERATED_FILES: true
+          FILTER_REGEX_EXCLUDE: ^example-crs-webservice/
