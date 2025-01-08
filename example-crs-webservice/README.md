@@ -50,6 +50,10 @@ $ docker pull ghcr.io/aixcc-finals/example-crs-architecture/example-competition-
 $ docker run --rm -p 1323:1323 ghcr.io/aixcc-finals/example-crs-architecture/example-competition-api:v0.1
 ```
 
+ All endpoints use HTTP Basic authentication.  Use `api_key_id` and `api_key_token` as the credentials. 
+ 
+ A basic UI showing API interactions and formats is available at `http://localhost:1323/swagger/`.
+
 Test the Competition API client example implemented in `test_patch_api.py`.
 
 ```bash
