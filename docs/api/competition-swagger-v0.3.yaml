@@ -4,7 +4,7 @@ definitions:
       - x86_64
     type: string
     x-enum-varnames:
-      - VulnArchitecture64
+      - ArchitecturexX8664
   types.Assessment:
     enum:
       - correct

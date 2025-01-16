@@ -342,7 +342,7 @@
     "types.Architecture": {
       "type": "string",
       "enum": ["x86_64"],
-      "x-enum-varnames": ["VulnArchitecture64"]
+      "x-enum-varnames": ["ArchitecturexX8664"]
     },
     "types.Assessment": {
       "type": "string",

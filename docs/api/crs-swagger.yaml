@@ -93,8 +93,9 @@ definitions:
         type: integer
       focus:
         description:
-          Directory in the repo source tar to look for vulns or submit
-          patches against
+          When the challenge task contains multiple repositories, which
+          folder in the repo source tarball contains the main repository (to submit
+          patches and vulns against)
         type: string
       project_name:
         description: OSS Fuzz Project Name
