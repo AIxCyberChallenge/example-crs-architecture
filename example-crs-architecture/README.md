@@ -241,7 +241,7 @@ To teardown your AKS cluster run the following:
 
 ## Reset / Redeploy CRS
 
-To reset or redeploy a running CRS cluster: 
+To reset or redeploy a running CRS cluster:
 
-- Destroy the AKS instance following the steps in [Destroy](#Destroy)
-- Re-apply the cluster via `terraform apply` as described in [Deploy](#Deploy)
+- Destroy the AKS instance following the steps in [Destroy](#destroy)
+- Re-apply the cluster via `terraform apply` as described in [Deploy](#deploy)
