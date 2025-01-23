@@ -49,8 +49,8 @@ resource "kubernetes_deployment" "crs-example-webservice" {
           }
 
           env {
-            name  = "CRS_CONTROLLER_KEY_ID"
-            value = var.CRS_CONTROLLER_KEY_ID
+            name  = "CRS_CONTROLLER_KEY_TOKEN"
+            value = var.CRS_CONTROLLER_KEY_TOKEN
           }
 
           # resource limits

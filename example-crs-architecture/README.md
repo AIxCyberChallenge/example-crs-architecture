@@ -162,16 +162,16 @@ The container service expects the following environment variables to be passed t
 
 - `CRS_KEY_ID` - The CRS's username/ID
 - `CRS_KEY_TOKEN` - The CRS's password
-- `CRS_CONTROLLER_ID` - The CRS Controller's username/ID
-- `CRS_CONTROLLER_KEY` - The CRS Controller's password
+- `CRS_CONTROLLER_KEY_ID` - The CRS Controller's username/ID
+- `CRS_CONTROLLER_KEY_TOKEN` - The CRS Controller's password
 
 To pass your values to the cluster via an environment variable:
 
 ```bash
 export TF_VAR_CRS_KEY_ID="<your-crs-key-id>"
 export TF_VAR_CRS_KEY_TOKEN="<your-crs-password>"
-export TF_VAR_CRS_CONTROLLER_ID="<your-crs-controller-id>"
-export TF_VAR_CRS_CONTROLLER_KEY="<your-crs-controller-password>"
+export TF_VAR_CRS_CONTROLLER_KEY_ID="<your-crs-controller-id>"
+export TF_VAR_CRS_CONTROLLER_KEY_TOKEN="<your-crs-controller-password>"
 ```
 
 > Terraform looks for environment variables prefixed with `TF_VAR_` to automatically set corresponding variables.
