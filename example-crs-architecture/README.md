@@ -161,7 +161,7 @@ The `example-crs-webservice` is a container image hosted within the GitHub `aixc
 The container service expects the following environment variables to be passed to it for HTTP basic authentication:
 
 - `CRS_KEY_ID` - The CRS's username/ID
-- `CRS_KEY_TOKEN` - The CSR's password
+- `CRS_KEY_TOKEN` - The CRS's password
 - `CRS_CONTROLLER_ID` - The CRS Controller's username/ID
 - `CRS_CONTROLLER_KEY` - The CRS Controller's password
 
