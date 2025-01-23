@@ -7,7 +7,7 @@ resource "kubernetes_secret" "docker-registry" {
     ".dockerconfigjson" = jsonencode({
       auths = {
         "ghcr.io" = {
-          "auth" = "<your_base64_encoded_credentials>"
+          "auth" = var.GHCR_AUTH
         }
       }
     })

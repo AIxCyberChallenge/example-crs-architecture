@@ -52,7 +52,7 @@ az ad sp create-for-rbac --name "ExampleSPA" --role Contributor --scopes /subscr
 ```
 
 > Replace "ExampleSPA" with the name of the SPA you wish to create. Replace `<YOUR-SUBSCRIPTION-ID>` with your azure subscription ID.
-> If using resource group locks, additional configuration may be neccessary which is out of scope of this example; e.g. adding the role `Microsoft.Authorization/locks/` for write, read and delete to the SPA.
+> If using resource group locks, additional configuration may be necessary which is out of scope of this example; e.g. adding the role `Microsoft.Authorization/locks/` for write, read and delete to the SPA.
 
 On successful SPA creation, you will receive output similar to the following:
 
@@ -141,9 +141,9 @@ terraform {
 
 ## Service deployment
 
-### deplyment.tf
+### deployment.tf
 
-This configuration describes how to to deploy containerized applications and services in the AKS cluster. There are two resources defined currently:
+This configuration describes how to deploy containerized applications and services in the AKS cluster. There are two resources defined currently:
 
 - `crs-webservice-lb` load balancer service
 - `crs-example-webservice` deployment
@@ -155,6 +155,28 @@ The `crs-webservice-lb` is a private (internal) load balancer service for the `e
 #### crs-example-webservice
 
 The `example-crs-webservice` is a container image hosted within the GitHub `aixcc-finals` organization at `ghcr.io/aixcc-finals/example-crs-architecture/example-crs-webservice:v0.1`.
+
+#### Environment variables
+
+The container service expects the following environment variables to be passed to it for HTTP basic authentication:
+
+- `CRS_KEY_ID` - The CRS's username/ID
+- `CRS_KEY_TOKEN` - The CSR's password
+- `CRS_CONTROLLER_ID` - The CRS Controller's username/ID
+- `CRS_CONTROLLER_KEY` - The CRS Controller's password
+
+To pass your values to the cluster via an environment variable:
+
+```bash
+export TF_VAR_CRS_KEY_ID="<your-crs-key-id>"
+export TF_VAR_CRS_KEY_TOKEN="<your-crs-password>"
+export TF_VAR_CRS_CONTROLLER_ID="<your-crs-controller-id>"
+export TF_VAR_CRS_CONTROLLER_KEY="<your-crs-controller-password>"
+```
+
+> Terraform looks for environment variables prefixed with `TF_VAR_` to automatically set corresponding variables.
+
+#### Resources
 
 You may scale your resource limits as you see fit in the `resources{}` block:
 
@@ -175,28 +197,34 @@ This deployment requires authenticated access to the `ghcr.io/aixcc-finals` pack
 
 ### secrets.tf
 
-### GitHub pernsonal access token
+### GitHub personal access token
 
 You will need to have a GitHub personal access token (PAT) scoped to at least `read:packages`.
 
-To create the PAT, go to your account `Settings` > `Developer settings` > `Personal access tokens`, and generate a token with the scopes needed for your use case.
+To create the PAT, go to your account, `Settings` > `Developer settings` > `Personal access tokens`, and generate a token with the scopes needed for your use case.
 
-Once you have your PAT, you will to to base64 encode it for use within `secrets.tf`:
+Once you have your PAT, you will to base64 encode it for use within `secrets.tf`:
 
 ```bash
-echo -n "gh_username:gh_token" | base64
+echo -n "ghcr_username:ghcr_token" | base64
 ```
 
-> replace `gh_username` and `gh_token` with your GitHub username and your PAT respectively.
+> replace `ghcr_username` and `ghcr_token` with your GitHub username and your PAT respectively.
 
-You will need to add your base64 encoded credentials to the `auth` section of the following block in order to authenticate to the oragnization's docker registry.
+To pass your base64 encoded credentials to the cluster via an environment variable in order to authenticate to the organization's docker registry:
+
+```bash
+export export TF_VAR_GHCR_AUTH="<your-base64-encoded-auth-string>"
+```
+
+This value will be stored for use as `auth` in the following block:
 
 ```bash
   data = {
     ".dockerconfigjson" = jsonencode({
       auths = {
         "ghcr.io" = {
-          "auth" = "<your_base64_encoded_credentials>"
+          "auth" = var.GHCR_AUTH
         }
       }
     })
@@ -223,7 +251,7 @@ A handful of outputs will be provided based on `outputs.tf` when the apply compl
 - `kubectl config get-contexts` - lists the current contexts in your kubeconfig
 - `kubectl describe deployment <deployment name>` - provides detailed information about your deployment
 - `kubectl get pods -l app=<appName>` - lists pods labeled with `<appName>`
-- `kubectl logs <podName>` - retrieves the stdout and stderr streams from the containers within the speicified pod
+- `kubectl logs <podName>` - retrieves the stdout and stderr streams from the containers within the specified pod
 - `kubectl get svc <service name>` - checks the status of service, e.g. the load balancer `crs-webservice-lb`
 
 ## State
@@ -233,7 +261,7 @@ A handful of outputs will be provided based on `outputs.tf` when the apply compl
 
 ## Destroy
 
-To teardown your AKS cluster run the following:
+To tear down your AKS cluster run the following:
 
 - `terraform destroy`
 - Review the output on what is to be destroyed

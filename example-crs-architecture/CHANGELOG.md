@@ -1,5 +1,12 @@
 # CHANGELOG.md
 
+## 2025-01-19
+
+- Updates to outputs.tf
+- Updates to variables.tf
+- Changes hardcoded credentials environment variables
+- Updates to README.md
+
 ## 2025-01-15
 
 - Adds example CRS webservice docker image via deployment.tf
