@@ -203,7 +203,7 @@ You will need to have a GitHub personal access token (PAT) scoped to at least `r
 
 To create the PAT, go to your account, `Settings` > `Developer settings` > `Personal access tokens`, and generate a token with the scopes needed for your use case.
 
-Once you have your PAT, you will to base64 encode it for use within `secrets.tf`:
+Once you have your PAT, you will need to base64 encode it for use within `secrets.tf`:
 
 ```bash
 echo -n "ghcr_username:ghcr_token" | base64
