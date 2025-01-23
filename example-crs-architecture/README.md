@@ -201,7 +201,7 @@ This deployment requires authenticated access to the `ghcr.io/aixcc-finals` pack
 
 You will need to have a GitHub personal access token (PAT) scoped to at least `read:packages`.
 
-To create the PAT, go to your account, `Settings` > `Developer settings` > `Personal access tokens`, and generate a token with the scopes needed for your use case.
+To create the PAT, go to your account, `Settings` > `Developer settings` > `Personal access tokens`, and generate a Token (classic) with the scopes needed for your use case.
 
 Once you have your PAT, you will need to base64 encode it for use within `secrets.tf`:
 
