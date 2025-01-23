@@ -214,7 +214,7 @@ echo -n "ghcr_username:ghcr_token" | base64
 To pass your base64 encoded credentials to the cluster via an environment variable in order to authenticate to the organization's docker registry:
 
 ```bash
-export export TF_VAR_GHCR_AUTH="<your-base64-encoded-auth-string>"
+export TF_VAR_GHCR_AUTH="<your-base64-encoded-auth-string>"
 ```
 
 This value will be stored for use as `auth` in the following block:
