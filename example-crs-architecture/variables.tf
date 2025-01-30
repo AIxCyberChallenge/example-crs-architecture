@@ -27,3 +27,28 @@ variable "username" {
   description = "The admin username for the new cluster."
   default     = "azureadmin"
 }
+
+variable "GHCR_AUTH" {
+  type        = string
+  description = "Base64 encoded credentials for GHCR"
+}
+
+variable "CRS_KEY_ID" {
+  type        = string
+  description = "HTTP basic auth username for the CRS "
+}
+
+variable "CRS_KEY_TOKEN" {
+  type        = string
+  description = "HTTP basic auth password for the CRS "
+}
+
+variable "CRS_CONTROLLER_KEY_ID" {
+  type        = string
+  description = "HTTP basic auth username for the CRS controller "
+}
+
+variable "CRS_CONTROLLER_KEY_TOKEN" {
+  type        = string
+  description = "HTTP basic auth password for the CRS controller "
+}

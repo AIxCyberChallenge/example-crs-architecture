@@ -14,6 +14,10 @@ terraform {
       source  = "hashicorp/random"
       version = "3.6.3"
     }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.35.1"
+    }
     time = {
       source  = "hashicorp/time"
       version = "0.12.1"
@@ -21,15 +25,6 @@ terraform {
   }
 }
 
-
-provider "azurerm" {
-  features {}
-  #Can setup your service principal here, currently commented out to use az cli apply terraform
-  #subscription_id   = "<azure_subscription_id>"
-  #tenant_id         = "<azure_subscription_tenant_id>"
-  #client_id         = "<service_principal_appid>"
-  #client_secret     = "<service_principal_password>"
-}
 
 #resource for random prefixes, helps with unique names and identifiers
 resource "random_pet" "ssh_key_name" {
@@ -116,8 +111,9 @@ resource "azurerm_kubernetes_cluster" "primary" {
     }
   }
   network_profile {
-    network_plugin = "azure"
-    network_policy = "azure"
+    network_plugin    = "azure"
+    network_policy    = "azure"
+    load_balancer_sku = "standard"
   }
   oms_agent {
     log_analytics_workspace_id      = azurerm_log_analytics_workspace.aks_logs.id
