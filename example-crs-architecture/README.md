@@ -165,6 +165,16 @@ The container service expects the following environment variables to be passed t
 - `CRS_CONTROLLER_KEY_ID` - The CRS Controller's username/ID
 - `CRS_CONTROLLER_KEY_TOKEN` - The CRS Controller's password
 
+These values can be generated with the following python calls:
+
+```bash
+key_id:
+python3 -c 'import uuid; print(str(uuid.uuid4()))'
+
+key_token:
+python3 -c 'import secrets, string; print("".join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(32)))'
+```
+
 To pass your values to the cluster via an environment variable:
 
 ```bash
