@@ -21,6 +21,26 @@
             }
           }
         }
+      },
+      "delete": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "description": "Reset all stats in the status endpoint.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["status"],
+        "summary": "Reset status stats",
+        "responses": {
+          "200": {
+            "description": "No Content",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
       }
     },
     "/v1/sarif/": {
@@ -42,7 +62,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/types.VulnBroadcast"
+              "$ref": "#/definitions/types.SARIFBroadcast"
             }
           }
         ],
@@ -87,6 +107,26 @@
             }
           }
         }
+      },
+      "delete": {
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "description": "Cancel all previously submitted tasks. This is meant for edge case recovery in case something goes wrong.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["task"],
+        "summary": "Cancel Tasks",
+        "responses": {
+          "200": {
+            "description": "No Content",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
       }
     },
     "/v1/task/{task_id}/": {
@@ -96,7 +136,7 @@
             "BasicAuth": []
           }
         ],
-        "description": "cancel a task",
+        "description": "Cancel a task by id. This is meant for edge case recovery in case something goes wrong.",
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "tags": ["task"],
@@ -123,17 +163,60 @@
     }
   },
   "definitions": {
+    "types.SARIFBroadcast": {
+      "type": "object",
+      "required": ["broadcasts", "message_id", "message_time"],
+      "properties": {
+        "broadcasts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/types.SARIFBroadcastDetail"
+          }
+        },
+        "message_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "message_time": {
+          "type": "integer"
+        }
+      }
+    },
+    "types.SARIFBroadcastDetail": {
+      "type": "object",
+      "required": ["metadata", "sarif", "sarif_id", "task_id"],
+      "properties": {
+        "metadata": {
+          "description": "String to string map containing data that should be attached to outputs like log messages and OpenTelemetry trace attributes for traceability",
+          "type": "object"
+        },
+        "sarif": {
+          "description": "SARIF Report compliant with provided schema",
+          "type": "object"
+        },
+        "sarif_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "task_id": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
     "types.SourceDetail": {
       "type": "object",
       "required": ["sha256", "type", "url"],
       "properties": {
         "sha256": {
+          "description": "Integrity hash of the gzipped tarball",
           "type": "string"
         },
         "type": {
           "$ref": "#/definitions/types.SourceType"
         },
         "url": {
+          "description": "URL to fetch the source gzipped tarball",
           "type": "string"
         }
       }
@@ -149,21 +232,32 @@
     },
     "types.Status": {
       "type": "object",
-      "required": ["ready", "state", "version"],
+      "required": ["ready", "since", "state", "version"],
       "properties": {
         "details": {
-          "description": "Keep in mind this endpoint is unauthenticated. Do not place sensitive details in this object. This is optional arbitrary content. This may be logged in error cases, but is mainly for interactive troubleshooting.",
+          "description": "This is optional arbitrary content that may be logged in error cases, but is mainly for interactive troubleshooting.\n\nKeep in mind this endpoint is unauthenticated. Do not place sensitive details in this object.",
           "type": "object",
-          "additionalProperties": {}
+          "additionalProperties": {
+            "type": "string"
+          }
         },
         "ready": {
           "type": "boolean"
         },
+        "since": {
+          "description": "Last time task and submission stats were reset",
+          "type": "integer"
+        },
         "state": {
-          "$ref": "#/definitions/types.StatusState"
+          "description": "State of the currently running tasks and submissions",
+          "allOf": [
+            {
+              "$ref": "#/definitions/types.StatusState"
+            }
+          ]
         },
         "version": {
-          "description": "Version string for verification and reproducibility. Git commit, SemVer, etc...",
+          "description": "Version string for verification and reproducibility\n\n- git commit\n\n- SemVer\n\n- etc",
           "type": "string"
         }
       }
@@ -179,21 +273,42 @@
     },
     "types.StatusTasksState": {
       "type": "object",
-      "required": ["canceled", "errored", "pending", "running", "succeeded"],
+      "required": [
+        "canceled",
+        "errored",
+        "failed",
+        "pending",
+        "processing",
+        "succeeded",
+        "waiting"
+      ],
       "properties": {
         "canceled": {
+          "description": "Number of tasks that competition infrastructure has cancelled",
           "type": "integer"
         },
         "errored": {
+          "description": "Number of tasks that the CRS encountered an unrecoverable issue for",
+          "type": "integer"
+        },
+        "failed": {
+          "description": "Number of submissions that the competition infrastructure marked failed",
           "type": "integer"
         },
         "pending": {
+          "description": "Number of tasks that the CRS has not started work on",
           "type": "integer"
         },
-        "running": {
+        "processing": {
+          "description": "Number of tasks that the CRS is currently processing",
           "type": "integer"
         },
         "succeeded": {
+          "description": "Number of submissions that the competition infrastructure marked passed",
+          "type": "integer"
+        },
+        "waiting": {
+          "description": "Number of submissions that the competition infrastructure is currently testing",
           "type": "integer"
         }
       }
@@ -222,6 +337,7 @@
       "required": [
         "deadline",
         "focus",
+        "metadata",
         "project_name",
         "source",
         "task_id",
@@ -229,17 +345,23 @@
       ],
       "properties": {
         "deadline": {
+          "description": "UNIX timestamp by which any submissions for this task must be in",
           "type": "integer"
         },
         "focus": {
-          "description": "When the challenge task contains multiple repositories, which folder in the repo source tarball contains the main repository (to submit patches and vulns against)",
+          "description": "Because the challenge task may contain multiple repositories, the folder in the type repo source tarball containing the main project.\nIt is still set when there is only one repository.\n\nThis is the project the CRS is meant to submit vulns, patches, and SARIF assessments against.",
           "type": "string"
         },
+        "metadata": {
+          "description": "String to string map containing data that should be attached to outputs like log messages and OpenTelemetry trace attributes for traceability",
+          "type": "object"
+        },
         "project_name": {
-          "description": "OSS Fuzz Project Name",
+          "description": "OSS Fuzz project name",
           "type": "string"
         },
         "source": {
+          "description": "List of sources needed to evaluate a task",
           "type": "array",
           "items": {
             "$ref": "#/definitions/types.SourceDetail"
@@ -258,43 +380,6 @@
       "type": "string",
       "enum": ["full", "delta"],
       "x-enum-varnames": ["TaskTypeFull", "TaskTypeDelta"]
-    },
-    "types.VulnBroadcast": {
-      "type": "object",
-      "required": ["message_id", "message_time", "vulns"],
-      "properties": {
-        "message_id": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "message_time": {
-          "type": "integer"
-        },
-        "vulns": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/types.VulnDetail"
-          }
-        }
-      }
-    },
-    "types.VulnDetail": {
-      "type": "object",
-      "required": ["sarif", "task_id", "vuln_id"],
-      "properties": {
-        "sarif": {
-          "description": "SARIF Report compliant with \"https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json\"",
-          "type": "object"
-        },
-        "task_id": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "vuln_id": {
-          "type": "string",
-          "format": "uuid"
-        }
-      }
     }
   },
   "securityDefinitions": {

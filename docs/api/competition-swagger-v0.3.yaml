@@ -4,7 +4,7 @@ definitions:
       - x86_64
     type: string
     x-enum-varnames:
-      - ArchitecturexX8664
+      - ArchitectureX864
   types.Assessment:
     enum:
       - correct
@@ -27,18 +27,29 @@ definitions:
   types.PatchSubmission:
     properties:
       description:
-        description: Optional plain text string describing the vulnerability
+        description: |-
+          Optional plain text reasoning for the assessment
+
+          100KiB max size
+        maxLength: 131072
         type: string
       patch:
-        description: 100kb Max Size
+        description: |-
+          Base64 encoded patch in unified diff format
+
+          100KiB max size before Base64 encoding
         format: base64
         type: string
+      sarif_id:
+        description: Optional ID of SARIF Broadcast this patch is associated with
+        format: uuid
+        type: string
       vuln_id:
+        description: Optional ID of Vuln this patch is associated with
         format: uuid
         type: string
     required:
       - patch
-      - vuln_id
     type: object
   types.PatchSubmissionResponse:
     properties:
@@ -63,7 +74,11 @@ definitions:
       assessment:
         $ref: "#/definitions/types.Assessment"
       description:
-        description: Plain text reasoning for the assesment
+        description: |-
+          Plain text reasoning for the assessment
+
+          100KiB max size
+        maxLength: 131072
         type: string
     required:
       - assessment
@@ -77,6 +92,13 @@ definitions:
       - failed
       - deadline_exceeded
     type: string
+    x-enum-comments:
+      SubmissionStatusAccepted: Successfully submitted
+      SubmissionStatusDeadlineExceeded:
+        Task deadline exceeded. All submissions marked
+        accepted before the deadline will be evaluated.
+      SubmissionStatusFailed: Submission failed testing
+      SubmissionStatusPassed: Successfully evaluated submission
     x-enum-varnames:
       - SubmissionStatusAccepted
       - SubmissionStatusInvalid
@@ -88,15 +110,30 @@ definitions:
       architecture:
         $ref: "#/definitions/types.Architecture"
       data_file:
-        description: 2mb max size
+        description: |-
+          Base64 encoded vuln trigger
+
+          2MiB max size before Base64 encoding
         format: base64
         type: string
       harness_name:
+        description: |-
+          Fuzz Tooling Harness Name that exercises this vuln
+
+          4KiB max size
+        maxLength: 4096
         type: string
       sanitizer:
+        description: |-
+          Fuzz Tooling Sanitizer that exercises this vuln
+
+          4KiB max size
+        maxLength: 4096
         type: string
       sarif:
-        description: SARIF Report compliant with "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json"
+        description:
+          Optional SARIF Report compliant with the provided versioned SARIF
+          schema
         type: object
     required:
       - architecture
