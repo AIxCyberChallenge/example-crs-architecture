@@ -18,5 +18,5 @@
 - Added a reset stats endpoint
 - Added a cancel all running tasks endpoint
 - Reworked status endpoint
-  - Added a `since` field tracking the last UNIX timestamp it was reset
+  - Added a `since` field tracking the last Unix timestamp it was reset
   - Reworked counter fields to allow more fine grained tracking and provided definitions for each field
