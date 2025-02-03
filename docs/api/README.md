@@ -70,9 +70,9 @@ sequenceDiagram
 sequenceDiagram
     accTitle: CRS SARIF Assessment Workflow
 
-    API->CRS: SARIF Broadcast
-    CRS->API: SARIF Assessment
-    API->CRS: Assessment Status "accepted"
+    API->>CRS: SARIF Broadcast
+    CRS->>API: SARIF Assessment
+    API->>CRS: Assessment Status "accepted"
 ```
 
 ### Submitting a patch
