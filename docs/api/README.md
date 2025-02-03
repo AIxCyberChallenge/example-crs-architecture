@@ -100,7 +100,7 @@ The CRS API has a status endpoint which provides a summary of tasks by status, a
 stateDiagram-v2
     accTitle: Task Status State Diagram
 
-    nonexistent, no state --> pending: Competition infrastructure sends a task to the CRS
+    nonexistent --> pending: Competition infrastructure sends a task to the CRS
     pending --> processing: CRS starts work on a task
     processing --> errored: CRS had an unrecoverable issue while working on the task
     processing --> canceled: Competition infrastructure cancels the task
