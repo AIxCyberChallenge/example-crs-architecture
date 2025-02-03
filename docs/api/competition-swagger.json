@@ -374,7 +374,7 @@
           "maxLength": 131072
         },
         "patch": {
-          "description": "Base64 encoded patch in unified diff format\n\n128KiB max size before Base64 encoding",
+          "description": "Base64 encoded patch in unified diff format\n\n100KiB max size before Base64 encoding",
           "type": "string",
           "format": "base64"
         },
