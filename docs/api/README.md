@@ -42,7 +42,8 @@ python -m http.server
 
 ## Competition API Interaction
 
-During the competition, the Competition API sends tasks and SARIF broadcasts to CRSs and receives responses of several types (vulnerability, patch, or SARIF assessment). The Example Competition API checks interfaces only. It does not send tasks, and it accepts any valid request.
+During the competition, the Competition API sends tasks and SARIF broadcasts to CRSs and receives responses of several types (vulnerability, patch, or SARIF assessment). The Example Competition API checks interfaces
+only. It does not send tasks, and it accepts any valid request.
 
 The competition-time workflows for interacting with the Competition API are documented in the following charts.
 
