@@ -49,21 +49,66 @@ The competition-time workflows for interacting with the Competition API are docu
 
 ### Submitting a vulnerability
 
-![Vulnerability Submission Workflow](./static/vulnsubmission.png)
+```mermaid
+sequenceDiagram
+    accTitle: CRS Vuln Submission Workflow
+
+    API->>CRS: Task(s)
+    CRS->>API: Vuln Submission
+    API->>CRS: Vuln ID, Vuln Status "accepted"
+    API->>API: Vuln Testing
+    CRS->>API: Vuln Status Polling
+    API->>CRS: Current Vuln Status ("accepted")
+    API->>API: Vuln Testing Complete, update status to "passed" or "failed"
+    CRS->>API: Vuln Status Polling
+    API->>CRS: Current Vuln Status ("passed" or "failed")
+```
 
 ### Submitting a SARIF assessment
 
-![SARIF Assessment Workflow](./static/sarifassessment.png)
+```mermaid
+sequenceDiagram
+    accTitle: CRS SARIF Assessment Workflow
+
+    API->CRS: SARIF Broadcast
+    CRS->API: SARIF Assessment
+    API->CRS: Assessment Status "accepted"
+```
 
 ### Submitting a patch
 
-![Patch Submission Workflow](./static/patchsubmission.png)
+```mermaid
+sequenceDiagram
+    accTitle: CRS Patch Submission Workflow
+
+    API->>CRS: Task(s) and/or SARIF Broadcast
+    CRS->>API: Patch Submission (optionally against an existing vuln or SARIF broadcast)
+    API->>CRS: Patch ID, Patch Status "accepted"
+    API->>API: Patch Testing
+    CRS->>API: Patch Status Polling
+    API->>CRS: Current Patch Status ("accepted")
+    API->>API: Patch Testing Complete, update status to "passed" or "failed"
+    CRS->>API: Patch Status Polling
+    API->>CRS: Current Patch Status ("passed" or "failed")
+```
 
 ## CRS API Task Statuses
 
 The CRS API has a status endpoint which provides a summary of tasks by status, among other things. The statuses which tasks go through are documented in the state diagram below.
 
-![CRS Task Status state diagram](./static/crstaskstatus.png)
+```mermaid
+stateDiagram-v2
+    accTitle: Task Status State Diagram
+
+    pending --> processing: CRS starts work on a task
+    processing --> errored: CRS had an unrecoverable issue while working on the task
+    processing --> canceled: Competition infrastructure cancels the task
+    processing --> waiting: CRS sends a submission in for the task
+    waiting --> processing: CRS receives a result from the Competition API for its submission, and intends to submit again for the task
+    waiting --> succeeded: CRS receives a positive result from the Competition API for its submission, and does not intend to submit again for the task
+    waiting --> succeeded: CRS receives a negative result from the Competition API for its submission, and does not intend to submit again for the task
+    waiting --> canceled: Competition infrastructure cancels the task
+```
 
 ## Generating a Client or Server
 
