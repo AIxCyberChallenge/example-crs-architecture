@@ -42,22 +42,25 @@ python -m http.server
 
 ## Competition API Interaction
 
-During the competition, the Competition API sends tasks and SARIF broadcasts to CRSs and receives responses of several types (vulnerability, patch, or SARIF assessment).  The Example Competition API checks interfaces only.  It does not send tasks, and it accepts any valid request.
+During the competition, the Competition API sends tasks and SARIF broadcasts to CRSs and receives responses of several types (vulnerability, patch, or SARIF assessment). The Example Competition API checks interfaces only. It does not send tasks, and it accepts any valid request.
 
 The competition-time workflows for interacting with the Competition API are documented in the following charts.
 
 ### Submitting a vulnerability
+
 ![Vulnerability Submission Workflow](./static/vulnsubmission.png)
 
 ### Submitting a SARIF assessment
+
 ![SARIF Assessment Workflow](./static/sarifassessment.png)
 
 ### Submitting a patch
+
 ![Patch Submission Workflow](./static/patchsubmission.png)
 
 ## CRS API Task Statuses
 
-The CRS API has a status endpoint which provides a summary of tasks by status, among other things.  The statuses which tasks go through are documented in the state diagram below.
+The CRS API has a status endpoint which provides a summary of tasks by status, among other things. The statuses which tasks go through are documented in the state diagram below.
 
 ![CRS Task Status state diagram](./static/crstaskstatus.png)
 
