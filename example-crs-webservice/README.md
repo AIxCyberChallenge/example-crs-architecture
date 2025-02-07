@@ -46,8 +46,8 @@ The `example-competition-api` provides a mock implementation of the competition 
 Run it using the container image:
 
 ```bash
-$ docker pull ghcr.io/aixcc-finals/example-crs-architecture/example-competition-api:v0.1
-$ docker run --rm -p 1323:1323 ghcr.io/aixcc-finals/example-crs-architecture/example-competition-api:v0.1
+$ docker pull ghcr.io/aixcc-finals/example-crs-architecture/example-competition-api:v0.3
+$ docker run --rm -p 1323:1323 ghcr.io/aixcc-finals/example-crs-architecture/example-competition-api:v0.3
 ```
 
  All endpoints use HTTP Basic authentication.  Use `api_key_id` and `api_key_token` as the credentials. 
@@ -105,7 +105,7 @@ $ sed -i -e 's/from openapi_client./from <new-package-path>.openapi_client./' *.
 $ sed -i -e 's/import openapi_client./import <new-package-path>./' *.py
 ```
 
-The HTTP client code can be tested against the provided `example-competition-api` available as a Docker container at `ghcr.io/aixcc-finals/example-crs-architecture/example-competition-api:v0.1`. This container provides a mock Competition API on port 1323.
+The HTTP client code can be tested against the provided `example-competition-api` available as a Docker container at `ghcr.io/aixcc-finals/example-crs-architecture/example-competition-api:v0.3`. This container provides a mock Competition API on port 1323.
 
 Example code for how to interact with the `example-competition-api` has been added under `test/test_patch_api.py`.
 
