@@ -107,7 +107,7 @@ stateDiagram-v2
     processing --> waiting: CRS sends a submission in for the task
     waiting --> processing: CRS receives a result from the Competition API for its submission, and intends to submit again for the task
     waiting --> succeeded: CRS receives a positive result from the Competition API for its submission, and does not intend to submit again for the task
-    waiting --> succeeded: CRS receives a negative result from the Competition API for its submission, and does not intend to submit again for the task
+    waiting --> failed: CRS receives a negative result from the Competition API for its submission, and does not intend to submit again for the task
     waiting --> canceled: Competition infrastructure cancels the task
 ```
 
