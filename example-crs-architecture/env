@@ -1,0 +1,14 @@
+#These must be updated to your unique values per README.md
+export TF_VAR_ARM_SUBSCRIPTION_ID=
+export TF_VAR_ARM_TENANT_ID=
+export TF_VAR_ARM_CLIENT_ID=
+export TF_VAR_ARM_CLIENT_SECRET=
+export TF_VAR_AZ_DNS_RESOURCE_GROUP=
+export TF_VAR_AZ_DNS_ZONE_NAME=
+export TF_VAR_CRS_CONTROLLER_KEY_ID=
+export TF_VAR_CRS_CONTROLLER_KEY_TOKEN=
+export TF_VAR_CRS_KEY_ID=
+export TF_VAR_CRS_KEY_TOKEN=
+export TF_VAR_GHCR_AUTH=
+export TF_VAR_ACME_EMAIL=
+export TF_VAR_CRS_API_DOMAIN=

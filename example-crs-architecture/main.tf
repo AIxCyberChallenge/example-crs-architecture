@@ -1,31 +1,3 @@
-terraform {
-  required_version = ">=1.0"
-
-  required_providers {
-    azapi = {
-      source  = "azure/azapi"
-      version = "2.0.1"
-    }
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "4.7.0"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "3.6.3"
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.35.1"
-    }
-    time = {
-      source  = "hashicorp/time"
-      version = "0.12.1"
-    }
-  }
-}
-
-
 #resource for random prefixes, helps with unique names and identifiers
 resource "random_pet" "ssh_key_name" {
   prefix    = "ssh"

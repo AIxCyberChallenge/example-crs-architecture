@@ -28,6 +28,27 @@ variable "username" {
   default     = "azureadmin"
 }
 
+variable "ARM_SUBSCRIPTION_ID" {
+  type        = string
+  description = "Azure subscription ID"
+}
+
+variable "ARM_TENANT_ID" {
+  type        = string
+  description = "Azure tenant ID"
+}
+
+variable "ARM_CLIENT_ID" {
+  type        = string
+  description = "Azure client ID"
+}
+
+variable "ARM_CLIENT_SECRET" {
+  type        = string
+  sensitive   = true
+  description = "Azure client secret"
+}
+
 variable "GHCR_AUTH" {
   type        = string
   description = "Base64 encoded credentials for GHCR"
