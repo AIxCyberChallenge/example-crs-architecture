@@ -6,86 +6,87 @@ set -e
 echo "Applying environment variables from ./env"
 source ./env
 
-
-
 #deploy the AKS cluster and kubernetes resources function
-deploy () {
-	
-     echo "Applying environment variables to yaml from templates"
-     CLIENT_BASE64=$(echo -n "$TF_VAR_ARM_CLIENT_SECRET" | base64)
-     CRS_KEY_BASE64=$(echo -n "$CRS_KEY_TOKEN" | base64)
-     CRS_CONTROLLER_KEY_BASE64=$(echo -n "$CRS_CONTROLLER_KEY_TOKEN" | base64)
-     export CLIENT_BASE64
-     export CRS_KEY_BASE64
-     export CRS_CONTROLLER_KEY_BASE64
-     envsubst < k8s/base/crs-webservice/ingress.template > k8s/base/crs-webservice/ingress.yaml
-     envsubst < k8s/base/crs-webservice/.dockerconfigjson.template > k8s/base/crs-webservice/.dockerconfigjson
-     envsubst < k8s/base/crs-webservice/secrets.template > k8s/base/crs-webservice/secrets.yaml
-     envsubst < k8s/base/crs-webservice/deployment.template > k8s/base/crs-webservice/deployment.yaml
-     envsubst < k8s/base/cluster-issuer/secrets.template > k8s/base/cluster-issuer/secrets.yaml
-     #check if $STAGING is set to false, otherwise applies staging template
-     if [ "$STAGING" = false ] ; then
-          echo "STAGING is set to $STAGING, applying letsencrypt-prod.template"
-          envsubst < k8s/base/cluster-issuer/letsencrypt-prod.template > k8s/base/cluster-issuer/letsencrypt.yaml
-     else
-          echo "STAGING is set to $STAGING, applying letsencrypt-staging.template"
-          envsubst < k8s/base/cluster-issuer/letsencrypt-staging.template > k8s/base/cluster-issuer/letsencrypt.yaml
-     fi
-     
-     #deploy AKS resources in Azure
-     echo "Deploying AKS cluster Resources"
-     terraform init
-     terraform apply -auto-approve
+deploy() {
 
-     #set resource group name and kubernetes cluster name variables from terraform outputs
+	echo "Applying environment variables to yaml from templates"
+	CLIENT_BASE64=$(echo -n "$TF_VAR_ARM_CLIENT_SECRET" | base64)
+	CRS_KEY_BASE64=$(echo -n "$CRS_KEY_TOKEN" | base64)
+	CRS_CONTROLLER_KEY_BASE64=$(echo -n "$CRS_CONTROLLER_KEY_TOKEN" | base64)
+	export CLIENT_BASE64
+	export CRS_KEY_BASE64
+	export CRS_CONTROLLER_KEY_BASE64
+	envsubst <k8s/base/crs-webservice/ingress.template >k8s/base/crs-webservice/ingress.yaml
+	envsubst <k8s/base/crs-webservice/.dockerconfigjson.template >k8s/base/crs-webservice/.dockerconfigjson
+	envsubst <k8s/base/crs-webservice/secrets.template >k8s/base/crs-webservice/secrets.yaml
+	envsubst <k8s/base/crs-webservice/deployment.template >k8s/base/crs-webservice/deployment.yaml
+	envsubst <k8s/base/cluster-issuer/secrets.template >k8s/base/cluster-issuer/secrets.yaml
+	#check if $STAGING is set to false, otherwise applies staging template
+	if [ "$STAGING" = false ]; then
+		echo "STAGING is set to $STAGING, applying letsencrypt-prod.template"
+		envsubst <k8s/base/cluster-issuer/letsencrypt-prod.template >k8s/base/cluster-issuer/letsencrypt.yaml
+	else
+		echo "STAGING is set to $STAGING, applying letsencrypt-staging.template"
+		envsubst <k8s/base/cluster-issuer/letsencrypt-staging.template >k8s/base/cluster-issuer/letsencrypt.yaml
+	fi
 
-     KUBERNETES_CLUSTER_NAME=$(terraform output -raw kubernetes_cluster_name)
-     RESOURCE_GROUP_NAME=$(terraform output -raw resource_group_name)
+	#deploy AKS resources in Azure
+	echo "Deploying AKS cluster Resources"
+	terraform init
+	terraform apply -auto-approve
 
-     echo "----------------------------------------------------"
-     echo "KUBERNETES_CLUSTER_NAME is $KUBERNETES_CLUSTER_NAME"
-     echo "RESOURCE_GROUP_NAME is $RESOURCE_GROUP_NAME"
-     echo "----------------------------------------------------"
-     echo "Retrieving credentials to access AKS cluster"
-     #retrieve credentials to access AKS cluster
+	#set resource group name and kubernetes cluster name variables from terraform outputs
 
-     az aks get-credentials --resource-group "$RESOURCE_GROUP_NAME" --name "$KUBERNETES_CLUSTER_NAME"
+	KUBERNETES_CLUSTER_NAME=$(terraform output -raw kubernetes_cluster_name)
+	RESOURCE_GROUP_NAME=$(terraform output -raw resource_group_name)
 
-     #deploy kubernetes resources in AKS cluster
-     kubectl apply -k k8s/base/cert-manager/
-     kubectl wait --for condition=Established crd/certificates.cert-manager.io --timeout=60s
-     kubectl wait --for condition=Established crd/clusterissuers.cert-manager.io --timeout=60s
-     kubectl wait --for=condition=ready pod -l app.kubernetes.io/component=webhook -n cert-manager --timeout=300s
-     kubectl apply -k k8s/base/crs-webservice/
-     kubectl apply -k k8s/base/ingress-nginx/
-     kubectl wait --for=jsonpath='{.status.loadBalancer.ingress[0].ip}' -n crs-webservice ingress/crs-webapp --timeout=5m
-     ingress_ip=$(kubectl get ingress -n crs-webservice crs-webapp -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-     echo "ingress IP is $ingress_ip"
-     kubectl apply -k k8s/base/cluster-issuer/
+	echo "----------------------------------------------------"
+	echo "KUBERNETES_CLUSTER_NAME is $KUBERNETES_CLUSTER_NAME"
+	echo "RESOURCE_GROUP_NAME is $RESOURCE_GROUP_NAME"
+	echo "----------------------------------------------------"
+	echo "Retrieving credentials to access AKS cluster"
+	#retrieve credentials to access AKS cluster
 
-     echo "Updating DNS records with ingress IP"
-     az network dns record-set a delete --resource-group "$DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --name api -y
-     az network dns record-set a create --resource-group "$DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --name api
-     az network dns record-set a add-record --resource-group "$DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --record-set-name api --ipv4-address "$ingress_ip" --ttl 180
-     
+	az aks get-credentials --resource-group "$RESOURCE_GROUP_NAME" --name "$KUBERNETES_CLUSTER_NAME"
+
+	#deploy kubernetes resources in AKS cluster
+	kubectl apply -k k8s/base/cert-manager/
+	kubectl wait --for condition=Established crd/certificates.cert-manager.io --timeout=60s
+	kubectl wait --for condition=Established crd/clusterissuers.cert-manager.io --timeout=60s
+	kubectl wait --for=condition=ready pod -l app.kubernetes.io/component=webhook -n cert-manager --timeout=300s
+	kubectl apply -k k8s/base/crs-webservice/
+	kubectl apply -k k8s/base/ingress-nginx/
+	kubectl wait --for=jsonpath='{.status.loadBalancer.ingress[0].ip}' -n crs-webservice ingress/crs-webapp --timeout=5m
+	ingress_ip=$(kubectl get ingress -n crs-webservice crs-webapp -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+	echo "ingress IP is $ingress_ip"
+	kubectl apply -k k8s/base/cluster-issuer/
+
+	echo "Updating DNS records with ingress IP"
+	az network dns record-set a delete --resource-group "$DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --name api -y
+	az network dns record-set a create --resource-group "$DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --name api
+	az network dns record-set a add-record --resource-group "$DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --record-set-name api --ipv4-address "$ingress_ip" --ttl 180
 
 }
 
 #destroy the AKS cluster and kubernetes resources function
-destroy () {     
-     echo "----------------------------------------------------"
-     echo "Destroying AKS cluster"
-     echo "----------------------------------------------------"
-     echo ""
-     terraform apply -destroy -auto-approve
+destroy() {
+	echo "----------------------------------------------------"
+	echo "Destroying AKS cluster"
+	echo "----------------------------------------------------"
+	echo ""
+	terraform apply -destroy -auto-approve
 
 }
 
-case $1 in 
-     deploy)
-          deploy;;
-     destroy)
-          destroy;;
-     *)
-          echo "The only acceptable arguments are deploy and destroy"
-esac	  
+case $1 in
+deploy)
+	deploy
+	;;
+destroy)
+	destroy
+	;;
+*)
+	echo "The only acceptable arguments are deploy and destroy"
+	;;
+esac
+

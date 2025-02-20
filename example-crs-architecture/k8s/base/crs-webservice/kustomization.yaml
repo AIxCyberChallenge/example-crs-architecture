@@ -4,8 +4,8 @@ kind: Kustomization
 namespace: crs-webservice
 
 resources:
-- namespace.yaml
-- deployment.yaml
-- secrets.yaml
-- service.yaml
-- ingress.yaml
+  - namespace.yaml
+  - deployment.yaml
+  - secrets.yaml
+  - service.yaml
+  - ingress.yaml

@@ -24,7 +24,7 @@ The standard `azure` networking profile is used.
 - An active Azure subscription.
 - An account in Azure Entra ID.
 - An Azure DNS Zone in your Azure subscription
-- *WIP Placeholder for Competitor Interfaces Team to provide DNS child zone*
+- _WIP Placeholder for Competitor Interfaces Team to provide DNS child zone_
 
 ### Azure
 
@@ -92,28 +92,28 @@ az role assignment create --assignee <APP-ID> --role "DNS Zone Contributor" --sc
 
 The following environment variables are required to be passed into the terraform and kubernetes configurations:
 
-| Variable Name | Description |
-| --- | --- |
-| `STAGING` | Boolean true or false; tells the LetsEncrypt cluster issuer whether to use the staging environment or not. LetsEncrypt has a rate limit of 5 certificates per exact same set of hostnames every 7 days. See more on [Rate Limits](https://letsencrypt.org/docs/rate-limits/). true: uses staging environment |
-| `TF_VAR_ARM_SUBSCRIPTION_ID` | Azure subscription ID |
-| `TF_VAR_ARM_TENANT_ID` | Azure tenant ID |
-| `TF_VAR_ARM_CLIENT_ID` | Azure client ID (service principal account) |
-| `TF_VAR_ARM_CLIENT_SECRET` | Azure client ID secret |
-| `AZ_DNS_RESOURCE_GROUP` | The name of the Azure resource group where your DNS zone is located |
-| `AZ_DNS_ZONE_NAME` | The DNS zone where you want Cert Manager to create DNS record for DNS-01 challenges |
-| `CRS_CONTROLLER_KEY_ID` | HTTP basic auth username for the CRS controller |
-| `CRS_CONTROLLER_KEY_TOKEN` | HTTP basic auth password for the CRS controller |
-| `CRS_KEY_ID` | HTTP basic auth username for the CRS |
-| `CRS_KEY_TOKEN` | HTTP basic auth password for the CRS |
-| `GHCR_AUTH` | Base64 encoded credentials for GHCR |
-| `ACME_EMAIL` | Email address for ACME registration with LetsEncrypt |
-| `API_HOSTNAME` | FQDN of your webservice e.g. api.mycrs.com |
+| Variable Name                | Description                                                                                                                                                                                |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `STAGING`                    | Tells the cluster issuer whether to use the staging environment or not. LetsEncrypt has a rate limits on production. See more on [Rate Limits](https://letsencrypt.org/docs/rate-limits/). |
+| `TF_VAR_ARM_SUBSCRIPTION_ID` | Azure subscription ID                                                                                                                                                                      |
+| `TF_VAR_ARM_TENANT_ID`       | Azure tenant ID                                                                                                                                                                            |
+| `TF_VAR_ARM_CLIENT_ID`       | Azure client ID (service principal account)                                                                                                                                                |
+| `TF_VAR_ARM_CLIENT_SECRET`   | Azure client ID secret                                                                                                                                                                     |
+| `AZ_DNS_RESOURCE_GROUP`      | The name of the Azure resource group where your DNS zone is located                                                                                                                        |
+| `AZ_DNS_ZONE_NAME`           | The DNS zone where you want Cert Manager to create DNS record for DNS-01 challenges                                                                                                        |
+| `CRS_CONTROLLER_KEY_ID`      | HTTP basic auth username for the CRS controller                                                                                                                                            |
+| `CRS_CONTROLLER_KEY_TOKEN`   | HTTP basic auth password for the CRS controller                                                                                                                                            |
+| `CRS_KEY_ID`                 | HTTP basic auth username for the CRS                                                                                                                                                       |
+| `CRS_KEY_TOKEN`              | HTTP basic auth password for the CRS                                                                                                                                                       |
+| `GHCR_AUTH`                  | Base64 encoded credentials for GHCR                                                                                                                                                        |
+| `ACME_EMAIL`                 | Email address for ACME registration with LetsEncrypt                                                                                                                                       |
+| `API_HOSTNAME`               | FQDN of your webservice e.g. api.mycrs.com                                                                                                                                                 |
 
 **These variables are stored in `./env` , and must be updated with accurate values.**
 
 ### CRS HTTP basic auth
 
-*WIP (Current example is using the `jmalloc/echo-server` image as a PoC)*  
+_WIP (Current example is using the `jmalloc/echo-server` image as a PoC)_  
 The crs-webapp container expects the following environment variables to be passed to it for HTTP basic authentication:
 
 - `CRS_KEY_ID` - The CRS's username/ID
@@ -133,7 +133,7 @@ python3 -c 'import secrets, string; print("".join(secrets.choice(string.ascii_up
 
 ### GitHub personal access token
 
-*WIP (Current example is using the `jmalloc/echo-server` image as a PoC)*  
+_WIP (Current example is using the `jmalloc/echo-server` image as a PoC)_  
 You will need to have a GitHub personal access token (PAT) scoped to at least `read:packages`.
 
 To create the PAT, go to your account, `Settings` > `Developer settings` > `Personal access tokens`, and generate a Token (classic) with the scopes needed for your use case.
@@ -203,7 +203,7 @@ The deployment of the AKS cluster and its resources are performed by the wrapper
 - Make any wanted changes to `main.tf`, `outputs.tf`, `providers.tf`, and `variables.tf`
 - Update `./env` with accurate values for each variable
 - Run `./crs-architecture.sh deploy`  
-    This will execute a deployment of your cluster via a combination of terraform and kubectl based on your unique values in `./env`
+   This will execute a deployment of your cluster via a combination of terraform and kubectl based on your unique values in `./env`
 
 ## Useful Cluster Commands
 
@@ -239,5 +239,5 @@ To reset or redeploy a running CRS cluster:
 The default configuration utilizes a private load balancer for it's ingress. This will only allow the ingress to be accessible from within the Azure cluster. To test additional functionality of the via a public ingress:
 
 - edit `k8s/base/ingress-nginx/ingress-nginx.yaml`
--  find `service.beta.kubernetes.io/azure-load-balancer-internal: "true"`
--  comment it out and re-deploy
+- find `service.beta.kubernetes.io/azure-load-balancer-internal: "true"`
+- comment it out and re-deploy
