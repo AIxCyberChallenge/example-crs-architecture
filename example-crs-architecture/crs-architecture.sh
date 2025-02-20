@@ -89,4 +89,3 @@ destroy)
 	echo "The only acceptable arguments are deploy and destroy"
 	;;
 esac
-
