@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crs-webapp
+  labels:
+    app: crs-webapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: crs-webapp
+  template:
+    metadata:
+      labels:
+        app: crs-webapp
+    spec:
+      containers:
+        - name: crs-webapp
+          image: jmalloc/echo-server
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: CRS_KEY_ID
+              value: ${CRS_KEY_ID}
+            - name: CRS_CONTROLLER_KEY_ID
+              value: ${CRS_CONTROLLER_KEY_ID}
+            - name: CRS_KEY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: crs-secrets
+                  key: CRS_KEY_TOKEN
+            - name: CRS_CONTROLLER_KEY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: crs-secrets
+                  key: CRS_CONTROLLER_KEY_TOKEN

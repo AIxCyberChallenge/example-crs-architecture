@@ -1,4 +1,4 @@
-# Example Terraform AKS Cluster
+# Example AKS Cluster
 
 ## Overview
 
@@ -11,17 +11,20 @@ This configuration deploys an AKS cluster (`primary`) with two node pools:
 
 The resource group name is generated with the `"random_pet"` resource from the `hashicorp/random` provider; and are prefixed with `example`
 
-The VM Size is for both pools are using `Standard_D5_v2` in this example. You can change this to suite your needs by editing the `vm_size` values in `main.tf`.
+The VM Size for both pools are using `Standard_D5_v2` in this example. You can change this to suit your needs by editing the `vm_size` values in `main.tf`.
 
 The standard `azure` networking profile is used.
 
-## Pre-requisites
+## Prerequisites
 
 - Azure CLI installed: [az cli install instructions](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
 - Terraform installed: [terraform install instructions](https://developer.hashicorp.com/terraform/tutorials/azure-get-started/install-cli)
 - Kubernetes CLI installed: [kubectl install instructions](https://kubernetes.io/docs/tasks/tools/#kubectl)
+- `gettext` package
 - An active Azure subscription.
 - An account in Azure Entra ID.
+- An Azure DNS Zone in your Azure subscription
+- *WIP Placeholder for Competitor Interfaces Team to provide DNS child zone*
 
 ### Azure
 
@@ -45,13 +48,14 @@ SubscriptionID                        Tenant
 
 A service principal account (SPA) is required to automate the creation of resources and objects within your subscription.
 
-You can create a SPA several ways, the following describes using azure cli.
+- You can create a SPA several ways, the following describes using Azure cli.
 
 ```bash
 az ad sp create-for-rbac --name "ExampleSPA" --role Contributor --scopes /subscriptions/<YOUR-SUBSCRIPTION-ID>
 ```
 
-> Replace "ExampleSPA" with the name of the SPA you wish to create. Replace `<YOUR-SUBSCRIPTION-ID>` with your azure subscription ID.
+> Replace "ExampleSPA" with the name of the SPA you wish to create.  
+> Replace `<YOUR-SUBSCRIPTION-ID>` with your Azure subscription ID.  
 > If using resource group locks, additional configuration may be necessary which is out of scope of this example; e.g. adding the role `Microsoft.Authorization/locks/` for write, read and delete to the SPA.
 
 On successful SPA creation, you will receive output similar to the following:
@@ -65,45 +69,93 @@ On successful SPA creation, you will receive output similar to the following:
 }
 ```
 
-Make note of these values, they will be used in the AKS deployment as the following environment variables:
+Make note of these values, they will be needed in the AKS deployment as the following environment variables:
 
 ```bash
-ARM_TENANT_ID="<tenant-value>"
-ARM_CLIENT_ID="<appID-value>"
-ARM_CLIENT_SECRET="<password-value>"
-ARM_SUBSCRIPTION_ID="<YOUR-SUBSCRIPTION-ID>"
+TF_ARM_TENANT_ID="<tenant-value>"
+TF_ARM_CLIENT_ID="<appID-value>"
+TF_ARM_CLIENT_SECRET="<password-value>"
+TF_ARM_SUBSCRIPTION_ID="<YOUR-SUBSCRIPTION-ID>"
 ```
 
-You can export these as environment variables from the host you're deploying from.
+- Assign the "DNS Zone Contributor" role to your SPA (required to update record sets within your Azure DNS Zone)
 
 ```bash
-export ARM_CLIENT_ID="00000000-0000-0000-0000-000000000000"
-export ARM_CLIENT_SECRET="12345678-0000-0000-0000-000000000000"
-export ARM_TENANT_ID="10000000-0000-0000-0000-000000000000"
-export ARM_SUBSCRIPTION_ID="20000000-0000-0000-0000-000000000000"
+az role assignment create --assignee <APP-ID> --role "DNS Zone Contributor" --scope /subscriptions/<YOUR-SUBSCRIPTION-ID>/resourceGroups/<RESOURCE-GROUP-NAME>/providers/Microsoft.Network/dnszones/<DNS-ZONE-NAME>
 ```
 
-Alternatively, you can add them to your `main.tf`, **this is discouraged for security reasons.**
+> Replace `<APP-ID>` with the appId received in the previous SPA creation step.  
+> Replace `<YOUR-SUBSCRIPTION-ID>` with your Azure subscription ID.  
+> Replace `<DNS-ZONE-NAME>` with your Azure DNS Zone Name.
+
+### Environment Variables
+
+The following environment variables are required to be passed into the terraform and kubernetes configurations:
+
+| Variable Name | Description |
+| --- | --- |
+| `STAGING` | Boolean true or false; tells the LetsEncrypt cluster issuer whether to use the staging environment or not. LetsEncrypt has a rate limit of 5 certificates per exact same set of hostnames every 7 days. See more on [Rate Limits](https://letsencrypt.org/docs/rate-limits/). true: uses staging environment |
+| `TF_VAR_ARM_SUBSCRIPTION_ID` | Azure subscription ID |
+| `TF_VAR_ARM_TENANT_ID` | Azure tenant ID |
+| `TF_VAR_ARM_CLIENT_ID` | Azure client ID (service principal account) |
+| `TF_VAR_ARM_CLIENT_SECRET` | Azure client ID secret |
+| `AZ_DNS_RESOURCE_GROUP` | The name of the Azure resource group where your DNS zone is located |
+| `AZ_DNS_ZONE_NAME` | The DNS zone where you want Cert Manager to create DNS record for DNS-01 challenges |
+| `CRS_CONTROLLER_KEY_ID` | HTTP basic auth username for the CRS controller |
+| `CRS_CONTROLLER_KEY_TOKEN` | HTTP basic auth password for the CRS controller |
+| `CRS_KEY_ID` | HTTP basic auth username for the CRS |
+| `CRS_KEY_TOKEN` | HTTP basic auth password for the CRS |
+| `GHCR_AUTH` | Base64 encoded credentials for GHCR |
+| `ACME_EMAIL` | Email address for ACME registration with LetsEncrypt |
+| `API_HOSTNAME` | FQDN of your webservice e.g. api.mycrs.com |
+
+**These variables are stored in `./env` , and must be updated with accurate values.**
+
+### CRS HTTP basic auth
+
+*WIP (Current example is using the `jmalloc/echo-server` image as a PoC)*  
+The crs-webapp container expects the following environment variables to be passed to it for HTTP basic authentication:
+
+- `CRS_KEY_ID` - The CRS's username/ID
+- `CRS_KEY_TOKEN` - The CRS's password
+- `CRS_CONTROLLER_KEY_ID` - The CRS Controller's username/ID
+- `CRS_CONTROLLER_KEY_TOKEN` - The CRS Controller's password
+
+These values can be generated with the following python calls:
 
 ```bash
-provider "azurerm" {
-  features {}
-  #Can setup your service principal here, currently commented out to use az cli apply terraform
-  #subscription_id   = "<azure_subscription_id>"
-  #tenant_id         = "<azure_subscription_tenant_id>"
-  #client_id         = "<service_principal_appid>"
-  #client_secret     = "<service_principal_password>"
-}
+key_id:
+python3 -c 'import uuid; print(str(uuid.uuid4()))'
+
+key_token:
+python3 -c 'import secrets, string; print("".join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(32)))'
 ```
+
+### GitHub personal access token
+
+*WIP (Current example is using the `jmalloc/echo-server` image as a PoC)*  
+You will need to have a GitHub personal access token (PAT) scoped to at least `read:packages`.
+
+To create the PAT, go to your account, `Settings` > `Developer settings` > `Personal access tokens`, and generate a Token (classic) with the scopes needed for your use case.
+
+Once you have your PAT, you will need to base64 encode it for use within `secrets.tf`:
+
+```bash
+echo -n "ghcr_username:ghcr_token" | base64
+```
+
+> replace `ghcr_username` and `ghcr_token` with your GitHub username and your PAT respectively.
+
+Add your base64 encoded credentials to `GHCR_AUTH`
 
 ## Remote Terraform State Storage
 
-By default, terraform stores its state locally. It is best practice to store terraform state in a remote location.
+By default, terraform stores its state locally. It is best practice to store terraform state in a remote location.  
 This can help with collaboration, security, recovery and scalability. To do this within Azure, you need to create resources to do so.
 
 ### Azure CLI
 
-The following is an example of how to create the resources needed for remote state configuration.
+The following is an example of how to create the resources needed for remote state configuration.  
 These resources will be used in the `backend.tf` configuration file.
 
 - Create remote state resource group.
@@ -139,130 +191,31 @@ terraform {
 }
 ```
 
-## Service deployment
+## crs-architecture.sh
 
-### deployment.tf
-
-This configuration describes how to deploy containerized applications and services in the AKS cluster. There are two resources defined currently:
-
-- `crs-webservice-lb` load balancer service
-- `crs-example-webservice` deployment
-
-### crs-webservice-lb
-
-The `crs-webservice-lb` is a private (internal) load balancer service for the `example-crs-webservice`.
-
-#### crs-example-webservice
-
-The `example-crs-webservice` is a container image hosted within the GitHub `aixcc-finals` organization at `ghcr.io/aixcc-finals/example-crs-architecture/example-crs-webservice:v0.1`.
-
-#### Environment variables
-
-The container service expects the following environment variables to be passed to it for HTTP basic authentication:
-
-- `CRS_KEY_ID` - The CRS's username/ID
-- `CRS_KEY_TOKEN` - The CRS's password
-- `CRS_CONTROLLER_KEY_ID` - The CRS Controller's username/ID
-- `CRS_CONTROLLER_KEY_TOKEN` - The CRS Controller's password
-
-These values can be generated with the following python calls:
-
-```bash
-key_id:
-python3 -c 'import uuid; print(str(uuid.uuid4()))'
-
-key_token:
-python3 -c 'import secrets, string; print("".join(secrets.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(32)))'
-```
-
-To pass your values to the cluster via an environment variable:
-
-```bash
-export TF_VAR_CRS_KEY_ID="<your-crs-key-id>"
-export TF_VAR_CRS_KEY_TOKEN="<your-crs-password>"
-export TF_VAR_CRS_CONTROLLER_KEY_ID="<your-crs-controller-id>"
-export TF_VAR_CRS_CONTROLLER_KEY_TOKEN="<your-crs-controller-password>"
-```
-
-> Terraform looks for environment variables prefixed with `TF_VAR_` to automatically set corresponding variables.
-
-#### Resources
-
-You may scale your resource limits as you see fit in the `resources{}` block:
-
-```bash
-          resources {
-            limits = {
-              cpu    = "0.5"
-              memory = "512Mi"
-            }
-            requests = {
-              cpu    = "250m"
-              memory = "50Mi"
-            }
-          }
-```
-
-This deployment requires authenticated access to the `ghcr.io/aixcc-finals` package registry; and is reliant on configuration within `secrets.tf`.
-
-### secrets.tf
-
-### GitHub personal access token
-
-You will need to have a GitHub personal access token (PAT) scoped to at least `read:packages`.
-
-To create the PAT, go to your account, `Settings` > `Developer settings` > `Personal access tokens`, and generate a Token (classic) with the scopes needed for your use case.
-
-Once you have your PAT, you will need to base64 encode it for use within `secrets.tf`:
-
-```bash
-echo -n "ghcr_username:ghcr_token" | base64
-```
-
-> replace `ghcr_username` and `ghcr_token` with your GitHub username and your PAT respectively.
-
-To pass your base64 encoded credentials to the cluster via an environment variable in order to authenticate to the organization's docker registry:
-
-```bash
-export TF_VAR_GHCR_AUTH="<your-base64-encoded-auth-string>"
-```
-
-This value will be stored for use as `auth` in the following block:
-
-```bash
-  data = {
-    ".dockerconfigjson" = jsonencode({
-      auths = {
-        "ghcr.io" = {
-          "auth" = var.GHCR_AUTH
-        }
-      }
-    })
-  }
-```
+The deployment of the AKS cluster and its resources are performed by the wrapper script, `./crs-architecture.sh`. This wrapper utilizes several mechanisms to properly configure both the teraform and kubernetes environments.
 
 ## Deploy
 
 - Log into your Azure tenant with `az login --tenant aixcc.tech`
 - Clone this repository if needed: `git clone git@github.com:aixcc-finals/example-crs-architecture.git /<local_dir>`
-- Make any required changes to `backend.tf`, `main.tf`, `outputs.tf`, `providers.tf`, `secrets.tf`, `deployment.tf` and `variables.tf`
-- Export the environment variables for your [SPA Configuration](#service-principal-account) if needed.
-- Initialize terraform: `terraform init`
-- Run plan: `terraform plan` - review output
-- Deploy: `terraform apply`
-  - type `yes` when prompted to apply
+- Make required changes to `backend.tf`
+- Make any wanted changes to `main.tf`, `outputs.tf`, `providers.tf`, and `variables.tf`
+- Update `./env` with accurate values for each variable
+- Run `./crs-architecture.sh deploy`  
+    This will execute a deployment of your cluster via a combination of terraform and kubectl based on your unique values in `./env`
 
-A handful of outputs will be provided based on `outputs.tf` when the apply completes.
-
-## Cluster Management
+## Useful Cluster Commands
 
 - `az aks get-credentials --name <your-cluster-name> --resource-group <your-resource-group>` - retrieves access credentials and updates kubeconfig for the current cluster
-- `kubectl get deployment` - lists all deployments within the current namespace
+- `kubectl get -n crs-webservice deployment` - lists all deployments within the namespace
+- `kubectl describe certificate -A` - print a detailed description of the selected resources, certificates in this case
 - `kubectl config get-contexts` - lists the current contexts in your kubeconfig
-- `kubectl describe deployment <deployment name>` - provides detailed information about your deployment
-- `kubectl get pods -l app=<appName>` - lists pods labeled with `<appName>`
+- `kubectl describe deployment -n crs-webservice crs-webapp` - print detailed information about the deployment, crs-webapp
+- `kubectl get pods -A` \- lists all pods in all namespaces
 - `kubectl logs <podName>` - retrieves the stdout and stderr streams from the containers within the specified pod
-- `kubectl get svc <service name>` - checks the status of service, e.g. the load balancer `crs-webservice-lb`
+- `kubectl get svc -A` - lists status of all services
+- `openssl s_client -connect <YOUR-API-HOSTNAME>:443 -servername <YOUR-API-HOSTNAME> -showcerts` - test TLS setup
 
 ## State
 
@@ -273,13 +226,18 @@ A handful of outputs will be provided based on `outputs.tf` when the apply compl
 
 To tear down your AKS cluster run the following:
 
-- `terraform destroy`
-- Review the output on what is to be destroyed
-- Type `yes` at the prompt
+- Run `./crs-architecture.sh destroy`
 
 ## Reset / Redeploy CRS
 
 To reset or redeploy a running CRS cluster:
 
-- Destroy the AKS instance following the steps in [Destroy](#destroy)
-- Re-apply the cluster via `terraform apply` as described in [Deploy](#deploy)
+- Run `./crs-architecture.sh destroy && ./crs-architecture.sh deploy`
+
+## Notes
+
+The default configuration utilizes a private load balancer for it's ingress. This will only allow the ingress to be accessible from within the Azure cluster. To test additional functionality of the via a public ingress:
+
+- edit `k8s/base/ingress-nginx/ingress-nginx.yaml`
+-  find `service.beta.kubernetes.io/azure-load-balancer-internal: "true"`
+-  comment it out and re-deploy

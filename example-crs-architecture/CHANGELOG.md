@@ -1,5 +1,13 @@
 # CHANGELOG.md
 
+## 2025-02-20
+
+- moved kuberenetes resources out of terraform HCL due to inconsistencies and reliability concerns
+- terraform now only creates the initial AKS infrastructure
+- introduced kustomize manifests to deploy kubernetes resources into the AKS cluster
+- introduced wrapper script, crs-architecture, to manage the proper deployment of all environments and variables within
+- leveraging generic template files for kustomize usage of environment variables to simplify end user burden
+
 ## 2025-01-19
 
 - Updates to outputs.tf

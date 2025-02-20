@@ -40,28 +40,3 @@ output "kube_config" {
   value     = azurerm_kubernetes_cluster.primary.kube_config_raw
   sensitive = true
 }
-
-output "GHCR_AUTH" {
-  value     = var.GHCR_AUTH
-  sensitive = true
-}
-
-output "CRS_KEY_ID" {
-  value     = var.CRS_KEY_ID
-  sensitive = true
-}
-
-output "CRS_KEY_TOKEN" {
-  value     = var.CRS_KEY_TOKEN
-  sensitive = true
-}
-
-output "CRS_CONTROLLER_KEY_ID" {
-  value     = var.CRS_CONTROLLER_KEY_ID
-  sensitive = true
-}
-
-output "CRS_CONTROLLER_KEY_TOKEN" {
-  value     = var.CRS_CONTROLLER_KEY_TOKEN
-  sensitive = true
-}
