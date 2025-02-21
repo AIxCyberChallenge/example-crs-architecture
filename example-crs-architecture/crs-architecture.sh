@@ -62,9 +62,9 @@ deploy() {
 	kubectl apply -k k8s/base/cluster-issuer/
 
 	echo "Updating DNS records with ingress IP"
-	az network dns record-set a delete --resource-group "$DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --name api -y
-	az network dns record-set a create --resource-group "$DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --name api
-	az network dns record-set a add-record --resource-group "$DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --record-set-name api --ipv4-address "$ingress_ip" --ttl 180
+	az network dns record-set a delete --resource-group "$AZ_DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --name "$AZ_DNS_A_RECORD" -y
+	az network dns record-set a create --resource-group "$AZ_DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --name "$AZ_DNS_A_RECORD"
+	az network dns record-set a add-record --resource-group "$AZ_DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --record-set-name "$AZ_DNS_A_RECORD" --ipv4-address "$ingress_ip" --ttl 180
 
 }
 

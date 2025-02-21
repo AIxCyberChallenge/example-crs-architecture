@@ -86,6 +86,7 @@ az role assignment create --assignee <APP-ID> --role "DNS Zone Contributor" --sc
 
 > Replace `<APP-ID>` with the appId received in the previous SPA creation step.  
 > Replace `<YOUR-SUBSCRIPTION-ID>` with your Azure subscription ID.  
+> Replace `<RESOURCE-GROUP-NAME>` with your Azure DNS resource group.  
 > Replace `<DNS-ZONE-NAME>` with your Azure DNS Zone Name.
 
 ### Environment Variables
@@ -101,6 +102,7 @@ The following environment variables are required to be passed into the terraform
 | `TF_VAR_ARM_CLIENT_SECRET`   | Azure client ID secret                                                                                                                                                                     |
 | `AZ_DNS_RESOURCE_GROUP`      | The name of the Azure resource group where your DNS zone is located                                                                                                                        |
 | `AZ_DNS_ZONE_NAME`           | The DNS zone where you want Cert Manager to create DNS record for DNS-01 challenges                                                                                                        |
+| `AZ_DNS_A_RECORD`            | The DNS Host A record for your API                                                                                                                                                         |
 | `CRS_CONTROLLER_KEY_ID`      | HTTP basic auth username for the CRS controller                                                                                                                                            |
 | `CRS_CONTROLLER_KEY_TOKEN`   | HTTP basic auth password for the CRS controller                                                                                                                                            |
 | `CRS_KEY_ID`                 | HTTP basic auth username for the CRS                                                                                                                                                       |
@@ -240,4 +242,4 @@ The default configuration utilizes a private load balancer for it's ingress. Thi
 
 - edit `k8s/base/ingress-nginx/ingress-nginx.yaml`
 - find `service.beta.kubernetes.io/azure-load-balancer-internal: "true"`
-- comment it out and re-deploy
+- change to `"false"`
