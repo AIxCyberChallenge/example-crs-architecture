@@ -1,6 +1,6 @@
 # Example CRS Architecture
 
-This repository contains an example Cyber Reasoning System architecture that may be used to perform vulnerability discovery on an OSS-Fuzz compatible repository.
+This repository contains an example Cyber Reasoning System architecture that may be used to perform vulnerability discovery on a compatible repository.
 
 Version-controlled specifications for API Details are located in the `docs/api` directory. Telemetry specifications are coming soon.
 It is anticipated that [OTel GenAI](https://opentelemetry.io/blog/2024/otel-generative-ai/) will be used for LLM telemetry.
