@@ -23,8 +23,7 @@ The standard `azure` networking profile is used.
 - `gettext` package
 - An active Azure subscription.
 - An account in Azure Entra ID.
-- An Azure DNS Zone in your Azure subscription
-- _WIP Placeholder for Competitor Interfaces Team to provide DNS child zone_
+- An Azure DNS Zone in your Azure subscription (provided by the Competitor Interfaces team)
 
 ### Azure
 

@@ -1,7 +1,7 @@
 {
   "auths": {
     "ghcr.io": {
-      "auth": "${GHCR_AUTH}
+      "auth": "${GHCR_AUTH}"
     }
   }
 }

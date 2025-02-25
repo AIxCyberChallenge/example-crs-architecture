@@ -9,3 +9,9 @@ resources:
   - secrets.yaml
   - service.yaml
   - ingress.yaml
+
+secretGenerator:
+  - name: ghcr-secret
+    type: kubernetes.io/dockerconfigjson
+    files:
+      - .dockerconfigjson

@@ -36,3 +36,5 @@ spec:
                 secretKeyRef:
                   name: crs-secrets
                   key: CRS_CONTROLLER_KEY_TOKEN
+      imagePullSecrets:
+        - name: ghcr-secret
