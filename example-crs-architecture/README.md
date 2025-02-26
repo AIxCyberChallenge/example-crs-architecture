@@ -234,11 +234,3 @@ To tear down your AKS cluster run the following:
 To reset or redeploy a running CRS cluster:
 
 - Run `./crs-architecture.sh destroy && ./crs-architecture.sh deploy`
-
-## Notes
-
-The default configuration utilizes a private load balancer for it's ingress. This will only allow the ingress to be accessible from within the Azure cluster. To test additional functionality of the via a public ingress:
-
-- edit `k8s/base/ingress-nginx/ingress-nginx.yaml`
-- find `service.beta.kubernetes.io/azure-load-balancer-internal: "true"`
-- change to `"false"`
