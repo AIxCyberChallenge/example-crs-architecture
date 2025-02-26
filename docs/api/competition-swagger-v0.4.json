@@ -684,6 +684,7 @@
           "format": "uuid"
         },
         "description": {
+          "description": "optional plaintext description of the components of the bundle, such as would be found in a pull request description or bug report",
           "type": "string"
         },
         "patch_id": {
