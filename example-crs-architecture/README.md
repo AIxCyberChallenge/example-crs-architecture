@@ -108,7 +108,6 @@ The following environment variables are required to be passed into the terraform
 | `CRS_KEY_TOKEN`              | HTTP basic auth password for the CRS                                                                                                                                                       |
 | `GHCR_AUTH`                  | Base64 encoded credentials for GHCR                                                                                                                                                        |
 | `ACME_EMAIL`                 | Email address for ACME registration with LetsEncrypt                                                                                                                                       |
-| `API_HOSTNAME`               | FQDN of your webservice e.g. api.mycrs.com                                                                                                                                                 |
 
 **These variables are stored in `./env` , and must be updated with accurate values.**
 

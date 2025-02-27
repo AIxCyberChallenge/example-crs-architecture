@@ -10,10 +10,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - ${API_HOSTNAME}
+        - ${AZ_DNS_A_RECORD}.${AZ_DNS_ZONE_NAME}
       secretName: api-dev-tls
   rules:
-    - host: ${API_HOSTNAME}
+    - host: ${AZ_DNS_A_RECORD}.${AZ_DNS_ZONE_NAME}
       http:
         paths:
           - path: /
