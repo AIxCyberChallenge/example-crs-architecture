@@ -1,6 +1,7 @@
 # Changelog
 
 ## v0.4
+
 - added bundle workflow
 - removed SARIF Broadcast ID, Vuln ID, and description from patch submission
 - renamed vuln submissions to pov submissions
@@ -8,6 +9,11 @@
 - removed sarif submissions from vuln
 - added new endpoint for sarif submissions
 - added new errored state to possible statuses for server side testing errors
+
+For more information, see:
+
+- [The v0.4 README](./api-v0.4-readme.md)
+- [The v0.4 OpenAPI specification](./competition-swagger-v0.4.yaml)
 
 ## v0.3
 
