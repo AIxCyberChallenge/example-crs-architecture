@@ -111,7 +111,8 @@ The additional statuses which submissions can enter over time are:
 - `failed`: the submission failed to apply, build, or pass the tests.
 - `errored`: there was a server-side error testing the submission.
 
-There is an additional field, `functionality_tests_passing`, which contains a separate status for the functionality tests. The overall patch status still includes the functionality test result (i.e. the functionality tests must have passed for the patch to be `passed`).
+There is an additional field, `functionality_tests_passing`, which contains a separate status for the functionality tests. The overall patch status still includes the functionality test result (i.e. the functionality
+tests must have passed for the patch to be `passed`).
 
 If the functionality tests have not been run, the `functionality_tests_passing` field will be `null`.
 
