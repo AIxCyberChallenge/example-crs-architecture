@@ -1,7 +1,9 @@
 # API
 
-- Competitors will consume the API described by `competition-swagger-v0.3.yaml`
-- Competitors will provide the API described by `crs-swagger-v0.3.yaml`
+See the [API Changelog](./docs/api/CHANGELOG.md) for information on recent API changes.
+
+- Competitors will consume the API described by `competition-swagger-v0.4.yaml`
+- Competitors will provide the API described by `crs-swagger-v0.4.yaml`
 
 NOTE: The JSON and YAML documents contain the same information and are generated from the same source.
 
