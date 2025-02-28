@@ -24,7 +24,7 @@ If you are are not using OpenLIT, and instead using the native OpenTelemetry Ins
 
 ## CRS Actions
 
-In order to track Tasks that are CRS are working on, the `metadata` field of each TaskDetail (received by the CRS API) should be
+In order to track Tasks that a CRS is working on, the `metadata` field of each TaskDetail (received by the CRS API) should be
 added to each Span as attributes. The metadata is a string,string map. For example:
 
 ```python
