@@ -9,14 +9,14 @@ It is anticipated that [OTel GenAI](https://opentelemetry.io/blog/2024/otel-gene
 
 This repository is currently under development. Documentation and examples are being added as they are created.
 
-| Task                                                 | Status |
-| ---------------------------------------------------- | ------ |
-| Example CRS Azure Kubernetes Service (AKS) Terraform | ✅     |
-| Competition API Spec v0.4                            | ✅     |
-| CRS API Spec v0.4                                    | ✅     |
-| Telemetry Spec                                       | ❌ WIP |
-| End-to-end example webservice that implements specs  | ❌ WIP |
-| Example Challenge Generation & Testing script        | ❌ WIP |
+| Task                                                                                     | Status |
+| ---------------------------------------------------------------------------------------- | ------ |
+| Example CRS Azure Kubernetes Service (AKS) Terraform                                     | ✅     |
+| Competition API Spec v0.4                                                                | ✅     |
+| CRS API Spec v0.4                                                                        | ✅     |
+| Telemetry Spec v1.0                                                                      | ✅     |
+| <[Challenge Generation script](https://github.com/aixcc-finals/generate-challenge-task)> | ✅     |
+| End-to-end example webservice that implements specs                                      | ❌ WIP |
 
 ## Contributing
 
