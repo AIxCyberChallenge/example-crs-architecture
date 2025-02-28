@@ -194,7 +194,7 @@ def get_current_task():
     }
 
 
-def log_task(crs_action_category, crs_action_category, task_metadata, extra_attributes={}):
+def log_action(crs_action_category, crs_action_name, task_metadata, extra_attributes={}):
     with tracer.start_as_current_span(task_category) as span:
         span.set_attribute("crs.action.category", crs_action_category)
         span.set_attribute("crs.action.name", crs_action_name)
@@ -207,7 +207,7 @@ def log_task(crs_action_category, crs_action_category, task_metadata, extra_attr
 
         span.set_status(Status(StatusCode.OK))
 
-    print(f"Logged task: {task_category} - {task_name}")
+    print(f"Logged crs action: {crs_action_category} - {crs_action_name}")
 
 def main():
   client = OpenAI()
@@ -215,7 +215,7 @@ def main():
 
   response = fetch_llm_completion(client, "Write a short poem about OpenTelemetry", "gpt-4o-mini")
 
-  log_task("static_analysis", "check_security_flaws", task_metadata, {"crs.action.gen_ai.id": response.id})
+  log_action("static_analysis", "check_security_flaws", task_metadata, {"crs.action.gen_ai.id": response.id})
 
 
 def fetch_llm_completion(client, prompt, model):
