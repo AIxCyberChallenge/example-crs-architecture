@@ -12,10 +12,10 @@ deploy() {
 	echo "Applying environment variables to yaml from templates"
 	CLIENT_BASE64=$(echo -n "$TF_VAR_ARM_CLIENT_SECRET" | base64)
 	CRS_KEY_BASE64=$(echo -n "$CRS_KEY_TOKEN" | base64)
-	CRS_CONTROLLER_KEY_BASE64=$(echo -n "$CRS_CONTROLLER_KEY_TOKEN" | base64)
+	COMPETITION_API_KEY_BASE64=$(echo -n "$COMPETITION_API_KEY_TOKEN" | base64)
 	export CLIENT_BASE64
 	export CRS_KEY_BASE64
-	export CRS_CONTROLLER_KEY_BASE64
+	export COMPETITION_API_KEY_BASE64
 	envsubst <k8s/base/crs-webservice/ingress.template >k8s/base/crs-webservice/ingress.yaml
 	envsubst <k8s/base/crs-webservice/.dockerconfigjson.template >k8s/base/crs-webservice/.dockerconfigjson
 	envsubst <k8s/base/crs-webservice/secrets.template >k8s/base/crs-webservice/secrets.yaml

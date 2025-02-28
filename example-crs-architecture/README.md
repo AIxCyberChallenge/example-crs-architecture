@@ -94,7 +94,7 @@ The following environment variables are required to be passed into the terraform
 
 | Variable Name                | Description                                                                                                                                                                                |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `STAGING`                    | Tells the cluster issuer whether to use the staging environment or not. LetsEncrypt has a rate limits on production. See more on [Rate Limits](https://letsencrypt.org/docs/rate-limits/). |
+| `STAGING`                    | Tells the cluster issuer whether to use the staging environment or not. LetsEncrypt has rate limits on production. See more on [Rate Limits](https://letsencrypt.org/docs/rate-limits/).   |
 | `TF_VAR_ARM_SUBSCRIPTION_ID` | Azure subscription ID                                                                                                                                                                      |
 | `TF_VAR_ARM_TENANT_ID`       | Azure tenant ID                                                                                                                                                                            |
 | `TF_VAR_ARM_CLIENT_ID`       | Azure client ID (service principal account)                                                                                                                                                |
@@ -102,9 +102,9 @@ The following environment variables are required to be passed into the terraform
 | `AZ_DNS_RESOURCE_GROUP`      | The name of the Azure resource group where your DNS zone is located                                                                                                                        |
 | `AZ_DNS_ZONE_NAME`           | The DNS zone where you want Cert Manager to create DNS record for DNS-01 challenges                                                                                                        |
 | `AZ_DNS_A_RECORD`            | The DNS Host A record for your API                                                                                                                                                         |
-| `CRS_CONTROLLER_KEY_ID`      | HTTP basic auth username for the CRS controller                                                                                                                                            |
-| `CRS_CONTROLLER_KEY_TOKEN`   | HTTP basic auth password for the CRS controller                                                                                                                                            |
-| `CRS_KEY_ID`                 | HTTP basic auth username for the CRS                                                                                                                                                       |
+| `COMPETITION_API_KEY_ID`     | HTTP basic auth username for the CRS controller                                                                                                                                            |
+| `COMPETITION_API_KEY_TOKEN`  | HTTP basic auth password for the competition API                                                                                                                                           |
+| `CRS_KEY_ID`                 | HTTP basic auth username for the competition API                                                                                                                                           |
 | `CRS_KEY_TOKEN`              | HTTP basic auth password for the CRS                                                                                                                                                       |
 | `GHCR_AUTH`                  | Base64 encoded credentials for GHCR                                                                                                                                                        |
 | `ACME_EMAIL`                 | Email address for ACME registration with LetsEncrypt                                                                                                                                       |
@@ -118,8 +118,8 @@ The crs-webapp container expects the following environment variables to be passe
 
 - `CRS_KEY_ID` - The CRS's username/ID
 - `CRS_KEY_TOKEN` - The CRS's password
-- `CRS_CONTROLLER_KEY_ID` - The CRS Controller's username/ID
-- `CRS_CONTROLLER_KEY_TOKEN` - The CRS Controller's password
+- `COMPETITION_API_KEY_ID` - The CRS Controller's username/ID
+- `COMPETITION_API_KEY_TOKEN` - The CRS Controller's password
 
 These values can be generated with the following python calls:
 

@@ -24,17 +24,17 @@ spec:
           env:
             - name: CRS_KEY_ID
               value: ${CRS_KEY_ID}
-            - name: CRS_CONTROLLER_KEY_ID
-              value: ${CRS_CONTROLLER_KEY_ID}
+            - name: COMPETITION_API_KEY_ID
+              value: ${COMPETITION_API_KEY_ID}
             - name: CRS_KEY_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: crs-secrets
                   key: CRS_KEY_TOKEN
-            - name: CRS_CONTROLLER_KEY_TOKEN
+            - name: COMPETITION_API_KEY_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: crs-secrets
-                  key: CRS_CONTROLLER_KEY_TOKEN
+                  key: COMPETITION_API_KEY_TOKEN
       imagePullSecrets:
         - name: ghcr-secret
