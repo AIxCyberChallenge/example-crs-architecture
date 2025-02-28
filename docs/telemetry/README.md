@@ -12,7 +12,7 @@ GenAI Semantic Convention is being used to track LLM Telemetry, including Prompt
 Learn more here: <https://opentelemetry.io/docs/specs/semconv/gen-ai/>
 
 Any OpenTelemetry-compatible library may be used to generate and submit this LLM telemetry data.
-If teams are using Python or Typescript, OpenLIT is known to work well.
+If teams are using Python or TypeScript, OpenLIT is known to work well.
 See OpenLIT documentation: <https://docs.openlit.io/latest/quickstart-observability>
 
 ```python
@@ -44,11 +44,12 @@ These attributes describe the overarching context of the telemetry data.
 
 These attributes capture the details of individual tasks or activities.
 
-| Attribute Key         | Type   | Description                                                                                                                                                                                                  |
-| --------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `crs.action.category` | string | Category of the work a CRS is performing. Values: `static_analysis`, `dynamic_analysis`, `fuzzing`, `program_analysis`, `building`, `input_generation`, `patch_generation`, `testing`, `scoring_submission`. |
-| `crs.action.name`     | string | Descriptive name of a CRS action. User-defined                                                                                                                                                               |
-| `<Task metadata>`     |        | Comes from Task request given to the CRS API. This should be passed on as attributes.                                                                                                                        |
+| Attribute Key         | Type   | Description                                                                                                                                                        |
+| --------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `crs.action.category` | string | Category of the work a CRS is performing.                                                                                                                          |
+|                       |        | Values: `static_analysis`, `dynamic_analysis`, `fuzzing`, `program_analysis`, `building`, `input_generation`, `patch_generation`, `testing`, `scoring_submission`. |
+| `crs.action.name`     | string | Descriptive name of a CRS action. User-defined                                                                                                                     |
+| `<Task metadata>`     |        | Comes from Task request given to the CRS API. This should be passed on as attributes.                                                                              |
 
 ### Optional Attributes
 
@@ -253,7 +254,7 @@ if __name__ == "__main__":
 
 Static Analysis
 
-```
+```python
 {
   "crs.action.category": "static_analysis",
   "crs.action.name": "analyze_vulnerabilities",
@@ -264,7 +265,7 @@ Static Analysis
 
 Dynamic Analysis
 
-```
+```python
 {
   "crs.action.category": "dynamic_analysis",
   "crs.action.name": "runtime_behavior_monitoring",
@@ -277,7 +278,7 @@ Dynamic Analysis
 
 Fuzzing
 
-```
+```python
 {
   "crs.action.category": "fuzzing",
   "crs.action.name": "fuzz_test_network_inputs",
@@ -290,7 +291,7 @@ Fuzzing
 
 Program Analysis
 
-```
+```python
 {
   "crs.action.category": "program_analysis",
   "crs.action.name": "analyze_control_flow",
@@ -300,7 +301,7 @@ Program Analysis
 
 Building
 
-```
+```python
 {
   "crs.action.category": "building",
   "crs.action.name": "compile_source_code",
@@ -310,7 +311,7 @@ Building
 
 Input Generation
 
-```
+```python
 {
   "crs.action.category": "input_generation",
   "crs.action.name": "generate_test_cases",
@@ -320,7 +321,7 @@ Input Generation
 
 Patch Generation
 
-```
+```python
 {
   "crs.action.category": "patch_generation",
   "crs.action.name": "generate_security_patch",
@@ -330,7 +331,7 @@ Patch Generation
 
 Testing
 
-```
+```python
 {
   "crs.action.category": "testing",
   "crs.action.name": "run_unit_tests"
@@ -339,7 +340,7 @@ Testing
 
 Scoring Submission
 
-```
+```python
 {
   "crs.action.category": "scoring_submission",
   "crs.action.name": "submit_final_results"
