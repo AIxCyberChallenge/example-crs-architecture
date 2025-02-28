@@ -273,7 +273,7 @@ def post_v1_task_(
 
 def do_task(task: TaskDetail):
     metadata_dict: dict = task.metadata
-    log_task("category", "name", metadata_dict, {})
+    log_action("category", "name", metadata_dict, {})
 
 def log_action(crs_action_category: str, crs_action_name: str, task_metadata: dict, extra_attributes: dict | None = None):
     extra_attributes = extra_attributes or {}
