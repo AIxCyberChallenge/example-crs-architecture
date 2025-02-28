@@ -92,22 +92,22 @@ az role assignment create --assignee <APP-ID> --role "DNS Zone Contributor" --sc
 
 The following environment variables are required to be passed into the terraform and kubernetes configurations:
 
-| Variable Name                | Description                                                                                                                                                                                |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `STAGING`                    | Tells the cluster issuer whether to use the staging environment or not. LetsEncrypt has rate limits on production. See more on [Rate Limits](https://letsencrypt.org/docs/rate-limits/).   |
-| `TF_VAR_ARM_SUBSCRIPTION_ID` | Azure subscription ID                                                                                                                                                                      |
-| `TF_VAR_ARM_TENANT_ID`       | Azure tenant ID                                                                                                                                                                            |
-| `TF_VAR_ARM_CLIENT_ID`       | Azure client ID (service principal account)                                                                                                                                                |
-| `TF_VAR_ARM_CLIENT_SECRET`   | Azure client ID secret                                                                                                                                                                     |
-| `AZ_DNS_RESOURCE_GROUP`      | The name of the Azure resource group where your DNS zone is located                                                                                                                        |
-| `AZ_DNS_ZONE_NAME`           | The DNS zone where you want Cert Manager to create DNS record for DNS-01 challenges                                                                                                        |
-| `AZ_DNS_A_RECORD`            | The DNS Host A record for your API                                                                                                                                                         |
-| `COMPETITION_API_KEY_ID`     | HTTP basic auth username for the CRS controller                                                                                                                                            |
-| `COMPETITION_API_KEY_TOKEN`  | HTTP basic auth password for the competition API                                                                                                                                           |
-| `CRS_KEY_ID`                 | HTTP basic auth username for the competition API                                                                                                                                           |
-| `CRS_KEY_TOKEN`              | HTTP basic auth password for the CRS                                                                                                                                                       |
-| `GHCR_AUTH`                  | Base64 encoded credentials for GHCR                                                                                                                                                        |
-| `ACME_EMAIL`                 | Email address for ACME registration with LetsEncrypt                                                                                                                                       |
+| Variable Name                | Description                                                                                                                                                                              |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `STAGING`                    | Tells the cluster issuer whether to use the staging environment or not. LetsEncrypt has rate limits on production. See more on [Rate Limits](https://letsencrypt.org/docs/rate-limits/). |
+| `TF_VAR_ARM_SUBSCRIPTION_ID` | Azure subscription ID                                                                                                                                                                    |
+| `TF_VAR_ARM_TENANT_ID`       | Azure tenant ID                                                                                                                                                                          |
+| `TF_VAR_ARM_CLIENT_ID`       | Azure client ID (service principal account)                                                                                                                                              |
+| `TF_VAR_ARM_CLIENT_SECRET`   | Azure client ID secret                                                                                                                                                                   |
+| `AZ_DNS_RESOURCE_GROUP`      | The name of the Azure resource group where your DNS zone is located                                                                                                                      |
+| `AZ_DNS_ZONE_NAME`           | The DNS zone where you want Cert Manager to create DNS record for DNS-01 challenges                                                                                                      |
+| `AZ_DNS_A_RECORD`            | The DNS Host A record for your API                                                                                                                                                       |
+| `COMPETITION_API_KEY_ID`     | HTTP basic auth username for the CRS controller                                                                                                                                          |
+| `COMPETITION_API_KEY_TOKEN`  | HTTP basic auth password for the competition API                                                                                                                                         |
+| `CRS_KEY_ID`                 | HTTP basic auth username for the competition API                                                                                                                                         |
+| `CRS_KEY_TOKEN`              | HTTP basic auth password for the CRS                                                                                                                                                     |
+| `GHCR_AUTH`                  | Base64 encoded credentials for GHCR                                                                                                                                                      |
+| `ACME_EMAIL`                 | Email address for ACME registration with LetsEncrypt                                                                                                                                     |
 
 **These variables are stored in `./env` , and must be updated with accurate values.**
 
