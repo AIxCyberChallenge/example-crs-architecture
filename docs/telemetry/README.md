@@ -24,7 +24,7 @@ If you are are not using OpenLIT, and instead using the native OpenTelemetry Ins
 
 ## CRS Actions
 
-In order to track Tasks that are CRS are working on, the `metadata` field of each TaskDetail should be
+In order to track Tasks that are CRS are working on, the `metadata` field of each TaskDetail (received by the CRS API) should be
 added to each Span as attributes. The metadata is a string,string map. For example:
 
 ```python
@@ -194,8 +194,9 @@ def get_current_task():
     }
 
 
-def log_action(crs_action_category, crs_action_name, task_metadata, extra_attributes={}):
-    with tracer.start_as_current_span(task_category) as span:
+def log_action(crs_action_category: str, crs_action_name: str, task_metadata: dict, extra_attributes: dict | None = None):
+    extra_attributes = extra_attributes or {}
+    with tracer.start_as_current_span(crs_action_category) as span:
         span.set_attribute("crs.action.category", crs_action_category)
         span.set_attribute("crs.action.name", crs_action_name)
 
@@ -246,6 +247,49 @@ def fetch_llm_completion(client, prompt, model):
 if __name__ == "__main__":
     main()
 
+```
+
+## Example CRS Webservice
+
+CRS web service example adapted from `example-crs-webservice/my_crs/task_server/server.py`
+
+```python
+@app.post(
+    "/v1/task/",
+    response_model=None,
+    responses={"202": {"model": str}},
+    tags=["task"],
+)
+def post_v1_task_(
+    credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)],
+    body: Task,
+) -> Optional[str]:
+    """
+    Receive Task
+    """
+    tasks: List[TaskDetail] = body.tasks
+    for task in tasks:
+        do_task(task)
+
+def do_task(task: TaskDetail):
+    metadata_dict: dict = task.metadata
+    log_task("category", "name", metadata_dict, {})
+
+def log_action(crs_action_category: str, crs_action_name: str, task_metadata: dict, extra_attributes: dict | None = None):
+    extra_attributes = extra_attributes or {}
+    with tracer.start_as_current_span(crs_action_category) as span:
+        span.set_attribute("crs.action.category", crs_action_category)
+        span.set_attribute("crs.action.name", crs_action_name)
+
+        for key, value in task_metadata.items():
+            span.set_attribute(key, value)
+
+        for key, value in extra_attributes.items():
+            span.set_attribute(key, value)
+
+        span.set_status(Status(StatusCode.OK))
+
+    print(f"Logged crs action: {crs_action_category} - {crs_action_name}")
 ```
 
 ---
