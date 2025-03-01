@@ -23,7 +23,7 @@ The standard `azure` networking profile is used.
 - `gettext` package
 - An active Azure subscription.
 - An account in Azure Entra ID.
-- An Azure DNS Zone in your Azure subscription (provided by the Competitor Interfaces team)
+- An Azure DNS Zone in your Azure subscription (A domain may be provided by the Organizers if requested, otherwise you may use your own domain).
 
 ### Azure
 
@@ -99,9 +99,9 @@ The following environment variables are required to be passed into the terraform
 | `TF_VAR_ARM_TENANT_ID`       | Azure tenant ID                                                                                                                                                                          |
 | `TF_VAR_ARM_CLIENT_ID`       | Azure client ID (service principal account)                                                                                                                                              |
 | `TF_VAR_ARM_CLIENT_SECRET`   | Azure client ID secret                                                                                                                                                                   |
-| `AZ_DNS_RESOURCE_GROUP`      | The name of the Azure resource group where your DNS zone is located                                                                                                                      |
-| `AZ_DNS_ZONE_NAME`           | The DNS zone where you want Cert Manager to create DNS record for DNS-01 challenges                                                                                                      |
-| `AZ_DNS_A_RECORD`            | The DNS Host A record for your API                                                                                                                                                       |
+| `AZ_DNS_RESOURCE_GROUP`      | The name of the Azure resource group where your DNS zone is located. Example: `myDNSZone-resource-group`                                                                                 |
+| `AZ_DNS_ZONE_NAME`           | The DNS zone where you want Cert Manager to create a DNS record for DNS-01 challenges. Exmaple: `mycrs.com`                                                                              |
+| `AZ_DNS_A_RECORD`            | The DNS Host A record for your API. Exmaple: `api1`                                                                                                                                      |
 | `COMPETITION_API_KEY_ID`     | HTTP basic auth username for the CRS controller                                                                                                                                          |
 | `COMPETITION_API_KEY_TOKEN`  | HTTP basic auth password for the competition API                                                                                                                                         |
 | `CRS_KEY_ID`                 | HTTP basic auth username for the competition API                                                                                                                                         |
@@ -137,6 +137,8 @@ _WIP (Current example is using the `jmalloc/echo-server` image as a PoC)_
 You will need to have a GitHub personal access token (PAT) scoped to at least `read:packages`.
 
 To create the PAT, go to your account, `Settings` > `Developer settings` > `Personal access tokens`, and generate a Token (classic) with the scopes needed for your use case.
+
+For this example, the `read:packages` scope is required.
 
 Once you have your PAT, you will need to base64 encode it for use within `secrets.tf`:
 
@@ -191,9 +193,9 @@ terraform {
 }
 ```
 
-## crs-architecture.sh
+## Makefile
 
-The deployment of the AKS cluster and its resources are performed by the wrapper script, `./crs-architecture.sh`. This wrapper utilizes several mechanisms to properly configure both the teraform and kubernetes environments.
+The deployment of the AKS cluster and its resources are performed by the `Makefile`, which leverages `crs-architecture.sh`. This wrapper utilizes several mechanisms to properly configure both the teraform and kubernetes environments.
 
 ## Deploy
 
@@ -202,8 +204,8 @@ The deployment of the AKS cluster and its resources are performed by the wrapper
 - Make required changes to `backend.tf`
 - Make any wanted changes to `main.tf`, `outputs.tf`, `providers.tf`, and `variables.tf`
 - Update `./env` with accurate values for each variable
-- Run `./crs-architecture.sh deploy`  
-   This will execute a deployment of your cluster via a combination of terraform and kubectl based on your unique values in `./env`
+- Run `make up` from within the `example-crs-architecture` directory
+  This will execute a deployment of your cluster via a combination of terraform and kubectl based on your unique values in `./env`
 
 ## Useful Cluster Commands
 
@@ -226,10 +228,14 @@ The deployment of the AKS cluster and its resources are performed by the wrapper
 
 To tear down your AKS cluster run the following:
 
-- Run `./crs-architecture.sh destroy`
+- Run `make down` from within the `example-crs-architecture` directory
 
 ## Reset / Redeploy CRS
 
 To reset or redeploy a running CRS cluster:
 
-- Run `./crs-architecture.sh destroy && ./crs-architecture.sh deploy`
+- Run `make down && make up` from within the `example-crs-architecture` directory
+
+## Clean
+
+Optionally, you can run `make clean` to remove any generated files create from the included templates at runtime. This action is executed during `make up`.

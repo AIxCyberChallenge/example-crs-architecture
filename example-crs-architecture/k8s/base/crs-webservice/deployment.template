@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: crs-webapp
-          image: jmalloc/echo-server
+          image: ghcr.io/aixcc-finals/example-crs-architecture/echo-server:latest
           ports:
             - name: http
               containerPort: 8080

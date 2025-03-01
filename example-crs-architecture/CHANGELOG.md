@@ -1,12 +1,20 @@
 # CHANGELOG.md
 
+## 2025-03-01
+
+- Modified variable names
+- Uppdated example deployment to use echo server from GHCR authenticated registry
+- Implmented `Makefile` to drive deployment and teardown of architecture
+- DNS records created during deploy (up) are removed during destroy (down)
+- Updates to README.md
+
 ## 2025-02-20
 
-- moved kuberenetes resources out of terraform HCL due to inconsistencies and reliability concerns
-- terraform now only creates the initial AKS infrastructure
-- introduced kustomize manifests to deploy kubernetes resources into the AKS cluster
-- introduced wrapper script, crs-architecture, to manage the proper deployment of all environments and variables within
-- leveraging generic template files for kustomize usage of environment variables to simplify end user burden
+- Moved kuberenetes resources out of terraform HCL due to inconsistencies and reliability concerns
+- Terraform now only creates the initial AKS infrastructure
+- Introduced kustomize manifests to deploy kubernetes resources into the AKS cluster
+- Iintroduced wrapper script, crs-architecture, to manage the proper deployment of all environments and variables within
+- Leveraging generic template files for kustomize usage of environment variables to simplify end user burden
 
 ## 2025-01-19
 

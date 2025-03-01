@@ -1,5 +1,5 @@
 export STAGING=true
-export TF_VAR_ARM_SUBSCRIPTION_ID="<you-sub-id>"
+export TF_VAR_ARM_SUBSCRIPTION_ID="<your-sub-id>"
 export TF_VAR_ARM_TENANT_ID="<your-tenant-id>"
 export TF_VAR_ARM_CLIENT_ID="<your-client-id>"
 export TF_VAR_ARM_CLIENT_SECRET="<your-client-secret>"

@@ -5,9 +5,11 @@ set -e
 
 echo "Applying environment variables from ./env"
 source ./env
+echo "Current azure account status:"
+az account show --query "{SubscriptionID:id, Tenant:tenantId}" --output table
 
 #deploy the AKS cluster and kubernetes resources function
-deploy() {
+up() {
 
 	echo "Applying environment variables to yaml from templates"
 	CLIENT_BASE64=$(echo -n "$TF_VAR_ARM_CLIENT_SECRET" | base64)
@@ -69,23 +71,22 @@ deploy() {
 }
 
 #destroy the AKS cluster and kubernetes resources function
-destroy() {
-	echo "----------------------------------------------------"
+down() {
 	echo "Destroying AKS cluster"
-	echo "----------------------------------------------------"
-	echo ""
 	terraform apply -destroy -auto-approve
+	echo "Removing the DNS record, $AZ_DNS_A_RECORD, from the DNS zone, $AZ_DNS_ZONE_NAME, in the resource group, $AZ_DNS_RESOURCE_GROUP"
+	az network dns record-set a delete --resource-group "$AZ_DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --name "$AZ_DNS_A_RECORD" -y
 
 }
 
 case $1 in
-deploy)
-	deploy
+up)
+	up
 	;;
-destroy)
-	destroy
+down)
+	down
 	;;
 *)
-	echo "The only acceptable arguments are deploy and destroy"
+	echo "The only acceptable arguments are up and down"
 	;;
 esac
