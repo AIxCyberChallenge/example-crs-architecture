@@ -102,10 +102,10 @@ The following environment variables are required to be passed into the terraform
 | `AZ_DNS_RESOURCE_GROUP`      | The name of the Azure resource group where your DNS zone is located. Example: `myDNSZone-resource-group`                                                                                 |
 | `AZ_DNS_ZONE_NAME`           | The DNS zone where you want Cert Manager to create a DNS record for DNS-01 challenges. Exmaple: `mycrs.com`                                                                              |
 | `AZ_DNS_A_RECORD`            | The DNS Host A record for your API. Exmaple: `api1`                                                                                                                                      |
-| `COMPETITION_API_KEY_ID`     | HTTP basic auth username for the CRS controller                                                                                                                                          |
+| `COMPETITION_API_KEY_ID`     | HTTP basic auth username for the competition API                                                                                                                                         |
 | `COMPETITION_API_KEY_TOKEN`  | HTTP basic auth password for the competition API                                                                                                                                         |
-| `CRS_KEY_ID`                 | HTTP basic auth username for the competition API                                                                                                                                         |
-| `CRS_KEY_TOKEN`              | HTTP basic auth password for the CRS                                                                                                                                                     |
+| `CRS_KEY_ID`                 | HTTP basic auth username for the CRS API                                                                                                                                                 |
+| `CRS_KEY_TOKEN`              | HTTP basic auth password for the CRS API                                                                                                                                                 |
 | `GHCR_AUTH`                  | Base64 encoded credentials for GHCR                                                                                                                                                      |
 | `ACME_EMAIL`                 | Email address for ACME registration with LetsEncrypt                                                                                                                                     |
 
