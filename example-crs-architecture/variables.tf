@@ -28,27 +28,23 @@ variable "username" {
   default     = "azureadmin"
 }
 
-variable "GHCR_AUTH" {
+variable "ARM_SUBSCRIPTION_ID" {
   type        = string
-  description = "Base64 encoded credentials for GHCR"
+  description = "Azure subscription ID"
 }
 
-variable "CRS_KEY_ID" {
+variable "ARM_TENANT_ID" {
   type        = string
-  description = "HTTP basic auth username for the CRS "
+  description = "Azure tenant ID"
 }
 
-variable "CRS_KEY_TOKEN" {
+variable "ARM_CLIENT_ID" {
   type        = string
-  description = "HTTP basic auth password for the CRS "
+  description = "Azure client ID"
 }
 
-variable "CRS_CONTROLLER_KEY_ID" {
+variable "ARM_CLIENT_SECRET" {
   type        = string
-  description = "HTTP basic auth username for the CRS controller "
-}
-
-variable "CRS_CONTROLLER_KEY_TOKEN" {
-  type        = string
-  description = "HTTP basic auth password for the CRS controller "
+  sensitive   = true
+  description = "Azure client secret"
 }

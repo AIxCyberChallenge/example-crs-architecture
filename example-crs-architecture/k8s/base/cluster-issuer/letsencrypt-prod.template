@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    email: ${ACME_EMAIL}
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-account-key
+    solvers:
+    - dns01:
+        azureDNS:
+          clientID: ${TF_VAR_ARM_CLIENT_ID} #gitleaks:allow
+          clientSecretSecretRef:
+            name: azure-dns-config
+            key: client-secret
+          subscriptionID: ${TF_VAR_ARM_SUBSCRIPTION_ID}
+          tenantID: ${TF_VAR_ARM_TENANT_ID}
+          resourceGroupName: ${AZ_DNS_RESOURCE_GROUP}
+          hostedZoneName: ${AZ_DNS_ZONE_NAME}
