@@ -91,6 +91,7 @@ pip install openlit
 1. Run with environment variables set.
 
 ```bash
+export OPENAI_API_KEY=<YOUR OPENAI API KEY>.
 OTEL_EXPORTER_OTLP_ENDPOINT="http://127.0.0.1:4317" OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic <base64 encoded http basic credentials>" OTEL_EXPORTER_OTLP_PROTOCOL=grpc python3 main.py
 ```
 
