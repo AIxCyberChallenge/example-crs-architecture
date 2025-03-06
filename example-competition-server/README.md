@@ -1,7 +1,7 @@
 # Example Competition Server
 
 ## Overview
-This folder allows users to run a full end-to-end competition server, as well as a signoz endpoint for which competitors may submit telemetry to for testing. Note: because of some issues with docker, this currently will not run on non-x86_64 machines.
+This folder allows users to run a full end-to-end competition server, as well as a signoz endpoint for which competitors may submit telemetry to for testing. 
 
 ## Prerequisites
 You must make changes to the following files in order for the server to run properly
