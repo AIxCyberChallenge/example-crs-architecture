@@ -1,0 +1,54 @@
+name: "competitor-test-server"
+
+include:
+  - ./signoz/compose.yaml
+
+services:
+  dind:
+    image: docker:28-dind
+    command:
+      [
+        "dockerd",
+        "-H",
+        "tcp://0.0.0.0:2375",
+        "--tls=false",
+        "--storage-driver=overlay2",
+      ]
+    restart: always
+    privileged: true
+    networks:
+      - dind-internal
+      - internet
+    expose:
+      - "2375"
+    environment:
+      - DOCKER_TLS_CERTDIR= # Ensure this is correctly formatted (empty value)
+    volumes:
+      - shared-tmp:/tmp
+
+  scantron:
+    image: ghcr.io/aixcc-finals/competitor-test-server/competition-api:v0.4
+    privileged: true
+    volumes:
+      - "./scantron.yaml:/etc/scantron/scantron.yaml"
+      - shared-tmp:/tmp
+    depends_on:
+      - dind
+    ports:
+      - "1323:1323"
+    command: server
+    networks:
+      - dind-internal
+      - internet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - "DOCKER_HOST=tcp://dind:2375"
+
+networks:
+  dind-internal:
+    internal: true
+  internet: {}
+
+volumes:
+  shared-tmp:
