@@ -33,6 +33,5 @@ listen_address: "[::]:1323"
 
 github:
   # github Personal Access token. This is used by the server to download the 
-  # appropriate fuzz tooling and whatnot. This can also be set with 
-  # SCANTRON_GITHUB_PAT and removed from here
+  # appropriate fuzz tooling and whatnot.
   pat: github_pat_foobar
