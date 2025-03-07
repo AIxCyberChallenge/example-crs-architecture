@@ -75,7 +75,7 @@ curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: ap
 ```
 
 Here is an example for a delta scan:
-
+```
 curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: application/json' -d '{
     "challenge_repo_url": "git@github.com:aixcc-finals/example-libpng.git",
     "challenge_repo_base_ref": "0cc367aaeaac3f888f255cee5d394968996f736e",
@@ -86,3 +86,19 @@ curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: ap
     "duration": 3600
 }'
 ```
+
+## Viewing Signoz Dashboard
+Once you kick off a task, you will be able to view the competition dashboard. Go to `localhost:3301`.
+There you will see a login screen, or a screen to create your account. Once you login you'll be met
+with this screen.
+
+![Signoz Home Screen](./images/initial-login.png)
+
+Click on the Dashboards menu entry on the left-hand side.
+
+![Signoz Dashboards](./images/dashboards.png)
+
+Click on one of the Round Status dashboards (doesn't matter which one). Then, set the `$Round`
+and the $Environment`. You should see an image similar to below.
+
+![Signoz Round Status](./images/round-status.png)
