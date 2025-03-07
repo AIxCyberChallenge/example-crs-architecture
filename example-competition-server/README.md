@@ -1,7 +1,10 @@
 # Example Competition Server
 
 ## Overview
-This folder allows users to run a full end-to-end competition server, as well as a signoz endpoint for which competitors may submit telemetry to for testing. 
+This folder allows users to run a full end-to-end competition server, as well as a signoz endpoint for which competitors may submit telemetry to for testing. This server simulates how the actual server will act in the competition. This means:
+- The example server supports the v0.4 competition server API, including endpoints for patches/POVs/sarif submissions, as well as endpoints for checking the patch/POV statuses.
+- As a correlary, the server also supports the v0.4 CRS API, meaning it can send tasks to CRSs
+- The `compose.yaml` given in this folder also brings up signoz for telemetry. Competitors may use this to send to telemetry to, much like how they would in a real competition round.
 
 ## Prerequisites
 You must make changes to the following files in order for the server to run properly
