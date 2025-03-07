@@ -37,6 +37,14 @@ To check if it succeeded, try running the following:
 docker pull ghcr.io/aixcc-finals/competitor-test-server/competition-api:v0.4
 ```
 
+__Note__: If you are on a non-x86_64 machine (e.g. Apple M1 Macintosh), the above docker pull
+command will not work. Instead use the following
+```bash
+docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/competitor-test-server/competition-api:v0.4
+```
+
+Docker will store your credentials in your OS's native keystore, so you should only have to run `docker login` on subsequent logins into the Github Container Repository
+
 ### `scantron.yaml`
 The competition servers configuration is stored in the `scantron.yaml` file. Of note for competitors
 would be the following:
