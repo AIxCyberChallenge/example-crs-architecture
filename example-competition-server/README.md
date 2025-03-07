@@ -2,7 +2,8 @@
 
 ## Overview
 
-This folder allows users to run a full end-to-end competition server, as well as a signoz endpoint for which competitors may submit telemetry to for testing. This server simulates how the actual server will act in the competition. This means:
+This folder allows users to run a full end-to-end competition server, as well as a signoz endpoint for which competitors may submit telemetry to for testing.
+This server simulates how the actual server will act in the competition. This means:
 
 - The example server supports the v0.4 competition server API, including endpoints for patches/POVs/sarif submissions, as well as endpoints for checking the patch/POV statuses.
 - As a correlary, the server also supports the v0.4 CRS API, meaning it can send tasks to CRSs
@@ -72,7 +73,7 @@ In the normal competition, the server would get a notification from GitHub via G
 the CRS from there. The example server here responds to a simple HTTP request instead. Here is an example curl command to
 trigger a full scan.
 
-```
+```bash
 curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: application/json' -d '{
     "challenge_repo_url": "git@github.com:aixcc-finals/example-libpng.git",
     "challenge_repo_head_ref": "2c894c66108f0724331a9e5b4826e351bf2d094b",
@@ -85,7 +86,7 @@ curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: ap
 
 Here is an example for a delta scan:
 
-```
+```bash
 curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: application/json' -d '{
     "challenge_repo_url": "git@github.com:aixcc-finals/example-libpng.git",
     "challenge_repo_base_ref": "0cc367aaeaac3f888f255cee5d394968996f736e",
