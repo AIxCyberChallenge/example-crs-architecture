@@ -9,6 +9,34 @@ This folder allows users to run a full end-to-end competition server, as well as
 ## Prerequisites
 You must make changes to the following files in order for the server to run properly
 
+### Github Container Registry
+You must login to the Github Container Registry to access the example competition server container.
+
+You will need to have a GitHub personal access token (PAT) scoped to at least `read:packages`.
+
+To create the PAT, go to your account, `Settings` > `Developer settings` > `Personal access tokens`, and generate a Token (classic) with the scopes needed for your use case.
+
+For this example, the `read:packages` scope is required.
+
+Once you have your PAT, set it to an environment variable on your machine like this
+
+```bash
+export CR_PAT=YOUR_TOKEN_HERE
+```
+
+Finally, you must login to the registry, like so: 
+
+```bash
+$ echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+> Login Succeeded
+```
+
+To check if it succeeded, try running the following:
+
+```bash
+docker pull ghcr.io/aixcc-finals/competitor-test-server/competition-api:v0.4
+```
+
 ### `scantron.yaml`
 The competition servers configuration is stored in the `scantron.yaml` file. Of note for competitors
 would be the following:
