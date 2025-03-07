@@ -71,11 +71,11 @@ OTEL_EXPORTER_OTLP_PROTOCOL=grpc
 
 ## Running the server
 
-You can run the server and signoz simply by doing `docker compose up` from within the example-competition-server directory.
-If you wish to not run signoz, you can simply remove the `include` statement at the top of the compose.yaml in example-competition-server.
+You can run the server and signoz by doing `docker compose up` from within the example-competition-server directory.
+If you wish to not run signoz, you can remove the `include` statement at the top of the compose.yaml in example-competition-server. NOTE: Signoz may take 2-5 minutes to fully start up.
 
 In the normal competition, the server would get a notification from GitHub via GitHub webhooks, and would fire off a task to
-the CRS from there. The example server here responds to a simple HTTP request instead. Here is an example curl command to
+the CRS from there. The example server here responds to an HTTP request instead. Here is an example curl command to
 trigger a full scan.
 
 ```bash
