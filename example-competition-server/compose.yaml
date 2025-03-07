@@ -1,12 +1,11 @@
 name: "competitor-test-server"
 
 x-default-logging: &logging
- driver: "json-file"
- options:
-   max-size: "5m"
-   max-file: "2"
-   tag: "{{.Name}}|{{.ImageName}}|{{.ID}}"
-
+  driver: "json-file"
+  options:
+    max-size: "5m"
+    max-file: "2"
+    tag: "{{.Name}}|{{.ImageName}}|{{.ID}}"
 
 include:
   - ./signoz/compose.yaml
@@ -56,8 +55,7 @@ services:
     environment:
       - "DOCKER_HOST=tcp://dind:2375"
       - DOCKER_DEFAULT_PLATFORM=linux/amd64
-    logging:
-      *logging
+    logging: *logging
 
 networks:
   dind-internal:
