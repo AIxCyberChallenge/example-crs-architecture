@@ -48,7 +48,7 @@ command will not work. Instead use the following
 docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/competitor-test-server/competition-api:v0.4
 ```
 
-Docker will store your credentials in your OS's native keystore, so you should only have to run `docker login` on subsequent logins into the Github Container Repository
+Docker will store your credentials in your OS's native keystore, so you should only have to run `docker login` on subsequent logins into the GitHub Container Repository
 
 ### `scantron.yaml`
 
@@ -57,7 +57,7 @@ would be the following:
 
 - `api_keys.id`: You don't need to edit this, but this is the key the CRS must use to send submissions to the server
 - `crs`: This stores information the competition server uses to access the CRS
-- `github.pat`: The server must download fuzz tooling and challenge repositories from github, so you must add a github personal access token with repository read access here in order for the server to work.
+- `github.pat`: The server must download fuzz tooling and challenge repositories from GitHub, so you must add a GitHub personal access token with repository read access here in order for the server to work.
 
 ### `signoz/otel-collector-config.yaml`
 
@@ -68,7 +68,7 @@ If you choose to submit data to signoz, you can edit the Basic Auth username and
 You can run the server and signoz simply by doing `docker compose up` from within the example-competition-server directory.
 If you wish to not run signoz, you can simply remove the `include` statement at the top of the compose.yaml in example-competition-server.
 
-In the normal competition, the server would get a notification from github via github webhooks, and would fire off a task to
+In the normal competition, the server would get a notification from GitHub via GitHub webhooks, and would fire off a task to
 the CRS from there. The example server here responds to a simple HTTP request instead. Here is an example curl command to
 trigger a full scan.
 
