@@ -21,7 +21,7 @@ logging:
 
 crs:
   # The url of your CRS. If you are running your CRS on localhost, keep the
-  # url as host.docker.internal 
+  # url as host.docker.internal
   - url: http://host.docker.internal:1324
     api_key_id: api_key_id
     api_key_token: api_key_token
@@ -32,6 +32,6 @@ round_id: testing
 listen_address: "[::]:1323"
 
 github:
-  # github Personal Access token. This is used by the server to download the 
-  # appropriate fuzz tooling and whatnot.
+  # github Personal Access token. This is used by the server to download the
+  # appropriate fuzz tooling if not using public repositories
   pat: github_pat_foobar
