@@ -10,7 +10,6 @@ api_keys:
     active: true
     permissions:
       crs: true
-      competition_management: true
 
 logging:
   gorm:
