@@ -182,42 +182,26 @@ services:
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
       - ./config/signoz/otel-collector-opamp-config.yaml:/etc/manager-config.yaml
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - OTEL_RESOURCE_ATTRIBUTES=host.name=signoz-host,os.type=linux
       - LOW_CARDINAL_EXCEPTION_GROUPING=false
     ports:
       # - "1777:1777"     # pprof extension
       - "4317:4317" # OTLP gRPC receiver
+      - "2255:2255"
     depends_on:
       query-service:
         condition: service_healthy
-  otel-agent:
-    <<: *common
-    image: otel/opentelemetry-collector-contrib:0.121.0
-    command:
-      - --config=/etc/otel-collector-config.yaml
-    volumes:
-      - ./infra-otel-collector-config.yaml:/etc/otel-collector-config.yaml
-      - /:/hostfs:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - SIGNOZ_COLLECTOR_ENDPOINT=http://host.docker.internal:4317    # In case of external SigNoz or cloud, update the endpoint and access token
-      - OTEL_RESOURCE_ATTRIBUTES=host.name=signoz-host,os.type=linux  # Replace signoz-host with the actual hostname
-      # TODO!! Fill this with the base64 encoded username:password used for the collector
-      # IMPORTANT: Do not use quotes around the value
-      - SIGNOZ_AUTH_BASE64=
-    depends_on:
-      otel-collector:
-        condition: service_started
   logspout:
     <<: *common
     image: "gliderlabs/logspout:v3.2.14"
     volumes:
       - /etc/hostname:/etc/host_hostname:ro
       - /var/run/docker.sock:/var/run/docker.sock
-    command: syslog+tcp://otel-agent:2255
+    command: syslog+tcp://otel-collector:2255
     depends_on:
-      - otel-agent
+      - otel-collector
   schema-migrator-sync:
     !!merge <<: *common
     image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-0.111.24}
