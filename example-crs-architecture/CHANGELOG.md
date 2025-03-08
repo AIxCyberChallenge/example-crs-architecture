@@ -5,6 +5,9 @@
 - Adds tailscale configuration for ingress
 - Removes nginx-ingress component
 - Removes cert-manager / letsencrypt component
+- Removes cluster issuer component
+- Updates to env variables
+- Updates to README.md
 
 ## 2025-03-01
 
