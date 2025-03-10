@@ -65,9 +65,11 @@ would be the following:
 In order to test data submission to signoz, you can edit the Basic Auth username and password here, under `basicauth/server.htpasswd.inline`
 
 In order to use this signoz from your CRS, use the following environment vars:
+```bash
 OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic <base64 encoded credentials in format username:password>"
 OTEL_EXPORTER_OTLP_ENDPOINT="http://127.0.0.1:4317" # This will be the Team-specific telemetry server configured by the Organizers.
 OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+```
 
 ## Running the server
 
