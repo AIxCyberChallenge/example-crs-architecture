@@ -21,7 +21,7 @@ You will need to have a GitHub personal access token (PAT) scoped to at least `r
 
 To create the PAT, go to your account, `Settings` > `Developer settings` > `Personal access tokens`, and generate a Token (classic) with the scopes needed for your use case.
 
-For this example, the `read:packages` scope is required.
+For this example, the `read:packages` scope is required. If you'd like, you may also enable the `repo` scope so you can use the same token for the container registry and the competition test server (see the [scantron.yaml](#scantronyaml) section below).
 
 Once you have your PAT, set it to an environment variable on your machine like this
 
@@ -51,7 +51,7 @@ would be the following:
 
 - `api_keys.id`: You don't need to edit this, but this is the key the CRS must use to send submissions to the server
 - `crs`: This stores information the competition server uses to access the CRS
-- `github.pat`: The server must download fuzz tooling and challenge repositories from GitHub, so you must add a GitHub personal access token with repository read access here in order for the server to work.
+- `github.pat`: The server must download fuzz tooling and challenge repositories from GitHub, so you must add a GitHub personal access token with repository read access here in order for the server to work. This token must have the `repo` scope. You may use the same access token that you used for container registry, just as long as it has both the `repo` scope and the `read:packages` scope enabled.
 
 ### `signoz/otel-collector-config.yaml`
 
