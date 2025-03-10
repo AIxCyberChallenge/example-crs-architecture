@@ -80,25 +80,32 @@ These attributes capture the details of individual tasks or activities.
 
 ## Example Python Implementation
 
+Change the endpoint and authentication to your telemetry solution as appropriate.
+
+1. Install OpenLIT
+
+```bash
+pip install openlit
+```
+
+1. Run with environment variables set.
+
+```bash
+export OPENAI_API_KEY=<YOUR OPENAI API KEY>.
+OTEL_EXPORTER_OTLP_ENDPOINT="http://127.0.0.1:4317" OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic <base64 encoded http basic credentials>" OTEL_EXPORTER_OTLP_PROTOCOL=grpc python3 main.py
+```
+
 ```python
 import logging
 from openai import OpenAI
 from opentelemetry import trace
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-from opentelemetry.sdk.resources import Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
 import openlit
 
-openlit.init()
+# Initialize openlit
+openlit.init(application_name="mycrsllmservice")
 
-resource = Resource(attributes={"service.name": "llmservice"})
-
-trace.set_tracer_provider(TracerProvider(resource=resource))
+# Acquire a tracer
 tracer = trace.get_tracer(__name__)
-otlp_exporter = OTLPSpanExporter()
-span_processor = BatchSpanProcessor(otlp_exporter)
-trace.get_tracer_provider().add_span_processor(span_processor)
 
 
 def get_current_task():
@@ -167,21 +174,13 @@ if __name__ == "__main__":
 import logging
 from openai import OpenAI
 from opentelemetry import trace
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-from opentelemetry.sdk.resources import Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
 import openlit
 
-openlit.init()
+# Initialize openlit
+openlit.init(application_name="mycrsllmservice")
 
-resource = Resource(attributes={"service.name": "llmservice"})
-
-trace.set_tracer_provider(TracerProvider(resource=resource))
+# Acquire a tracer
 tracer = trace.get_tracer(__name__)
-otlp_exporter = OTLPSpanExporter()
-span_processor = BatchSpanProcessor(otlp_exporter)
-trace.get_tracer_provider().add_span_processor(span_processor)
 
 def get_current_task():
     # Context for the task
