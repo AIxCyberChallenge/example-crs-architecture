@@ -5,8 +5,8 @@
 This folder allows users to run a full end-to-end competition server, as well as a signoz endpoint for which competitors may submit telemetry to for testing.
 This server simulates how the actual server will act in the competition. This means:
 
-- The example server supports the v0.4 competition server API, including endpoints for patches/POVs/sarif submissions, as well as endpoints for checking the patch/POV statuses.
-- As a correlary, the server also supports the v0.4 CRS API, meaning it can send tasks to CRSs
+- The example server supports the v0.5 competition server API, including endpoints for patches/POVs/sarif submissions, as well as endpoints for checking the patch/POV statuses.
+- As a correlary, the server also supports the v0.5 CRS API, meaning it can send tasks to CRSs
 - The `compose.yaml` given in this folder also brings up signoz for telemetry. Competitors may use this to send to telemetry to, much like how they would in a real competition round.
 
 ## Prerequisites
@@ -39,14 +39,14 @@ $ echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
 To check if it succeeded, try running the following:
 
 ```bash
-docker pull ghcr.io/aixcc-finals/competitor-test-server/competition-api:v0.4
+docker pull ghcr.io/aixcc-finals/competitor-test-server/competition-api:v0.5-rc1
 ```
 
 **Note**: If you are on a non-x86_64 machine (e.g. Apple M1 Macintosh), the above docker pull
 command will not work. Instead use the following
 
 ```bash
-docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/competitor-test-server/competition-api:v0.4
+docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/competitor-test-server/competition-api:v0.5-rc1
 ```
 
 Docker will store your credentials in your OS's native keystore, so you should only have to run `docker login` on subsequent logins into the GitHub Container Repository
