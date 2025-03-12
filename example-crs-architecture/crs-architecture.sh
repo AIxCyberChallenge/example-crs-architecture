@@ -62,6 +62,7 @@ up() {
 
 	kubectl apply -k k8s/base/tailscale-coredns/
 	kubectl apply -k k8s/base/crs-webservice/
+	kubectl apply -k k8s/base/tailscale-connections/
 
 	echo -e "${BLU}Waiting for ingress hostname namespace${NC}"
 	timeout 5m bash -c "until kubectl get ingress -n crs-webservice crs-webapp -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' | grep -q '.'; do sleep 1; done" || echo -e "${BLU}Error: Ingress hostname failed to be to set within 5 minutes${NC}"
@@ -74,6 +75,7 @@ up() {
 down() {
 	echo -e "${BLU}Deleting Kubernetes resource${NC}"
 	set +e
+	kubectl delete -k k8s/base/tailscale-connections/
 	kubectl delete -k k8s/base/crs-webservice/
 	timeout 2m bash -c "until kubectl get statefulset -n tailscale -l tailscale.com/parent-resource=crs-webapp,tailscale.com/parent-resource-ns=crs-webservice 2>&1 | grep -q 'No resources found'; do sleep 1; done" || echo -e "${RED}Error: StatefulSet cleanup timed out after 2 minutes${NC}"
 	kubectl delete -k k8s/base/tailscale-coredns/

@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo-1-proxy
+  namespace: crs-webservice
+  annotations:
+    tailscale.com/tailnet-fqdn: "echo-1.tail7e9b4c.ts.net" #Update with the actual tailnet fqdn of the competition API
+spec:
+  externalName: placeholder
+  type: ExternalName
