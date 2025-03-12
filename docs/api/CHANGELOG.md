@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.5
+## v1.0
 
 - add freeform submission
 - add freeform submission to bundle

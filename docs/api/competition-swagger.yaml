@@ -242,7 +242,7 @@ definitions:
 info:
   contact: {}
   title: Example Competition API
-  version: "0.5"
+  version: "1.0"
 paths:
   /v1/task/{task_id}/broadcast-sarif-assessment/{broadcast_sarif_id}/:
     post:

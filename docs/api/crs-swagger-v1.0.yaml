@@ -215,7 +215,7 @@ definitions:
 info:
   contact: {}
   title: Example CRS API
-  version: "0.5"
+  version: "1.0"
 paths:
   /status/:
     delete:

@@ -3,7 +3,7 @@
   "info": {
     "title": "Example CRS API",
     "contact": {},
-    "version": "0.5"
+    "version": "1.0"
   },
   "paths": {
     "/status/": {
