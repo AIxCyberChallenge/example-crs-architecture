@@ -1,9 +1,10 @@
 # Changelog
 
 ## v0.5
+
 - add freeform submission
 - add freeform submission to bundle
-- add `harnesses_included` boolean to task broadcasts 
+- add `harnesses_included` boolean to task broadcasts
 
 ## v0.4
 
