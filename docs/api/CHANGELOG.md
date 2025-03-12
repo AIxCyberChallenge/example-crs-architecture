@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0
+
+- add freeform submission
+- add freeform submission to bundle
+- add `harnesses_included` boolean to task broadcasts
+- **BREAKING CHANGE**: add new required `engine` field to pov submission. valid values are found in the `project.yaml`
+
 ## v0.4
 
 - added bundle workflow
