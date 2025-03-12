@@ -3,7 +3,7 @@ definitions:
     properties:
       broadcasts:
         items:
-          $ref: '#/definitions/types.SARIFBroadcastDetail'
+          $ref: "#/definitions/types.SARIFBroadcastDetail"
         type: array
       message_id:
         format: uuid
@@ -11,14 +11,15 @@ definitions:
       message_time:
         type: integer
     required:
-    - broadcasts
-    - message_id
-    - message_time
+      - broadcasts
+      - message_id
+      - message_time
     type: object
   types.SARIFBroadcastDetail:
     properties:
       metadata:
-        description: String to string map containing data that should be attached
+        description:
+          String to string map containing data that should be attached
           to outputs like log messages and OpenTelemetry trace attributes for traceability
         type: object
       sarif:
@@ -31,10 +32,10 @@ definitions:
         format: uuid
         type: string
     required:
-    - metadata
-    - sarif
-    - sarif_id
-    - task_id
+      - metadata
+      - sarif
+      - sarif_id
+      - task_id
     type: object
   types.SourceDetail:
     properties:
@@ -42,25 +43,25 @@ definitions:
         description: Integrity hash of the gzipped tarball
         type: string
       type:
-        $ref: '#/definitions/types.SourceType'
+        $ref: "#/definitions/types.SourceType"
       url:
         description: URL to fetch the source gzipped tarball
         type: string
     required:
-    - sha256
-    - type
-    - url
+      - sha256
+      - type
+      - url
     type: object
   types.SourceType:
     enum:
-    - repo
-    - fuzz-tooling
-    - diff
+      - repo
+      - fuzz-tooling
+      - diff
     type: string
     x-enum-varnames:
-    - SourceTypeRepo
-    - SourceTypeFuzzTooling
-    - SourceTypeDiff
+      - SourceTypeRepo
+      - SourceTypeFuzzTooling
+      - SourceTypeDiff
   types.Status:
     properties:
       details:
@@ -78,7 +79,7 @@ definitions:
         type: integer
       state:
         allOf:
-        - $ref: '#/definitions/types.StatusState'
+          - $ref: "#/definitions/types.StatusState"
         description: State of the currently running tasks and submissions
       version:
         description: |-
@@ -91,17 +92,17 @@ definitions:
           - etc
         type: string
     required:
-    - ready
-    - since
-    - state
-    - version
+      - ready
+      - since
+      - state
+      - version
     type: object
   types.StatusState:
     properties:
       tasks:
-        $ref: '#/definitions/types.StatusTasksState'
+        $ref: "#/definitions/types.StatusTasksState"
     required:
-    - tasks
+      - tasks
     type: object
   types.StatusTasksState:
     properties:
@@ -109,11 +110,13 @@ definitions:
         description: Number of tasks that competition infrastructure has cancelled
         type: integer
       errored:
-        description: Number of tasks that the CRS encountered an unrecoverable issue
+        description:
+          Number of tasks that the CRS encountered an unrecoverable issue
           for
         type: integer
       failed:
-        description: Number of submissions that the competition infrastructure marked
+        description:
+          Number of submissions that the competition infrastructure marked
           failed
         type: integer
       pending:
@@ -123,21 +126,23 @@ definitions:
         description: Number of tasks that the CRS is currently processing
         type: integer
       succeeded:
-        description: Number of submissions that the competition infrastructure marked
+        description:
+          Number of submissions that the competition infrastructure marked
           passed
         type: integer
       waiting:
-        description: Number of submissions that the competition infrastructure is
+        description:
+          Number of submissions that the competition infrastructure is
           currently testing
         type: integer
     required:
-    - canceled
-    - errored
-    - failed
-    - pending
-    - processing
-    - succeeded
-    - waiting
+      - canceled
+      - errored
+      - failed
+      - pending
+      - processing
+      - succeeded
+      - waiting
     type: object
   types.Task:
     properties:
@@ -148,17 +153,18 @@ definitions:
         type: integer
       tasks:
         items:
-          $ref: '#/definitions/types.TaskDetail'
+          $ref: "#/definitions/types.TaskDetail"
         type: array
     required:
-    - message_id
-    - message_time
-    - tasks
+      - message_id
+      - message_time
+      - tasks
     type: object
   types.TaskDetail:
     properties:
       deadline:
-        description: UNIX timestamp by which any submissions for this task must be
+        description:
+          UNIX timestamp by which any submissions for this task must be
           in
         type: integer
       focus:
@@ -171,7 +177,8 @@ definitions:
       harnesses_included:
         type: boolean
       metadata:
-        description: String to string map containing data that should be attached
+        description:
+          String to string map containing data that should be attached
           to outputs like log messages and OpenTelemetry trace attributes for traceability
         type: object
       project_name:
@@ -180,31 +187,31 @@ definitions:
       source:
         description: List of sources needed to evaluate a task
         items:
-          $ref: '#/definitions/types.SourceDetail'
+          $ref: "#/definitions/types.SourceDetail"
         type: array
       task_id:
         format: uuid
         type: string
       type:
-        $ref: '#/definitions/types.TaskType'
+        $ref: "#/definitions/types.TaskType"
     required:
-    - deadline
-    - focus
-    - harnesses_included
-    - metadata
-    - project_name
-    - source
-    - task_id
-    - type
+      - deadline
+      - focus
+      - harnesses_included
+      - metadata
+      - project_name
+      - source
+      - task_id
+      - type
     type: object
   types.TaskType:
     enum:
-    - full
-    - delta
+      - full
+      - delta
     type: string
     x-enum-varnames:
-    - TaskTypeFull
-    - TaskTypeDelta
+      - TaskTypeFull
+      - TaskTypeDelta
 info:
   contact: {}
   title: Example CRS API
@@ -213,124 +220,126 @@ paths:
   /status/:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Reset all stats in the status endpoint.
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: No Content
           schema:
             type: string
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Reset status stats
       tags:
-      - status
+        - status
     get:
       consumes:
-      - application/json
+        - application/json
       description: UNAUTHENTICATED! report the status of the CRS
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: Status Obect
           schema:
-            $ref: '#/definitions/types.Status'
+            $ref: "#/definitions/types.Status"
       summary: CRS Status
       tags:
-      - status
+        - status
   /v1/sarif/:
     post:
       consumes:
-      - application/json
+        - application/json
       description: submit a sarif broadcast
       parameters:
-      - description: Vulnerability Broadcast
-        in: body
-        name: payload
-        required: true
-        schema:
-          $ref: '#/definitions/types.SARIFBroadcast'
+        - description: Vulnerability Broadcast
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: "#/definitions/types.SARIFBroadcast"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: No Content
           schema:
             type: string
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Submit Sarif Broadcast
       tags:
-      - sarif
+        - sarif
   /v1/task/:
     delete:
       consumes:
-      - application/json
-      description: Cancel all previously submitted tasks. This is meant for edge case
+        - application/json
+      description:
+        Cancel all previously submitted tasks. This is meant for edge case
         recovery in case something goes wrong.
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: No Content
           schema:
             type: string
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Cancel Tasks
       tags:
-      - task
+        - task
     post:
       consumes:
-      - application/json
+        - application/json
       description: submit a task for work
       parameters:
-      - description: Submission body
-        in: body
-        name: payload
-        required: true
-        schema:
-          $ref: '#/definitions/types.Task'
+        - description: Submission body
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: "#/definitions/types.Task"
       produces:
-      - application/json
+        - application/json
       responses:
         "202":
           description: No Content
           schema:
             type: string
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Submit Task
       tags:
-      - task
+        - task
   /v1/task/{task_id}/:
     delete:
       consumes:
-      - application/json
-      description: Cancel a task by id. This is meant for edge case recovery in case
+        - application/json
+      description:
+        Cancel a task by id. This is meant for edge case recovery in case
         something goes wrong.
       parameters:
-      - description: Task ID
-        format: uuid
-        in: path
-        name: task_id
-        required: true
-        type: string
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: No Content
           schema:
             type: string
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Cancel Task
       tags:
-      - task
+        - task
 securityDefinitions:
   BasicAuth:
     type: basic

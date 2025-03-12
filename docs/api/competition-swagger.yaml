@@ -1,25 +1,26 @@
 definitions:
   types.Architecture:
     enum:
-    - x86_64
+      - x86_64
     type: string
     x-enum-varnames:
-    - ArchitectureX864
+      - ArchitectureX8664
   types.Assessment:
     enum:
-    - correct
-    - incorrect
+      - correct
+      - incorrect
     type: string
     x-enum-varnames:
-    - AssessmentCorrect
-    - AssessmentIncorrect
+      - AssessmentCorrect
+      - AssessmentIncorrect
   types.BundleSubmission:
     properties:
       broadcast_sarif_id:
         format: uuid
         type: string
       description:
-        description: optional plaintext description of the components of the bundle,
+        description:
+          optional plaintext description of the components of the bundle,
           such as would be found in a pull request description or bug report
         type: string
       freeform_id:
@@ -41,10 +42,10 @@ definitions:
         format: uuid
         type: string
       status:
-        $ref: '#/definitions/types.SubmissionStatus'
+        $ref: "#/definitions/types.SubmissionStatus"
     required:
-    - bundle_id
-    - status
+      - bundle_id
+      - status
     type: object
   types.BundleSubmissionResponseVerbose:
     properties:
@@ -66,13 +67,13 @@ definitions:
         format: uuid
         type: string
       status:
-        $ref: '#/definitions/types.SubmissionStatus'
+        $ref: "#/definitions/types.SubmissionStatus"
       submitted_sarif_id:
         format: uuid
         type: string
     required:
-    - bundle_id
-    - status
+      - bundle_id
+      - status
     type: object
   types.Error:
     properties:
@@ -83,7 +84,7 @@ definitions:
       message:
         type: string
     required:
-    - message
+      - message
     type: object
   types.FreeformResponse:
     properties:
@@ -91,10 +92,10 @@ definitions:
         format: uuid
         type: string
       status:
-        $ref: '#/definitions/types.SubmissionStatus'
+        $ref: "#/definitions/types.SubmissionStatus"
     required:
-    - freeform_id
-    - status
+      - freeform_id
+      - status
     type: object
   types.FreeformSubmission:
     properties:
@@ -105,12 +106,12 @@ definitions:
           2MiB max size before Base64 encoding
         type: string
     required:
-    - submission
+      - submission
     type: object
   types.POVSubmission:
     properties:
       architecture:
-        $ref: '#/definitions/types.Architecture'
+        $ref: "#/definitions/types.Architecture"
       engine:
         description: |-
           Fuzz Tooling Engine that exercises this vuln
@@ -140,11 +141,11 @@ definitions:
         format: base64
         type: string
     required:
-    - architecture
-    - engine
-    - fuzzer_name
-    - sanitizer
-    - testcase
+      - architecture
+      - engine
+      - fuzzer_name
+      - sanitizer
+      - testcase
     type: object
   types.POVSubmissionResponse:
     properties:
@@ -152,10 +153,10 @@ definitions:
         format: uuid
         type: string
       status:
-        $ref: '#/definitions/types.SubmissionStatus'
+        $ref: "#/definitions/types.SubmissionStatus"
     required:
-    - pov_id
-    - status
+      - pov_id
+      - status
     type: object
   types.PatchSubmission:
     properties:
@@ -167,7 +168,7 @@ definitions:
         format: base64
         type: string
     required:
-    - patch
+      - patch
     type: object
   types.PatchSubmissionResponse:
     properties:
@@ -178,10 +179,10 @@ definitions:
         format: uuid
         type: string
       status:
-        $ref: '#/definitions/types.SubmissionStatus'
+        $ref: "#/definitions/types.SubmissionStatus"
     required:
-    - patch_id
-    - status
+      - patch_id
+      - status
     type: object
   types.SARIFSubmission:
     properties:
@@ -189,30 +190,30 @@ definitions:
         description: SARIF object compliant with the provided schema
         type: object
     required:
-    - sarif
+      - sarif
     type: object
   types.SARIFSubmissionResponse:
     properties:
       status:
-        $ref: '#/definitions/types.SubmissionStatus'
+        $ref: "#/definitions/types.SubmissionStatus"
       submitted_sarif_id:
         format: uuid
         type: string
     required:
-    - status
-    - submitted_sarif_id
+      - status
+      - submitted_sarif_id
     type: object
   types.SarifAssessmentResponse:
     properties:
       status:
-        $ref: '#/definitions/types.SubmissionStatus'
+        $ref: "#/definitions/types.SubmissionStatus"
     required:
-    - status
+      - status
     type: object
   types.SarifAssessmentSubmission:
     properties:
       assessment:
-        $ref: '#/definitions/types.Assessment'
+        $ref: "#/definitions/types.Assessment"
       description:
         description: |-
           Plain text reasoning for the assessment
@@ -221,30 +222,31 @@ definitions:
         maxLength: 131072
         type: string
     required:
-    - assessment
-    - description
+      - assessment
+      - description
     type: object
   types.SubmissionStatus:
     enum:
-    - accepted
-    - passed
-    - failed
-    - deadline_exceeded
-    - errored
+      - accepted
+      - passed
+      - failed
+      - deadline_exceeded
+      - errored
     type: string
     x-enum-comments:
       SubmissionStatusAccepted: Successfully submitted
-      SubmissionStatusDeadlineExceeded: Task deadline exceeded. All submissions marked
+      SubmissionStatusDeadlineExceeded:
+        Task deadline exceeded. All submissions marked
         accepted before the deadline will be evaluated.
       SubmissionStatusErrored: Server side error when testing submission
       SubmissionStatusFailed: Submission failed testing
       SubmissionStatusPassed: Successfully evaluated submission
     x-enum-varnames:
-    - SubmissionStatusAccepted
-    - SubmissionStatusPassed
-    - SubmissionStatusFailed
-    - SubmissionStatusDeadlineExceeded
-    - SubmissionStatusErrored
+      - SubmissionStatusAccepted
+      - SubmissionStatusPassed
+      - SubmissionStatusFailed
+      - SubmissionStatusDeadlineExceeded
+      - SubmissionStatusErrored
 info:
   contact: {}
   title: Example Competition API
@@ -253,121 +255,121 @@ paths:
   /v1/task/{task_id}/broadcast-sarif-assessment/{broadcast_sarif_id}/:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Submit a SARIF assessment
       parameters:
-      - description: Task ID
-        format: uuid
-        in: path
-        name: task_id
-        required: true
-        type: string
-      - description: Broadcast SARIF ID
-        format: uuid
-        in: path
-        name: broadcast_sarif_id
-        required: true
-        type: string
-      - description: Submission body
-        in: body
-        name: payload
-        required: true
-        schema:
-          $ref: '#/definitions/types.SarifAssessmentSubmission'
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Broadcast SARIF ID
+          format: uuid
+          in: path
+          name: broadcast_sarif_id
+          required: true
+          type: string
+        - description: Submission body
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: "#/definitions/types.SarifAssessmentSubmission"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.SarifAssessmentResponse'
+            $ref: "#/definitions/types.SarifAssessmentResponse"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Submit a SARIF Assessment
       tags:
-      - broadcast-sarif-assessment
+        - broadcast-sarif-assessment
   /v1/task/{task_id}/bundle/:
     post:
       consumes:
-      - application/json
+        - application/json
       description: submits a bundle
       parameters:
-      - description: Task ID
-        format: uuid
-        in: path
-        name: task_id
-        required: true
-        type: string
-      - description: Submission Body
-        in: body
-        name: payload
-        required: true
-        schema:
-          $ref: '#/definitions/types.BundleSubmission'
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Submission Body
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: "#/definitions/types.BundleSubmission"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.BundleSubmissionResponse'
+            $ref: "#/definitions/types.BundleSubmissionResponse"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Submit Bundle
       tags:
-      - bundle
+        - bundle
   /v1/task/{task_id}/bundle/{bundle_id}/:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: delete a bundle
       parameters:
-      - description: Task ID
-        format: uuid
-        in: path
-        name: task_id
-        required: true
-        type: string
-      - description: Bundle ID
-        format: uuid
-        in: path
-        name: bundle_id
-        required: true
-        type: string
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Bundle ID
+          format: uuid
+          in: path
+          name: bundle_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
@@ -376,396 +378,396 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Delete Bundle
       tags:
-      - bundle
+        - bundle
     get:
       consumes:
-      - application/json
+        - application/json
       description: get a bundle
       parameters:
-      - description: Task ID
-        format: uuid
-        in: path
-        name: task_id
-        required: true
-        type: string
-      - description: Bundle ID
-        format: uuid
-        in: path
-        name: bundle_id
-        required: true
-        type: string
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Bundle ID
+          format: uuid
+          in: path
+          name: bundle_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.BundleSubmissionResponseVerbose'
+            $ref: "#/definitions/types.BundleSubmissionResponseVerbose"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Get Bundle
       tags:
-      - bundle
+        - bundle
     patch:
       consumes:
-      - application/json
+        - application/json
       description: updates a bundle
       parameters:
-      - description: Task ID
-        format: uuid
-        in: path
-        name: task_id
-        required: true
-        type: string
-      - description: Bundle ID
-        format: uuid
-        in: path
-        name: bundle_id
-        required: true
-        type: string
-      - description: Submission Body
-        in: body
-        name: payload
-        required: true
-        schema:
-          $ref: '#/definitions/types.BundleSubmission'
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Bundle ID
+          format: uuid
+          in: path
+          name: bundle_id
+          required: true
+          type: string
+        - description: Submission Body
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: "#/definitions/types.BundleSubmission"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.BundleSubmissionResponseVerbose'
+            $ref: "#/definitions/types.BundleSubmissionResponseVerbose"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Update Bundle
       tags:
-      - bundle
+        - bundle
   /v1/task/{task_id}/freeform/:
     post:
       consumes:
-      - application/json
+        - application/json
       description: submits a freeform pov
       parameters:
-      - description: Task ID
-        format: uuid
-        in: path
-        name: task_id
-        required: true
-        type: string
-      - description: Submission Body
-        in: body
-        name: payload
-        required: true
-        schema:
-          $ref: '#/definitions/types.FreeformSubmission'
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Submission Body
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: "#/definitions/types.FreeformSubmission"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.FreeformResponse'
+            $ref: "#/definitions/types.FreeformResponse"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Submit Freeform
       tags:
-      - feeform
+        - feeform
   /v1/task/{task_id}/patch/:
     post:
       consumes:
-      - application/json
+        - application/json
       description: submit a patch for testing
       parameters:
-      - description: Task ID
-        format: uuid
-        in: path
-        name: task_id
-        required: true
-        type: string
-      - description: Payload
-        in: body
-        name: payload
-        required: true
-        schema:
-          $ref: '#/definitions/types.PatchSubmission'
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Payload
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: "#/definitions/types.PatchSubmission"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.PatchSubmissionResponse'
+            $ref: "#/definitions/types.PatchSubmissionResponse"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Submit Patch
       tags:
-      - patch
+        - patch
   /v1/task/{task_id}/patch/{patch_id}/:
     get:
       consumes:
-      - application/json
+        - application/json
       description: yield the status of patch testing
       parameters:
-      - description: Task ID
-        format: uuid
-        in: path
-        name: task_id
-        required: true
-        type: string
-      - description: Patch ID
-        format: uuid
-        in: path
-        name: patch_id
-        required: true
-        type: string
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Patch ID
+          format: uuid
+          in: path
+          name: patch_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.PatchSubmissionResponse'
+            $ref: "#/definitions/types.PatchSubmissionResponse"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Patch Status
       tags:
-      - patch
+        - patch
   /v1/task/{task_id}/pov/:
     post:
       consumes:
-      - application/json
+        - application/json
       description: submit a vulnerability for testing
       parameters:
-      - description: Task ID
-        format: uuid
-        in: path
-        name: task_id
-        required: true
-        type: string
-      - description: Submission body
-        in: body
-        name: payload
-        required: true
-        schema:
-          $ref: '#/definitions/types.POVSubmission'
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Submission body
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: "#/definitions/types.POVSubmission"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.POVSubmissionResponse'
+            $ref: "#/definitions/types.POVSubmissionResponse"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Submit Vulnerability
       tags:
-      - pov
+        - pov
   /v1/task/{task_id}/pov/{pov_id}/:
     get:
       consumes:
-      - application/json
+        - application/json
       description: yield the status of vuln testing
       parameters:
-      - description: Task ID
-        format: uuid
-        in: path
-        name: task_id
-        required: true
-        type: string
-      - description: POV ID
-        format: uuid
-        in: path
-        name: pov_id
-        required: true
-        type: string
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: POV ID
+          format: uuid
+          in: path
+          name: pov_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.POVSubmissionResponse'
+            $ref: "#/definitions/types.POVSubmissionResponse"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Vulnerability Status
       tags:
-      - pov
+        - pov
   /v1/task/{task_id}/submitted-sarif/:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Submit a CRS generated SARIF
       parameters:
-      - description: Task ID
-        format: uuid
-        in: path
-        name: task_id
-        required: true
-        type: string
-      - description: Submission body
-        in: body
-        name: payload
-        required: true
-        schema:
-          $ref: '#/definitions/types.SARIFSubmission'
+        - description: Task ID
+          format: uuid
+          in: path
+          name: task_id
+          required: true
+          type: string
+        - description: Submission body
+          in: body
+          name: payload
+          required: true
+          schema:
+            $ref: "#/definitions/types.SARIFSubmission"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/types.SARIFSubmissionResponse'
+            $ref: "#/definitions/types.SARIFSubmissionResponse"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/types.Error'
+            $ref: "#/definitions/types.Error"
       security:
-      - BasicAuth: []
+        - BasicAuth: []
       summary: Submit a CRS generated SARIF
       tags:
-      - submitted-sarif
+        - submitted-sarif
 securityDefinitions:
   BasicAuth:
     type: basic
