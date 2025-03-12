@@ -5,6 +5,7 @@
 - add freeform submission
 - add freeform submission to bundle
 - add `harnesses_included` boolean to task broadcasts
+- add `engine` field to pov submission. valid values are found in the `project.yaml`
 
 ## v0.4
 
