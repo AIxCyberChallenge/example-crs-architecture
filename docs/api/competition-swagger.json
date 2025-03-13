@@ -892,7 +892,7 @@
           "$ref": "#/definitions/types.Architecture"
         },
         "engine": {
-          "description": "Fuzz Tooling Engine that exercises this vuln\n\n4KiB max size",
+          "description": "Fuzz Tooling Engine that exercises this vuln. Allowable engine values are specified in project.yaml.\n\n4KiB max size",
           "type": "string",
           "maxLength": 4096
         },

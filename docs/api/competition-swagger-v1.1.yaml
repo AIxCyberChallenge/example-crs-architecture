@@ -114,7 +114,7 @@ definitions:
         $ref: "#/definitions/types.Architecture"
       engine:
         description: |-
-          Fuzz Tooling Engine that exercises this vuln
+          Fuzz Tooling Engine that exercises this vuln. Allowable engine values are specified in project.yaml.
 
           4KiB max size
         maxLength: 4096
