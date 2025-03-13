@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: crs-webapp
+  namespace: crs-webservice
   labels:
     app: crs-webapp
 spec:
@@ -21,11 +22,8 @@ spec:
           ports:
             - name: http
               containerPort: 8080
+              protocol: TCP
           env:
-            - name: CRS_KEY_ID
-              value: ${CRS_KEY_ID}
-            - name: COMPETITION_API_KEY_ID
-              value: ${COMPETITION_API_KEY_ID}
             - name: CRS_KEY_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -36,5 +34,21 @@ spec:
                 secretKeyRef:
                   name: crs-secrets
                   key: COMPETITION_API_KEY_TOKEN
+          livenessProbe:
+            httpGet:
+              path: "/"
+              port: "http"
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: "/"
+              port: "http"
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 1
       imagePullSecrets:
         - name: ghcr-secret
