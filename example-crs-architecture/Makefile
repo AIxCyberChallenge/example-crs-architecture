@@ -7,7 +7,8 @@ GENERATED_FILES := k8s/base/crs-webservice/ingress.yaml \
                    k8s/base/crs-webservice/secrets.yaml \
                    k8s/base/crs-webservice/deployment.yaml \
                    k8s/base/cluster-issuer/secrets.yaml \
-                   k8s/base/cluster-issuer/letsencrypt.yaml
+                   k8s/base/cluster-issuer/letsencrypt.yaml \
+		   k8s/base/tailscale-coredns/coredns-custom.yaml
 
 # Default target when just running `make`
 .PHONY: help
