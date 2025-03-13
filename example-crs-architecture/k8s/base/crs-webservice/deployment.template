@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: crs-webapp
-  namespace: crs-webservice
   labels:
     app: crs-webapp
 spec:
@@ -22,8 +21,11 @@ spec:
           ports:
             - name: http
               containerPort: 8080
-              protocol: TCP
           env:
+            - name: CRS_KEY_ID
+              value: ${CRS_KEY_ID}
+            - name: COMPETITION_API_KEY_ID
+              value: ${COMPETITION_API_KEY_ID}
             - name: CRS_KEY_TOKEN
               valueFrom:
                 secretKeyRef:
