@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1
+
+- add ping endpoint to test network connectivity and credentials
+
 ## v1.0
 
 - add freeform submission
