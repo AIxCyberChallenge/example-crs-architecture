@@ -53,7 +53,7 @@ up() {
 	kubectl apply -k k8s/base/tailscale-operator/
 	kubectl apply -k k8s/base/tailscale-dns/
 
-	echo -e "${BLU}Waiting the service nameserver to exist${NC}"
+	echo -e "${BLU}Waiting for the service nameserver to exist${NC}"
 	timeout 5m bash -c "until kubectl get svc -n tailscale nameserver > /dev/null 2>&1; do sleep 1; done" || echo -e "${RED}Error: nameserver failed to exist within 5 minutes${NC}"
 	echo -e "${BLU}Waiting for nameserver to have a valid ClusterIP${NC}"
 	timeout 5m bash -c "until kubectl get svc -n tailscale nameserver -o jsonpath='{.spec.clusterIP}' | grep -v '<none>' > /dev/null 2>&1; do sleep 1; done" || echo -e "${RED}Error: nameserver failed to obtain a valid CLusterIP within 5 minutes${NC}"
@@ -64,7 +64,7 @@ up() {
 	kubectl apply -k k8s/base/crs-webservice/
 	kubectl apply -k k8s/base/tailscale-connections/
 
-	echo -e "${BLU}Waiting for ingress hostname namespace${NC}"
+	echo -e "${BLU}Waiting for ingress hostname DNS registration${NC}"
 	timeout 5m bash -c "until kubectl get ingress -n crs-webservice crs-webapp -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' | grep -q '.'; do sleep 1; done" || echo -e "${BLU}Error: Ingress hostname failed to be to set within 5 minutes${NC}"
 	INGRESS_HOSTNAME=$(kubectl get ingress -n crs-webservice crs-webapp -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 	echo -e "${GRN}Your ingress DNS hostname is $INGRESS_HOSTNAME${NC}"
