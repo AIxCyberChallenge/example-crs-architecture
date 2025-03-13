@@ -3,6 +3,7 @@
 ## v1.1
 
 - add ping endpoint to test network connectivity and credentials
+- crs status endpoint requires authentication
 
 ## v1.0
 
