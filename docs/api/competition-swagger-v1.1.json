@@ -880,13 +880,24 @@
     },
     "types.POVSubmission": {
       "type": "object",
-      "required": ["architecture", "fuzzer_name", "sanitizer", "testcase"],
+      "required": [
+        "architecture",
+        "engine",
+        "fuzzer_name",
+        "sanitizer",
+        "testcase"
+      ],
       "properties": {
         "architecture": {
           "$ref": "#/definitions/types.Architecture"
         },
+        "engine": {
+          "description": "Fuzz Tooling Engine that exercises this vuln\n\n4KiB max size",
+          "type": "string",
+          "maxLength": 4096
+        },
         "fuzzer_name": {
-          "description": "Fuzz Tooling Harness Name that exercises this vuln\n\n4KiB max size",
+          "description": "Fuzz Tooling fuzzer that exercises this vuln\n\n4KiB max size",
           "type": "string",
           "maxLength": 4096
         },

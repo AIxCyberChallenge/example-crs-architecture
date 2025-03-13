@@ -112,9 +112,16 @@ definitions:
     properties:
       architecture:
         $ref: "#/definitions/types.Architecture"
+      engine:
+        description: |-
+          Fuzz Tooling Engine that exercises this vuln
+
+          4KiB max size
+        maxLength: 4096
+        type: string
       fuzzer_name:
         description: |-
-          Fuzz Tooling Harness Name that exercises this vuln
+          Fuzz Tooling fuzzer that exercises this vuln
 
           4KiB max size
         maxLength: 4096
@@ -135,6 +142,7 @@ definitions:
         type: string
     required:
       - architecture
+      - engine
       - fuzzer_name
       - sanitizer
       - testcase
