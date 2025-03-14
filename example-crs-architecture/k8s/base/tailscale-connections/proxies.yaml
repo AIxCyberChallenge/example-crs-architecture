@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: competition-echo-1-egress
+  name: competition-echo-egress
   namespace: tailscale
   annotations:
-    tailscale.com/tailnet-fqdn: "echo-1.tail7e9b4c.ts.net" #Basic http echo test server
+    tailscale.com/tailnet-fqdn: "echo.tail7e9b4c.ts.net" #Basic http echo test server
 spec:
   externalName: placeholder
   type: ExternalName
