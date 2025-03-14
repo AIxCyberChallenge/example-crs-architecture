@@ -11,8 +11,8 @@ This repository is currently under development. Documentation and examples are b
 | Task                                                                                     | Status |
 | ---------------------------------------------------------------------------------------- | ------ |
 | Example CRS Azure Kubernetes Service (AKS) Terraform                                     | ✅     |
-| Competition API Spec v0.4                                                                | ✅     |
-| CRS API Spec v0.4                                                                        | ✅     |
+| Competition API Spec v1.1                                                                | ✅     |
+| CRS API Spec v1.1                                                                        | ✅     |
 | Telemetry Spec v1.0                                                                      | ✅     |
 | <[Challenge Generation script](https://github.com/aixcc-finals/generate-challenge-task)> | ✅     |
 | End-to-end example webservice that implements specs                                      | ❌ WIP |
