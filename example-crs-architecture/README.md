@@ -23,7 +23,7 @@ The standard `azure` networking profile is used.
 - `gettext` package
 - An active Azure subscription.
 - An account in Azure Entra ID.
-- An Azure DNS Zone in your Azure subscription (A domain may be provided by the Organizers if requested, otherwise you may use your own domain).
+- Access credentials to the competition Tailscale tailnet.
 
 ### Azure
 
@@ -77,49 +77,37 @@ TF_ARM_CLIENT_SECRET="<password-value>"
 TF_ARM_SUBSCRIPTION_ID="<YOUR-SUBSCRIPTION-ID>"
 ```
 
-- Assign the "DNS Zone Contributor" role to your SPA (required to update record sets within your Azure DNS Zone)
-
-```bash
-az role assignment create --assignee <APP-ID> --role "DNS Zone Contributor" --scope /subscriptions/<YOUR-SUBSCRIPTION-ID>/resourceGroups/<RESOURCE-GROUP-NAME>/providers/Microsoft.Network/dnszones/<DNS-ZONE-NAME>
-```
-
-> Replace `<APP-ID>` with the appId received in the previous SPA creation step.  
-> Replace `<YOUR-SUBSCRIPTION-ID>` with your Azure subscription ID.  
-> Replace `<RESOURCE-GROUP-NAME>` with your Azure DNS resource group.  
-> Replace `<DNS-ZONE-NAME>` with your Azure DNS Zone Name.
-
 ### Environment Variables
 
 The following environment variables are required to be passed into the terraform and kubernetes configurations:
 
-| Variable Name                | Description                                                                                                                                                                              |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `STAGING`                    | Tells the cluster issuer whether to use the staging environment or not. LetsEncrypt has rate limits on production. See more on [Rate Limits](https://letsencrypt.org/docs/rate-limits/). |
-| `TF_VAR_ARM_SUBSCRIPTION_ID` | Azure subscription ID                                                                                                                                                                    |
-| `TF_VAR_ARM_TENANT_ID`       | Azure tenant ID                                                                                                                                                                          |
-| `TF_VAR_ARM_CLIENT_ID`       | Azure client ID (service principal account)                                                                                                                                              |
-| `TF_VAR_ARM_CLIENT_SECRET`   | Azure client ID secret                                                                                                                                                                   |
-| `AZ_DNS_RESOURCE_GROUP`      | The name of the Azure resource group where your DNS zone is located. Example: `myDNSZone-resource-group`                                                                                 |
-| `AZ_DNS_ZONE_NAME`           | The DNS zone where you want Cert Manager to create a DNS record for DNS-01 challenges. Exmaple: `mycrs.com`                                                                              |
-| `AZ_DNS_A_RECORD`            | The DNS Host A record for your API. Exmaple: `api1`                                                                                                                                      |
-| `COMPETITION_API_KEY_ID`     | HTTP basic auth username for the competition API                                                                                                                                         |
-| `COMPETITION_API_KEY_TOKEN`  | HTTP basic auth password for the competition API                                                                                                                                         |
-| `CRS_KEY_ID`                 | HTTP basic auth username for the CRS API                                                                                                                                                 |
-| `CRS_KEY_TOKEN`              | HTTP basic auth password for the CRS API                                                                                                                                                 |
-| `GHCR_AUTH`                  | Base64 encoded credentials for GHCR                                                                                                                                                      |
-| `ACME_EMAIL`                 | Email address for ACME registration with LetsEncrypt                                                                                                                                     |
+| Variable Name                | Description                                                                   |
+| ---------------------------- | ----------------------------------------------------------------------------- |
+| `TF_VAR_ARM_SUBSCRIPTION_ID` | Azure subscription ID                                                         |
+| `TF_VAR_ARM_TENANT_ID`       | Azure tenant ID                                                               |
+| `TF_VAR_ARM_CLIENT_ID`       | Azure client ID (service principal account)                                   |
+| `TF_VAR_ARM_CLIENT_SECRET`   | Azure client ID secret                                                        |
+| `CRS_API_HOSTNAME`           | The hostname you want to assign to your API. Exmaple: `teamX-api`             |
+| `TS_CLIENT_ID`               | Tailscale oauth client ID (provided by the Organizers)                        |
+| `TS_CLIENT_SECRET`           | Tailscale oauth client secret (provided by the Organizers)                    |
+| `TS_OP_TAG`                  | Tailscale operator tag (provided by the Organizers)                           |
+| `COMPETITION_API_KEY_ID`     | HTTP basic auth username for the competition API (provided by the Organizers) |
+| `COMPETITION_API_KEY_TOKEN`  | HTTP basic auth password for the competition API (provided by the Organizers) |
+| `CRS_KEY_ID`                 | HTTP basic auth username for the CRS API                                      |
+| `CRS_KEY_TOKEN`              | HTTP basic auth password for the CRS API                                      |
+| `GHCR_AUTH`                  | Base64 encoded credentials for GHCR                                           |
 
 **These variables are stored in `./env` , and must be updated with accurate values.**
 
 ### CRS HTTP basic auth
 
 _WIP (Current example is using the `jmalloc/echo-server` image as a PoC)_  
-The crs-webapp container expects the following environment variables to be passed to it for HTTP basic authentication:
+The crs-webapp image expects the following environment variables to be passed to it for HTTP basic authentication:
 
 - `CRS_KEY_ID` - The CRS's username/ID
 - `CRS_KEY_TOKEN` - The CRS's password
-- `COMPETITION_API_KEY_ID` - The CRS Controller's username/ID
-- `COMPETITION_API_KEY_TOKEN` - The CRS Controller's password
+- `COMPETITION_API_KEY_ID` - The competition APIs username/ID
+- `COMPETITION_API_KEY_TOKEN` - The competition APIs password
 
 These values can be generated with the following python calls:
 
@@ -210,14 +198,15 @@ The deployment of the AKS cluster and its resources are performed by the `Makefi
 ## Useful Cluster Commands
 
 - `az aks get-credentials --name <your-cluster-name> --resource-group <your-resource-group>` - retrieves access credentials and updates kubeconfig for the current cluster
-- `kubectl get -n crs-webservice deployment` - lists all deployments within the namespace
-- `kubectl describe certificate -A` - print a detailed description of the selected resources, certificates in this case
+- `kubectl get namespaces` - lists all namespaces
+- `kubectl get -n crs-webservice all` - lists all resources within the crs-webservice namespace
+- `kubectl get -n tailscale all` - lists all resources within the tailscale namespace
+- `kubectl get pods -A` - lists all pods in all namespaces
 - `kubectl config get-contexts` - lists the current contexts in your kubeconfig
 - `kubectl describe deployment -n crs-webservice crs-webapp` - print detailed information about the deployment, crs-webapp
-- `kubectl get pods -A` \- lists all pods in all namespaces
 - `kubectl logs <podName>` - retrieves the stdout and stderr streams from the containers within the specified pod
 - `kubectl get svc -A` - lists status of all services
-- `openssl s_client -connect <YOUR-API-HOSTNAME>:443 -servername <YOUR-API-HOSTNAME> -showcerts` - test TLS setup
+- `kubectl get -n crs-webservice ingress` - lists the tailscale ingress address of your API
 
 ## State
 

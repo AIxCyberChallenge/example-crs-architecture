@@ -1,39 +1,39 @@
 #!/usr/bin/env bash
 set -e
 
+##set ANSI escaape codes
+NC='\033[0m'
+RED='\033[1;31m'
+GRN='\033[1;32m'
+BLU='\033[1;36m'
+
 #executes a series of terraform, az cli, and kubernetes commands to deploy or destroy an example crs architecture
 
-echo "Applying environment variables from ./env"
+echo -e "${BLU}Applying environment variables from ./env${NC}"
+# shellcheck disable=SC1094
 source ./env
-echo "Current azure account status:"
+echo -e "${GRN}Current azure account status:${NC}"
 az account show --query "{SubscriptionID:id, Tenant:tenantId}" --output table
 
 #deploy the AKS cluster and kubernetes resources function
 up() {
 
-	echo "Applying environment variables to yaml from templates"
+	echo -e "${BLU}Applying environment variables to yaml from templates${NC}"
 	CLIENT_BASE64=$(echo -n "$TF_VAR_ARM_CLIENT_SECRET" | base64)
 	CRS_KEY_BASE64=$(echo -n "$CRS_KEY_TOKEN" | base64)
 	COMPETITION_API_KEY_BASE64=$(echo -n "$COMPETITION_API_KEY_TOKEN" | base64)
 	export CLIENT_BASE64
 	export CRS_KEY_BASE64
 	export COMPETITION_API_KEY_BASE64
+	export TS_DNS_IP
 	envsubst <k8s/base/crs-webservice/ingress.template >k8s/base/crs-webservice/ingress.yaml
 	envsubst <k8s/base/crs-webservice/.dockerconfigjson.template >k8s/base/crs-webservice/.dockerconfigjson
 	envsubst <k8s/base/crs-webservice/secrets.template >k8s/base/crs-webservice/secrets.yaml
 	envsubst <k8s/base/crs-webservice/deployment.template >k8s/base/crs-webservice/deployment.yaml
-	envsubst <k8s/base/cluster-issuer/secrets.template >k8s/base/cluster-issuer/secrets.yaml
-	#check if $STAGING is set to false, otherwise applies staging template
-	if [ "$STAGING" = false ]; then
-		echo "STAGING is set to $STAGING, applying letsencrypt-prod.template"
-		envsubst <k8s/base/cluster-issuer/letsencrypt-prod.template >k8s/base/cluster-issuer/letsencrypt.yaml
-	else
-		echo "STAGING is set to $STAGING, applying letsencrypt-staging.template"
-		envsubst <k8s/base/cluster-issuer/letsencrypt-staging.template >k8s/base/cluster-issuer/letsencrypt.yaml
-	fi
+	envsubst <k8s/base/tailscale-operator/operator.template >k8s/base/tailscale-operator/operator.yaml
 
 	#deploy AKS resources in Azure
-	echo "Deploying AKS cluster Resources"
+	echo -e "${BLU}Deploying AKS cluster Resources${NC}"
 	terraform init
 	terraform apply -auto-approve
 
@@ -42,40 +42,48 @@ up() {
 	KUBERNETES_CLUSTER_NAME=$(terraform output -raw kubernetes_cluster_name)
 	RESOURCE_GROUP_NAME=$(terraform output -raw resource_group_name)
 
-	echo "----------------------------------------------------"
-	echo "KUBERNETES_CLUSTER_NAME is $KUBERNETES_CLUSTER_NAME"
-	echo "RESOURCE_GROUP_NAME is $RESOURCE_GROUP_NAME"
-	echo "----------------------------------------------------"
-	echo "Retrieving credentials to access AKS cluster"
+	echo -e "${GRN}KUBERNETES_CLUSTER_NAME is $KUBERNETES_CLUSTER_NAME"
+	echo "RESOURCE_GROUP_NAME is $RESOURCE_GROUP_NAME${NC}"
+	echo -e "${BLU}Retrieving credentials to access AKS cluster${NC}"
 	#retrieve credentials to access AKS cluster
 
 	az aks get-credentials --resource-group "$RESOURCE_GROUP_NAME" --name "$KUBERNETES_CLUSTER_NAME"
 
 	#deploy kubernetes resources in AKS cluster
-	kubectl apply -k k8s/base/cert-manager/
-	kubectl wait --for condition=Established crd/certificates.cert-manager.io --timeout=60s
-	kubectl wait --for condition=Established crd/clusterissuers.cert-manager.io --timeout=60s
-	kubectl wait --for=condition=ready pod -l app.kubernetes.io/component=webhook -n cert-manager --timeout=300s
-	kubectl apply -k k8s/base/crs-webservice/
-	kubectl apply -k k8s/base/ingress-nginx/
-	kubectl wait --for=jsonpath='{.status.loadBalancer.ingress[0].ip}' -n crs-webservice ingress/crs-webapp --timeout=5m
-	ingress_ip=$(kubectl get ingress -n crs-webservice crs-webapp -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-	echo "ingress IP is $ingress_ip"
-	kubectl apply -k k8s/base/cluster-issuer/
+	kubectl apply -k k8s/base/tailscale-operator/
+	kubectl apply -k k8s/base/tailscale-dns/
 
-	echo "Updating DNS records with ingress IP"
-	az network dns record-set a delete --resource-group "$AZ_DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --name "$AZ_DNS_A_RECORD" -y
-	az network dns record-set a create --resource-group "$AZ_DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --name "$AZ_DNS_A_RECORD"
-	az network dns record-set a add-record --resource-group "$AZ_DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --record-set-name "$AZ_DNS_A_RECORD" --ipv4-address "$ingress_ip" --ttl 180
+	echo -e "${BLU}Waiting for the service nameserver to exist${NC}"
+	timeout 5m bash -c "until kubectl get svc -n tailscale nameserver > /dev/null 2>&1; do sleep 1; done" || echo -e "${RED}Error: nameserver failed to exist within 5 minutes${NC}"
+	echo -e "${BLU}Waiting for nameserver to have a valid ClusterIP${NC}"
+	timeout 5m bash -c "until kubectl get svc -n tailscale nameserver -o jsonpath='{.spec.clusterIP}' | grep -v '<none>' > /dev/null 2>&1; do sleep 1; done" || echo -e "${RED}Error: nameserver failed to obtain a valid CLusterIP within 5 minutes${NC}"
+	TS_DNS_IP=$(kubectl get svc -n tailscale nameserver -o jsonpath='{.spec.clusterIP}')
+	envsubst <k8s/base/tailscale-coredns/coredns-custom.template >k8s/base/tailscale-coredns/coredns-custom.yaml
+
+	kubectl apply -k k8s/base/tailscale-coredns/
+	kubectl apply -k k8s/base/crs-webservice/
+	kubectl apply -k k8s/base/tailscale-connections/
+
+	echo -e "${BLU}Waiting for ingress hostname DNS registration${NC}"
+	timeout 5m bash -c "until kubectl get ingress -n crs-webservice crs-webapp -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' | grep -q '.'; do sleep 1; done" || echo -e "${BLU}Error: Ingress hostname failed to be to set within 5 minutes${NC}"
+	INGRESS_HOSTNAME=$(kubectl get ingress -n crs-webservice crs-webapp -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+	echo -e "${GRN}Your ingress DNS hostname is $INGRESS_HOSTNAME${NC}"
 
 }
 
 #destroy the AKS cluster and kubernetes resources function
 down() {
-	echo "Destroying AKS cluster"
+	echo -e "${BLU}Deleting Kubernetes resource${NC}"
+	set +e
+	kubectl delete -k k8s/base/tailscale-connections/
+	kubectl delete -k k8s/base/crs-webservice/
+	timeout 2m bash -c "until kubectl get statefulset -n tailscale -l tailscale.com/parent-resource=crs-webapp,tailscale.com/parent-resource-ns=crs-webservice 2>&1 | grep -q 'No resources found'; do sleep 1; done" || echo -e "${RED}Error: StatefulSet cleanup timed out after 2 minutes${NC}"
+	kubectl delete -k k8s/base/tailscale-coredns/
+	kubectl delete -k k8s/base/tailscale-dns/
+	kubectl delete -k k8s/base/tailscale-operator/
+	set -e
+	echo -e "${BLU}Destroying AKS cluster${NC}"
 	terraform apply -destroy -auto-approve
-	echo "Removing the DNS record, $AZ_DNS_A_RECORD, from the DNS zone, $AZ_DNS_ZONE_NAME, in the resource group, $AZ_DNS_RESOURCE_GROUP"
-	az network dns record-set a delete --resource-group "$AZ_DNS_RESOURCE_GROUP" --zone-name "$AZ_DNS_ZONE_NAME" --name "$AZ_DNS_A_RECORD" -y
 
 }
 
@@ -87,6 +95,6 @@ down)
 	down
 	;;
 *)
-	echo "The only acceptable arguments are up and down"
+	echo -e "${RED}The only acceptable arguments are up and down${NC}"
 	;;
 esac

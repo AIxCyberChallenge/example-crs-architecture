@@ -3,18 +3,17 @@ kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
   name: crs-webapp
+  namespace: crs-webservice
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/proxy-body-size: "5m"
+    tailscale.com/hostname: "${CRS_API_HOSTNAME}"
+    tailscale.com/experimental-forward-cluster-traffic-via-ingress: "true"
 spec:
-  ingressClassName: nginx
+  ingressClassName: tailscale
   tls:
     - hosts:
-        - ${AZ_DNS_A_RECORD}.${AZ_DNS_ZONE_NAME}
-      secretName: api-dev-tls
+        - ${CRS_API_HOSTNAME}
   rules:
-    - host: ${AZ_DNS_A_RECORD}.${AZ_DNS_ZONE_NAME}
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix
