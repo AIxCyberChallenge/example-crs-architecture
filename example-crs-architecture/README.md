@@ -23,6 +23,7 @@ The standard `azure` networking profile is used.
 - `gettext` package
 - An active Azure subscription.
 - An account in Azure Entra ID.
+- Access credentials to the competition Tailscale tailnet.
 
 ### Azure
 
