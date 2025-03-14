@@ -13,7 +13,6 @@ include:
 services:
   dind:
     image: docker:28-dind
-    platform: linux/arm64
     command:
       [
         "dockerd",
