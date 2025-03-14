@@ -72,6 +72,10 @@ definitions:
           cases, but is mainly for interactive troubleshooting.
         type: object
       ready:
+        description:
+          Boolean indicating if the CRS is prepared to work on tasks. Do
+          not return true unless you have successfully tested connectivity to the
+          Competition API via /v1/ping/
         type: boolean
       since:
         description: Last time task and submission stats were reset
@@ -83,8 +87,6 @@ definitions:
       version:
         description: |-
           Version string for verification and reproducibility.
-
-          Do not return true unless you have successfully tested connectivity to the Competition API via /v1/ping/
 
           - git commit
 

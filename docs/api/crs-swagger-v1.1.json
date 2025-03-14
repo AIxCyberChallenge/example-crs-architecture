@@ -247,6 +247,7 @@
           }
         },
         "ready": {
+          "description": "Boolean indicating if the CRS is prepared to work on tasks. Do not return true unless you have successfully tested connectivity to the Competition API via /v1/ping/",
           "type": "boolean"
         },
         "since": {
@@ -262,7 +263,7 @@
           ]
         },
         "version": {
-          "description": "Version string for verification and reproducibility.\n\nDo not return true unless you have successfully tested connectivity to the Competition API via /v1/ping/\n\n- git commit\n\n- SemVer\n\n- etc",
+          "description": "Version string for verification and reproducibility.\n\n- git commit\n\n- SemVer\n\n- etc",
           "type": "string"
         }
       }
