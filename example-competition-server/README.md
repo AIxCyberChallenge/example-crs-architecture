@@ -94,7 +94,7 @@ trigger a full scan.
 
 ```bash
 curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: application/json' -d '{
-    "challenge_repo_url": "git@github.com:aixcc-finals/example-libpng.git",
+    "challenge_repo_url": "git@github.com:<challenge repo here>.git",
     "challenge_repo_head_ref": "2c894c66108f0724331a9e5b4826e351bf2d094b",
     "fuzz_tooling_url": "https://github.com/aixcc-finals/oss-fuzz-aixcc.git",
     "fuzz_tooling_ref": "d5fbd68fca66e6fa4f05899170d24e572b01853d",
@@ -107,7 +107,7 @@ Here is an example for a delta scan:
 
 ```bash
 curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: application/json' -d '{
-    "challenge_repo_url": "git@github.com:aixcc-finals/example-libpng.git",
+    "challenge_repo_url": "git@github.com:<challenge repo here>.git",
     "challenge_repo_base_ref": "0cc367aaeaac3f888f255cee5d394968996f736e",
     "challenge_repo_head_ref": "2c894c66108f0724331a9e5b4826e351bf2d094b",
     "fuzz_tooling_url": "https://github.com/aixcc-finals/oss-fuzz-aixcc.git",
@@ -116,6 +116,8 @@ curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: ap
     "duration": 3600
 }'
 ```
+
+Note: The git repo specified in the curl command must have a shell script located at `.aixcc/test.sh`. This script is used to perform functionality tests on patches submitted to the competition API. This script should have a 0 exit code on success, and a non-zero exit code on failure.
 
 ## Viewing Signoz Dashboard
 
