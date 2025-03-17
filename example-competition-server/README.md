@@ -76,16 +76,16 @@ Alternatively, you may start the server directly with the command below.
 
 ```bash
 docker run \
-		-v /var/run/docker.sock:/var/run/docker.sock \ # required for Docker-out-of-docker stuff
-		-v path/to/scantron.yaml:/etc/scantron/scantron.yaml \ # required for server configuration
-		-v path/to/scantron.db:/app/scantron.db \ # optional, in case you may have a sqlite3 database from a previous run you want to use again
-		-v /tmp:/tmp \ # required, since it removes a strange bug caused by us doing Docker-out-of-docker
-		-p 1323:1323 \
-		-it \
-		--rm \
-		--privileged \ # required, for Docker-out-of-docker
-		--add-host=host.docker.internal:host-gateway \
-		ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc2 server
+    -v /var/run/docker.sock:/var/run/docker.sock \ # required for Docker-out-of-docker stuff
+    -v path/to/scantron.yaml:/etc/scantron/scantron.yaml \ # required for server configuration
+    -v path/to/scantron.db:/app/scantron.db \ # optional, in case you may have a sqlite3 database from a previous run you want to use again
+    -v /tmp:/tmp \ # required, since it removes a strange bug caused by us doing Docker-out-of-docker
+    -p 1323:1323 \
+    -it \
+    --rm \
+    --privileged \ # required, for Docker-out-of-docker
+    --add-host=host.docker.internal:host-gateway \
+    ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc2 server
 ```
 
 In the normal competition, the server would get a notification from GitHub via GitHub webhooks, and would fire off a task to
