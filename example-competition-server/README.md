@@ -117,7 +117,8 @@ curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: ap
 }'
 ```
 
-Note: The git repo specified in the curl command must have a shell script located at `.aixcc/test.sh`. This script is used to perform functionality tests on patches submitted to the competition API. This script should have a 0 exit code on success, and a non-zero exit code on failure.
+Note: The Git repository specified in the curl command must have a shell script located at `.aixcc/test.sh`. This script is used to perform functionality tests on patches submitted to the competition API. This script
+should have a 0 exit code on success, and a non-zero exit code on failure.
 
 ## Viewing Signoz Dashboard
 
