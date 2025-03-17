@@ -72,6 +72,22 @@ OTEL_EXPORTER_OTLP_PROTOCOL=grpc
 You can run the server and signoz by doing `docker compose up` from within the example-competition-server directory.
 If you wish to not run signoz, you can remove the `include` statement at the top of the compose.yaml in example-competition-server. NOTE: Signoz may take 2-5 minutes to fully start up.
 
+Alternatively, you may start the server directly with the command below.
+
+```bash
+docker run \
+		-v /var/run/docker.sock:/var/run/docker.sock \ # required for Docker-out-of-docker stuff
+		-v path/to/scantron.yaml:/etc/scantron/scantron.yaml \ # required for server configuration
+		-v path/to/scantron.db:/app/scantron.db \ # optional, in case you may have a sqlite3 database from a previous run you want to use again
+		-v /tmp:/tmp \ # required, since it removes a strange bug caused by us doing Docker-out-of-docker
+		-p 1323:1323 \
+		-it \
+		--rm \
+		--privileged \ # required, for Docker-out-of-docker
+		--add-host=host.docker.internal:host-gateway \
+		ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc2 server
+```
+
 In the normal competition, the server would get a notification from GitHub via GitHub webhooks, and would fire off a task to
 the CRS from there. The example server here responds to an HTTP request instead. Here is an example curl command to
 trigger a full scan.
