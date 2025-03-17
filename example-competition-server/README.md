@@ -40,7 +40,7 @@ $ echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
 To check if it succeeded, try running the following:
 
 ```bash
-docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc1
+docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc2
 ```
 
 Docker will store your credentials in your OS's native keystore, so you should only have to run `docker login` on subsequent logins into the GitHub Container Repository
@@ -72,13 +72,29 @@ OTEL_EXPORTER_OTLP_PROTOCOL=grpc
 You can run the server and signoz by doing `docker compose up` from within the example-competition-server directory.
 If you wish to not run signoz, you can remove the `include` statement at the top of the compose.yaml in example-competition-server. NOTE: Signoz may take 2-5 minutes to fully start up.
 
+Alternatively, you may start the server directly with the command below.
+
+```bash
+docker run \
+    -v /var/run/docker.sock:/var/run/docker.sock \ # required for Docker-out-of-docker stuff
+    -v path/to/scantron.yaml:/etc/scantron/scantron.yaml \ # required for server configuration
+    -v path/to/scantron.db:/app/scantron.db \ # optional, in case you may have a sqlite3 database from a previous run you want to use again
+    -v /tmp:/tmp \ # required, since it removes a strange bug caused by us doing Docker-out-of-docker
+    -p 1323:1323 \
+    -it \
+    --rm \
+    --privileged \ # required, for Docker-out-of-docker
+    --add-host=host.docker.internal:host-gateway \
+    ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc2 server
+```
+
 In the normal competition, the server would get a notification from GitHub via GitHub webhooks, and would fire off a task to
 the CRS from there. The example server here responds to an HTTP request instead. Here is an example curl command to
 trigger a full scan.
 
 ```bash
 curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: application/json' -d '{
-    "challenge_repo_url": "git@github.com:aixcc-finals/example-libpng.git",
+    "challenge_repo_url": "git@github.com:<challenge repo here>.git",
     "challenge_repo_head_ref": "2c894c66108f0724331a9e5b4826e351bf2d094b",
     "fuzz_tooling_url": "https://github.com/aixcc-finals/oss-fuzz-aixcc.git",
     "fuzz_tooling_ref": "d5fbd68fca66e6fa4f05899170d24e572b01853d",
@@ -91,7 +107,7 @@ Here is an example for a delta scan:
 
 ```bash
 curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: application/json' -d '{
-    "challenge_repo_url": "git@github.com:aixcc-finals/example-libpng.git",
+    "challenge_repo_url": "git@github.com:<challenge repo here>.git",
     "challenge_repo_base_ref": "0cc367aaeaac3f888f255cee5d394968996f736e",
     "challenge_repo_head_ref": "2c894c66108f0724331a9e5b4826e351bf2d094b",
     "fuzz_tooling_url": "https://github.com/aixcc-finals/oss-fuzz-aixcc.git",
@@ -100,6 +116,9 @@ curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: ap
     "duration": 3600
 }'
 ```
+
+Note: The Git repository specified in the curl command must have a shell script located at `.aixcc/test.sh`. This script is used to perform functionality tests on patches submitted to the competition API. This script
+should have a 0 exit code on success, and a non-zero exit code on failure.
 
 ## Viewing Signoz Dashboard
 
