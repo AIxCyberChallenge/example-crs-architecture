@@ -40,7 +40,7 @@ $ echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
 To check if it succeeded, try running the following:
 
 ```bash
-docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc1
+docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc2
 ```
 
 Docker will store your credentials in your OS's native keystore, so you should only have to run `docker login` on subsequent logins into the GitHub Container Repository
