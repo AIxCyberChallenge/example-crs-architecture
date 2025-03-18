@@ -2,7 +2,7 @@
 
 ## v1.1.1
 
- - correct typo in swagger docs tags for freeform submission
+- correct typo in swagger docs tags for freeform submission
 
 ## v1.1
 
