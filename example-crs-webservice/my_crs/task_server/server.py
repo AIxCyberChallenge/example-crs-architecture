@@ -6,18 +6,18 @@ from __future__ import annotations
 
 from http.client import HTTPException
 import secrets
-from typing import Annotated
+from typing import Annotated, Optional
 from uuid import UUID
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
-from my_crs.task_server.models.types import Status, Task, VulnBroadcast
+from my_crs.task_server.models.types import SARIFBroadcast, Status, Task
 
 app = FastAPI(
     title="Example CRS API",
     contact={},
-    version="1.0",
+    version="1.1",
     servers=[{"url": "/"}],
 )
 
@@ -58,9 +58,21 @@ def check_auth(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
 
 
 @app.get("/status/", response_model=Status, tags=["status"])
-def get_status_() -> Status:
+def get_status_(
+    credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)]
+) -> Status:
     """
     CRS Status
+    """
+    pass
+
+
+@app.delete("/status/", response_model=str, tags=["status"])
+def delete_status_(
+    credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)],
+) -> str:
+    """
+    Reset status stats
     """
     pass
 
@@ -68,7 +80,7 @@ def get_status_() -> Status:
 @app.post("/v1/sarif/", response_model=str, tags=["sarif"])
 def post_v1_sarif_(
     credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)],
-    body: VulnBroadcast,
+    body: SARIFBroadcast,
 ) -> str:
     """
     Submit Sarif Broadcast
@@ -88,6 +100,16 @@ def post_v1_task_(
 ) -> Optional[str]:
     """
     Submit Task
+    """
+    pass
+
+
+@app.delete("/v1/task/", response_model=str, tags=["task"])
+def delete_v1_task_(
+    credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)],
+) -> str:
+    """
+    Cancel Tasks
     """
     pass
 
