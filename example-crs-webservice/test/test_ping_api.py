@@ -15,13 +15,25 @@
 import unittest
 
 from my_crs.openapi_client.api.ping_api import PingApi
+from my_crs.openapi_client.api_client import ApiClient
+from my_crs.openapi_client.configuration import Configuration
 
 
 class TestPingApi(unittest.TestCase):
     """PingApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = PingApi()
+        configuration = Configuration(
+            host="http://localhost:1323",
+            username="11111111-1111-1111-1111-111111111111",
+            password="secret",
+        )
+        api_client = ApiClient(
+            configuration=configuration,
+            header_name="ContentType",
+            header_value="application/json",
+        )
+        self.api = PingApi(api_client=api_client)
 
     def tearDown(self) -> None:
         pass
@@ -31,7 +43,7 @@ class TestPingApi(unittest.TestCase):
 
         Test authentication creds and network connectivity
         """
-        pass
+        self.api.v1_ping_get()
 
 
 if __name__ == "__main__":
