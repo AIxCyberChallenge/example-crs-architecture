@@ -57,6 +57,10 @@ $ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
         ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc2 server
 ```
 
+Alternatively, `docker compose up` from the `example-competition-server` directory may be used which will launch both the competition test api server as well as a local telemetry server.
+
+The complete instructions for running the `example-competition-server` are available under [example-competition-server/](https://github.com/aixcc-finals/example-crs-architecture/tree/main/example-competition-server).
+
  All endpoints use HTTP Basic authentication.  Use `11111111-1111-1111-1111-111111111111` and `secret` as the credentials. 
  
  A basic UI showing API interactions and formats is available at `http://localhost:1323/swagger/`.
@@ -81,6 +85,23 @@ $ uvicorn server:app --reload
 The web server will be accessible at `http://localhost:8000` by default.
 
 The [generate-challenge-task](https://github.com/aixcc-finals/generate-challenge-task) script may be used to construct an HTTP request that the task server expects.
+
+Alternatively, the `example-competition-server` may be used to generate and send tasks to the task server.
+
+This can be performed by sending a web request to the `example-competition-server` which in turn will then send a request over the CRS API to the task server.
+
+The example curl command below will stage a full scan task to the `example-competition-server` which will then send the task over to the task server.
+
+```bash
+curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: application/json' -d '{
+    "challenge_repo_url": "git@github.com:<challenge repo here>.git",
+    "challenge_repo_head_ref": "2c894c66108f0724331a9e5b4826e351bf2d094b",
+    "fuzz_tooling_url": "https://github.com/aixcc-finals/oss-fuzz-aixcc.git",
+    "fuzz_tooling_ref": "d5fbd68fca66e6fa4f05899170d24e572b01853d",
+    "fuzz_tooling_project_name": "<project name>",
+    "duration": 3600
+}'
+```
 
 #### Reproducing this repository
 
