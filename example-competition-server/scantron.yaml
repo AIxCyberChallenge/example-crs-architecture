@@ -31,6 +31,7 @@ round_id: testing
 
 # Listen address outside the container
 listen_address: "[::]:1323"
+api_host_and_port: "localhost:1323"
 
 github:
   # github Personal Access token. This is used by the server to download the

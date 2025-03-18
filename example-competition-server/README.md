@@ -54,6 +54,7 @@ would be the following:
 - `crs`: This stores information the competition server uses to access the CRS
 - `github.pat`: The server must download fuzz tooling and challenge repositories from GitHub, so you must add a GitHub personal access token with repository read access here in order for the server to work. This token
   must have the `repo` scope. You may use the same access token that you used for container registry, just as long as it has both the `repo` scope and the `read:packages` scope enabled.
+- `api_host_and_port`: This should be set to whatever host and port your CRS is using to send submissions to.
 
 ### `signoz/otel-collector-config.yaml`
 
