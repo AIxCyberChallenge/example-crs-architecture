@@ -48,7 +48,7 @@ Run it using the container image:
 ```bash
 $ docker pull ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc2 
 $ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-        -v example-competition-server/scantron.yaml:/etc/scantron/scantron.yaml \
+        -v ./example-competition-server/scantron.yaml:/etc/scantron/scantron.yaml \
         -v /tmp:/tmp \
         -p 1323:1323 \
         -it \
