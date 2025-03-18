@@ -11,8 +11,18 @@ from uuid import UUID
 
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from urllib3.exceptions import MaxRetryError, NewConnectionError
 
-from my_crs.task_server.models.types import SARIFBroadcast, Status, Task
+from my_crs.openapi_client.api.ping_api import PingApi, TypesPingResponse
+from my_crs.openapi_client.api_client import ApiClient
+from my_crs.openapi_client.configuration import Configuration
+from my_crs.task_server.models.types import (
+    SARIFBroadcast,
+    Status,
+    StatusState,
+    StatusTasksState,
+    Task,
+)
 
 app = FastAPI(
     title="Example CRS API",
@@ -64,7 +74,50 @@ def get_status_(
     """
     CRS Status
     """
-    pass
+
+    def is_competition_api_ready():
+        is_ready = False
+        configuration = Configuration(
+            host="http://localhost:1323",
+            username="11111111-1111-1111-1111-111111111111",
+            password="secret",
+        )
+        api_client = ApiClient(
+            configuration=configuration,
+            header_name="ContentType",
+            header_value="application/json",
+        )
+        api = PingApi(api_client=api_client)
+
+        response = None
+        try:
+            response: TypesPingResponse = api.v1_ping_get()
+        except (MaxRetryError, NewConnectionError) as e:
+            is_ready = False
+
+        if isinstance(response, TypesPingResponse):
+            if response.status:
+                is_ready = True
+
+        return is_ready
+
+    ready: bool = is_competition_api_ready()
+
+    details = {}
+    tasks = StatusTasksState(
+        canceled=0,
+        errored=0,
+        failed=0,
+        pending=0,
+        processing=0,
+        succeeded=0,
+        waiting=0,
+    )
+    state = StatusState(tasks=tasks)
+    version = "1.1.0"  # CHANGEME whenever a release is made
+    return Status(
+        details=details, ready=ready, since=0, state=state, version=version
+    )
 
 
 @app.delete("/status/", response_model=str, tags=["status"])
