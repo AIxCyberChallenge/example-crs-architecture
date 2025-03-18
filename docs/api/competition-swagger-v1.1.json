@@ -372,7 +372,7 @@
         "description": "submits a freeform pov",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "tags": ["feeform"],
+        "tags": ["freeform"],
         "summary": "Submit Freeform",
         "parameters": [
           {

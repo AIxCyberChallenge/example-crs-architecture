@@ -537,7 +537,7 @@ paths:
         - BasicAuth: []
       summary: Submit Freeform
       tags:
-        - feeform
+        - freeform
   /v1/task/{task_id}/patch/:
     post:
       consumes:
