@@ -14,11 +14,11 @@
 
 import unittest
 
-from my_crs.openapi_client.models.types_assessment import TypesAssessment
+from my_crs.openapi_client.models.types_architecture import TypesArchitecture
 
 
-class TestTypesAssessment(unittest.TestCase):
-    """TypesAssessment unit test stubs"""
+class TestTypesArchitecture(unittest.TestCase):
+    """TypesArchitecture unit test stubs"""
 
     def setUp(self):
         pass
@@ -26,9 +26,9 @@ class TestTypesAssessment(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testTypesAssessment(self):
-        """Test TypesAssessment"""
-        # inst = TypesAssessment()
+    def testTypesArchitecture(self):
+        """Test TypesArchitecture"""
+        # inst = TypesArchitecture()
 
 
 if __name__ == "__main__":

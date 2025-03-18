@@ -14,21 +14,24 @@
 
 import unittest
 
-from my_crs.openapi_client.models.types_assessment import TypesAssessment
+from my_crs.openapi_client.api.ping_api import PingApi
 
 
-class TestTypesAssessment(unittest.TestCase):
-    """TypesAssessment unit test stubs"""
+class TestPingApi(unittest.TestCase):
+    """PingApi unit test stubs"""
 
-    def setUp(self):
+    def setUp(self) -> None:
+        self.api = PingApi()
+
+    def tearDown(self) -> None:
         pass
 
-    def tearDown(self):
-        pass
+    def test_v1_ping_get(self) -> None:
+        """Test case for v1_ping_get
 
-    def testTypesAssessment(self):
-        """Test TypesAssessment"""
-        # inst = TypesAssessment()
+        Test authentication creds and network connectivity
+        """
+        pass
 
 
 if __name__ == "__main__":

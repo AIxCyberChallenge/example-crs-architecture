@@ -14,29 +14,22 @@
 
 import unittest
 
-from my_crs.openapi_client.api.patch_api import PatchApi
+from my_crs.openapi_client.api.submitted_sarif_api import SubmittedSarifApi
 
 
-class TestPatchApi(unittest.TestCase):
-    """PatchApi unit test stubs"""
+class TestSubmittedSarifApi(unittest.TestCase):
+    """SubmittedSarifApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = PatchApi()
+        self.api = SubmittedSarifApi()
 
     def tearDown(self) -> None:
         pass
 
-    def test_v1_task_task_id_patch_patch_id_get(self) -> None:
-        """Test case for v1_task_task_id_patch_patch_id_get
+    def test_v1_task_task_id_submitted_sarif_post(self) -> None:
+        """Test case for v1_task_task_id_submitted_sarif_post
 
-        Patch Status
-        """
-        pass
-
-    def test_v1_task_task_id_patch_post(self) -> None:
-        """Test case for v1_task_task_id_patch_post
-
-        Submit Patch
+        Submit a CRS generated SARIF
         """
         pass
 

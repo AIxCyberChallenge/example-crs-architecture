@@ -17,8 +17,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
-from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, ConfigDict, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
 from my_crs.openapi_client.models.types_submission_status import (
     TypesSubmissionStatus,
 )
@@ -26,13 +26,29 @@ from typing import Optional, Set
 from typing_extensions import Self
 
 
-class TypesSarifAssessmentResponse(BaseModel):
+class TypesBundleSubmissionResponseVerbose(BaseModel):
     """
-    TypesSarifAssessmentResponse
+    TypesBundleSubmissionResponseVerbose
     """  # noqa: E501
 
+    broadcast_sarif_id: Optional[StrictStr] = None
+    bundle_id: StrictStr
+    description: Optional[StrictStr] = None
+    freeform_id: Optional[StrictStr] = None
+    patch_id: Optional[StrictStr] = None
+    pov_id: Optional[StrictStr] = None
     status: TypesSubmissionStatus
-    __properties: ClassVar[List[str]] = ["status"]
+    submitted_sarif_id: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = [
+        "broadcast_sarif_id",
+        "bundle_id",
+        "description",
+        "freeform_id",
+        "patch_id",
+        "pov_id",
+        "status",
+        "submitted_sarif_id",
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -51,7 +67,7 @@ class TypesSarifAssessmentResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TypesSarifAssessmentResponse from a JSON string"""
+        """Create an instance of TypesBundleSubmissionResponseVerbose from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -75,12 +91,23 @@ class TypesSarifAssessmentResponse(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TypesSarifAssessmentResponse from a dict"""
+        """Create an instance of TypesBundleSubmissionResponseVerbose from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"status": obj.get("status")})
+        _obj = cls.model_validate(
+            {
+                "broadcast_sarif_id": obj.get("broadcast_sarif_id"),
+                "bundle_id": obj.get("bundle_id"),
+                "description": obj.get("description"),
+                "freeform_id": obj.get("freeform_id"),
+                "patch_id": obj.get("patch_id"),
+                "pov_id": obj.get("pov_id"),
+                "status": obj.get("status"),
+                "submitted_sarif_id": obj.get("submitted_sarif_id"),
+            }
+        )
         return _obj

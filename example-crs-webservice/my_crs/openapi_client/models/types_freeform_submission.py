@@ -17,22 +17,21 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List
-from my_crs.openapi_client.models.types_submission_status import (
-    TypesSubmissionStatus,
-)
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class TypesSarifAssessmentResponse(BaseModel):
+class TypesFreeformSubmission(BaseModel):
     """
-    TypesSarifAssessmentResponse
+    TypesFreeformSubmission
     """  # noqa: E501
 
-    status: TypesSubmissionStatus
-    __properties: ClassVar[List[str]] = ["status"]
+    submission: StrictStr = Field(
+        description="Base64 encoded arbitrary data  2MiB max size before Base64 encoding"
+    )
+    __properties: ClassVar[List[str]] = ["submission"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -51,7 +50,7 @@ class TypesSarifAssessmentResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TypesSarifAssessmentResponse from a JSON string"""
+        """Create an instance of TypesFreeformSubmission from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -75,12 +74,12 @@ class TypesSarifAssessmentResponse(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TypesSarifAssessmentResponse from a dict"""
+        """Create an instance of TypesFreeformSubmission from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"status": obj.get("status")})
+        _obj = cls.model_validate({"submission": obj.get("submission")})
         return _obj
