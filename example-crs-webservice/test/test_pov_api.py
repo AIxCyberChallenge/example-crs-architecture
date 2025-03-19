@@ -14,29 +14,29 @@
 
 import unittest
 
-from my_crs.openapi_client.api.patch_api import PatchApi
+from my_crs.openapi_client.api.pov_api import PovApi
 
 
-class TestPatchApi(unittest.TestCase):
-    """PatchApi unit test stubs"""
+class TestPovApi(unittest.TestCase):
+    """PovApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = PatchApi()
+        self.api = PovApi()
 
     def tearDown(self) -> None:
         pass
 
-    def test_v1_task_task_id_patch_patch_id_get(self) -> None:
-        """Test case for v1_task_task_id_patch_patch_id_get
+    def test_v1_task_task_id_pov_post(self) -> None:
+        """Test case for v1_task_task_id_pov_post
 
-        Patch Status
+        Submit Vulnerability
         """
         pass
 
-    def test_v1_task_task_id_patch_post(self) -> None:
-        """Test case for v1_task_task_id_patch_post
+    def test_v1_task_task_id_pov_pov_id_get(self) -> None:
+        """Test case for v1_task_task_id_pov_pov_id_get
 
-        Submit Patch
+        Vulnerability Status
         """
         pass
 

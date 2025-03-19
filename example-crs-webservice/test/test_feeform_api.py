@@ -14,21 +14,24 @@
 
 import unittest
 
-from my_crs.openapi_client.models.types_assessment import TypesAssessment
+from my_crs.openapi_client.api.feeform_api import FeeformApi
 
 
-class TestTypesAssessment(unittest.TestCase):
-    """TypesAssessment unit test stubs"""
+class TestFeeformApi(unittest.TestCase):
+    """FeeformApi unit test stubs"""
 
-    def setUp(self):
+    def setUp(self) -> None:
+        self.api = FeeformApi()
+
+    def tearDown(self) -> None:
         pass
 
-    def tearDown(self):
-        pass
+    def test_v1_task_task_id_freeform_post(self) -> None:
+        """Test case for v1_task_task_id_freeform_post
 
-    def testTypesAssessment(self):
-        """Test TypesAssessment"""
-        # inst = TypesAssessment()
+        Submit Freeform
+        """
+        pass
 
 
 if __name__ == "__main__":

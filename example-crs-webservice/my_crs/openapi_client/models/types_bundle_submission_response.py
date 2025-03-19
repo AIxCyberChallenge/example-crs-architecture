@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List
 from my_crs.openapi_client.models.types_submission_status import (
     TypesSubmissionStatus,
@@ -26,13 +26,14 @@ from typing import Optional, Set
 from typing_extensions import Self
 
 
-class TypesSarifAssessmentResponse(BaseModel):
+class TypesBundleSubmissionResponse(BaseModel):
     """
-    TypesSarifAssessmentResponse
+    TypesBundleSubmissionResponse
     """  # noqa: E501
 
+    bundle_id: StrictStr
     status: TypesSubmissionStatus
-    __properties: ClassVar[List[str]] = ["status"]
+    __properties: ClassVar[List[str]] = ["bundle_id", "status"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -51,7 +52,7 @@ class TypesSarifAssessmentResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TypesSarifAssessmentResponse from a JSON string"""
+        """Create an instance of TypesBundleSubmissionResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -75,12 +76,14 @@ class TypesSarifAssessmentResponse(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TypesSarifAssessmentResponse from a dict"""
+        """Create an instance of TypesBundleSubmissionResponse from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"status": obj.get("status")})
+        _obj = cls.model_validate(
+            {"bundle_id": obj.get("bundle_id"), "status": obj.get("status")}
+        )
         return _obj

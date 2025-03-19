@@ -6,18 +6,28 @@ from __future__ import annotations
 
 from http.client import HTTPException
 import secrets
-from typing import Annotated
+from typing import Annotated, Optional
 from uuid import UUID
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from urllib3.exceptions import MaxRetryError, NewConnectionError
 
-from my_crs.task_server.models.types import Status, Task, VulnBroadcast
+from my_crs.openapi_client.api.ping_api import PingApi, TypesPingResponse
+from my_crs.openapi_client.api_client import ApiClient
+from my_crs.openapi_client.configuration import Configuration
+from my_crs.task_server.models.types import (
+    SARIFBroadcast,
+    Status,
+    StatusState,
+    StatusTasksState,
+    Task,
+)
 
 app = FastAPI(
     title="Example CRS API",
     contact={},
-    version="1.0",
+    version="1.1",
     servers=[{"url": "/"}],
 )
 
@@ -58,9 +68,64 @@ def check_auth(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
 
 
 @app.get("/status/", response_model=Status, tags=["status"])
-def get_status_() -> Status:
+def get_status_(
+    credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)]
+) -> Status:
     """
     CRS Status
+    """
+
+    def is_competition_api_ready():
+        is_ready = False
+        configuration = Configuration(
+            host="http://localhost:1323",
+            username="11111111-1111-1111-1111-111111111111",
+            password="secret",
+        )
+        api_client = ApiClient(
+            configuration=configuration,
+            header_name="ContentType",
+            header_value="application/json",
+        )
+        api = PingApi(api_client=api_client)
+
+        response = None
+        try:
+            response: TypesPingResponse = api.v1_ping_get()
+        except (MaxRetryError, NewConnectionError) as e:
+            is_ready = False
+
+        if isinstance(response, TypesPingResponse):
+            if response.status:
+                is_ready = True
+
+        return is_ready
+
+    ready: bool = is_competition_api_ready()
+
+    details = {}
+    tasks = StatusTasksState(
+        canceled=0,
+        errored=0,
+        failed=0,
+        pending=0,
+        processing=0,
+        succeeded=0,
+        waiting=0,
+    )
+    state = StatusState(tasks=tasks)
+    version = "1.1.0"  # CHANGEME whenever a release is made
+    return Status(
+        details=details, ready=ready, since=0, state=state, version=version
+    )
+
+
+@app.delete("/status/", response_model=str, tags=["status"])
+def delete_status_(
+    credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)],
+) -> str:
+    """
+    Reset status stats
     """
     pass
 
@@ -68,7 +133,7 @@ def get_status_() -> Status:
 @app.post("/v1/sarif/", response_model=str, tags=["sarif"])
 def post_v1_sarif_(
     credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)],
-    body: VulnBroadcast,
+    body: SARIFBroadcast,
 ) -> str:
     """
     Submit Sarif Broadcast
@@ -88,6 +153,16 @@ def post_v1_task_(
 ) -> Optional[str]:
     """
     Submit Task
+    """
+    pass
+
+
+@app.delete("/v1/task/", response_model=str, tags=["task"])
+def delete_v1_task_(
+    credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)],
+) -> str:
+    """
+    Cancel Tasks
     """
     pass
 
