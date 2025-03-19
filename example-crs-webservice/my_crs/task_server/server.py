@@ -4,16 +4,23 @@
 
 from __future__ import annotations
 
+import asyncio
 from http.client import HTTPException
 import secrets
 from typing import Annotated, Optional
 from uuid import UUID
+import logging
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, status, BackgroundTasks
+from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from urllib3.exceptions import MaxRetryError, NewConnectionError
 
 from my_crs.openapi_client.api.ping_api import PingApi, TypesPingResponse
+from my_crs.openapi_client.api.pov_api import PovApi, TypesPOVSubmissionResponse
+from my_crs.openapi_client.models.types_pov_submission import TypesPOVSubmission
+from my_crs.openapi_client.models.types_architecture import TypesArchitecture
+from my_crs.openapi_client.models.types_submission_status import TypesSubmissionStatus
 from my_crs.openapi_client.api_client import ApiClient
 from my_crs.openapi_client.configuration import Configuration
 from my_crs.task_server.models.types import (
@@ -22,6 +29,7 @@ from my_crs.task_server.models.types import (
     StatusState,
     StatusTasksState,
     Task,
+    TaskDetail,
 )
 
 app = FastAPI(
@@ -39,6 +47,11 @@ app = FastAPI(
 # Tokens should be stored using Argon2ID.
 security = HTTPBasic()
 
+logger = logging.getLogger(__name__)
+
+# CHANGEME: This should be changed to be read from the environment
+COMPETITION_API_TEAM_ID = "11111111-1111-1111-1111-111111111111"
+COMPETITION_API_TEAM_SECRET = "secret"
 
 def check_auth(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
     """
@@ -79,8 +92,8 @@ def get_status_(
         is_ready = False
         configuration = Configuration(
             host="http://localhost:1323",
-            username="11111111-1111-1111-1111-111111111111",
-            password="secret",
+            username=COMPETITION_API_TEAM_ID,
+            password=COMPETITION_API_TEAM_SECRET,
         )
         api_client = ApiClient(
             configuration=configuration,
@@ -147,14 +160,83 @@ def post_v1_sarif_(
     responses={"202": {"model": str}},
     tags=["task"],
 )
-def post_v1_task_(
+async def post_v1_task_(
     credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)],
     body: Task,
+    background_tasks: BackgroundTasks
 ) -> Optional[str]:
     """
     Submit Task
+
+    The following example submits a POV, Patch, and a Bundle for the example-libpng repo.
+   
+
+    The following submission only works for this curl command:
+    curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: application/json' -d '{
+        "challenge_repo_url": "https://github.com/aixcc-finals/example-libpng.git",
+        "challenge_repo_head_ref": "2c894c66108f0724331a9e5b4826e351bf2d094b",
+        "fuzz_tooling_url": "https://github.com/aixcc-finals/oss-fuzz-aixcc.git",
+        "fuzz_tooling_ref": "d5fbd68fca66e6fa4f05899170d24e572b01853d",
+        "fuzz_tooling_project_name": "libpng",
+        "duration": 3600
+    }'
     """
-    pass
+
+    async def submissions_task(task_detail: TaskDetail, status_interval: int = 1):
+        logger.debug(f"Start submission for task \"{task_detail.task_id}\"")
+        configuration = Configuration(
+            host="http://localhost:1323",
+            username=COMPETITION_API_TEAM_ID,
+            password=COMPETITION_API_TEAM_SECRET,
+        )
+        
+        api_client = ApiClient(
+            configuration=configuration,
+            header_name="ContentType",
+            header_value="application/json",
+        )
+        
+        pov_api = PovApi(api_client=api_client)
+
+        logger.debug(f"Submitting submission")
+        pov_submission_response = pov_api.v1_task_task_id_pov_post(
+            task_id=task_detail.task_id,
+            payload=TypesPOVSubmission(
+                architecture=TypesArchitecture.X86_64,
+                engine="libfuzzer",
+                fuzzer_name="libpng_read_fuzzer",
+                sanitizer="memory",
+                testcase="iVBORw0KGgoAAAANSUhEUgAAACAAAAAgEAIAAACsiDHgAAAABHNCSVRnQU1BAAGGoDHoll9pQ0NQdFJOU////////569S9jEYlOYYsAWlqG1o2UjoXY8XB0iIEygVJTCutJSWgodHWUQGA43tzkHok40OnFkOmYMMWbMRONzD7a5qfH9f6A2WVC6Z0lGdMvljt73/3/////////////////////////////////////////////////////////////////////////////////////////////vO/H7/5z4rwO4WAuSwOfkADlNFqIUNg8JfE32kjpSQEpKHgZ1dXeArVvTwNiYCxw7NgUAAJbnSLAAAAAEZ0FNQQABhqAx6JZfAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAENvcHlyaWdodACpILYgnxaPEhfhWYu/dyxEWQv4cfcc4e+kC1fK//7r9B+bDPkeC/hx9xzh76QLV8r//uv0H5sM+R76omEaAAAgAElFTkSuQmCC"
+            )
+        )
+
+        logger.debug(f"Initial Submission response for id={pov_submission_response.pov_id}: {pov_submission_response.status}")
+
+        status_check = pov_submission_response.model_copy()
+        while status_check.status == TypesSubmissionStatus.ACCEPTED:
+            await asyncio.sleep(status_interval)
+            status_check=pov_api.v1_task_task_id_pov_pov_id_get(
+                task_id=task_detail.task_id,
+                pov_id=status_check.pov_id
+            )
+            logger.info(f"Status check id={status_check.pov_id}: {status_check.status}")
+
+        if status_check.status == TypesSubmissionStatus.PASSED:
+            logger.info("Submission passed :)")
+        elif status_check.status == TypesSubmissionStatus.FAILED:
+            logger.error("Submision Failed :(")
+            return
+        
+
+
+    # We check that there is only one task 
+    if len(body.tasks) != 1:
+        logger.error("The e2e test only expects one task from the server")
+        return None
+    
+
+    background_tasks.add_task(submissions_task, body.tasks[0])
+    return JSONResponse(status_code=202, content="")
 
 
 @app.delete("/v1/task/", response_model=str, tags=["task"])
