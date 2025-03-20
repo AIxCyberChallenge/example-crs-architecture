@@ -205,7 +205,7 @@ async def post_v1_task_(
                 architecture=TypesArchitecture.X86_64,
                 engine="libfuzzer",
                 fuzzer_name="libpng_read_fuzzer",
-                sanitizer="memory",
+                sanitizer="address",
                 testcase="iVBORw0KGgoAAAANSUhEUgAAACAAAAAgEAIAAACsiDHgAAAABHNCSVRnQU1BAAGGoDHoll9pQ0NQdFJOU////////569S9jEYlOYYsAWlqG1o2UjoXY8XB0iIEygVJTCutJSWgodHWUQGA43tzkHok40OnFkOmYMMWbMRONzD7a5qfH9f6A2WVC6Z0lGdMvljt73/3/////////////////////////////////////////////////////////////////////////////////////////////vO/H7/5z4rwO4WAuSwOfkADlNFqIUNg8JfE32kjpSQEpKHgZ1dXeArVvTwNiYCxw7NgUAAJbnSLAAAAAEZ0FNQQABhqAx6JZfAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAENvcHlyaWdodACpILYgnxaPEhfhWYu/dyxEWQv4cfcc4e+kC1fK//7r9B+bDPkeC/hx9xzh76QLV8r//uv0H5sM+R76omEaAAAgAElFTkSuQmCC"
             )
         )
