@@ -56,6 +56,7 @@ would be the following:
   must have the `repo` scope. You may use the same access token that you used for container registry, just as long as it has both the `repo` scope and the `read:packages` scope enabled. You may also set this value
   through the environment variable `SCANTRON_GITHUB_PAT` within the scantron service.
 - `api_host_and_port`: This should be set to whatever host and port your CRS is using to send submissions to.
+- `teams.crs.taskme`: New as of rc4 is the `taskme` flag. You must set this to true if you want the competition server to send tasks to your CRS.
 
 ### `signoz/otel-collector-config.yaml`
 

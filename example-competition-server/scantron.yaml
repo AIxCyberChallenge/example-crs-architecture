@@ -14,6 +14,9 @@ teams:
         competition_management: true
 
     crs:
+      # New as of rc4 is this flag. You must set this to "true" if you want the server to
+      # send tasks to the CRS
+      taskme: true
       # The url of your CRS. If you are running your CRS on localhost, keep the
       # url as host.docker.internal
       url: http://host.docker.internal:1324 # This should stay the same, so the scantron docker container can communicate with the outside world
@@ -33,7 +36,8 @@ round_id: testing
 listen_address: "[::]:1323"
 api_host_and_port: "localhost:1323"
 
-github:
-  # github Personal Access token. This is used by the server to download the
-  # appropriate fuzz tooling if not using public repositories
-  pat: github_pat_foobar
+# github Personal Access token. This is used by the server to download the
+# appropriate fuzz tooling if not using public repositories. However, we
+# recommend using the SCANTRON_GITHUB_PAT environment variable instead.
+# github:
+#   pat: github_pat_foobar
