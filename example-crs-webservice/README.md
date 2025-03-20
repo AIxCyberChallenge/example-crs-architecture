@@ -46,7 +46,7 @@ The `example-competition-api` provides a mock implementation of the competition 
 Run it using the container image:
 
 ```bash
-$ docker pull ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc3
+$ docker pull ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc4
 $ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
         -v ./example-competition-server/scantron.yaml:/etc/scantron/scantron.yaml \
         -v /tmp:/tmp \
@@ -54,7 +54,7 @@ $ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
         -it \
         --privileged \
         --add-host=host.docker.internal:host-gateway \
-        ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc3 server
+        ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc4 server
 ```
 
 Alternatively, `docker compose up` from the `example-competition-server` directory may be used which will launch both the competition test api server as well as a local telemetry server.
@@ -133,7 +133,7 @@ $ sed -i -e 's/from openapi_client./from <new-package-path>.openapi_client./' *.
 $ sed -i -e 's/import openapi_client./import <new-package-path>./' *.py
 ```
 
-The HTTP client code can be tested against the provided `example-competition-api` available as a Docker container at `ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc3`. This container provides a mock Competition API on port 1323.
+The HTTP client code can be tested against the provided `example-competition-api` available as a Docker container at `ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc4`. This container provides a mock Competition API on port 1323.
 
 Example code for how to interact with the `example-competition-api` has been added under `test/test_ping_api.py`.
 

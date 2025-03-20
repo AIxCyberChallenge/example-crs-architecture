@@ -40,7 +40,7 @@ $ echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
 To check if it succeeded, try running the following:
 
 ```bash
-docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc3
+docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc4
 ```
 
 Docker will store your credentials in your OS's native keystore, so you should only have to run `docker login` on subsequent logins into the GitHub Container Repository
@@ -53,7 +53,8 @@ would be the following:
 - `api_keys.id`: You don't need to edit this, but this is the key the CRS must use to send submissions to the server
 - `crs`: This stores information the competition server uses to access the CRS
 - `github.pat`: The server must download fuzz tooling and challenge repositories from GitHub, so you must add a GitHub personal access token with repository read access here in order for the server to work. This token
-  must have the `repo` scope. You may use the same access token that you used for container registry, just as long as it has both the `repo` scope and the `read:packages` scope enabled.
+  must have the `repo` scope. You may use the same access token that you used for container registry, just as long as it has both the `repo` scope and the `read:packages` scope enabled. You may also set this value
+  through the environment variable `SCANTRON_GITHUB_PAT` within the scantron service.
 - `api_host_and_port`: This should be set to whatever host and port your CRS is using to send submissions to.
 
 ### `signoz/otel-collector-config.yaml`
@@ -86,7 +87,7 @@ docker run \
     --rm \
     --privileged \ # required, for Docker-out-of-docker
     --add-host=host.docker.internal:host-gateway \
-    ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc3 server
+    ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc4 server
 ```
 
 In the normal competition, the server would get a notification from GitHub via GitHub webhooks, and would fire off a task to
