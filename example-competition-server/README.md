@@ -1,25 +1,36 @@
 # Example Competition Server
+
 ## Changelog
+
 All notable changes to the competition-test-api docker container will be noted here.
 
 ### v1.1-rc4 - 2025-03-21
+
 #### Added
+
 - ***BREAKING CHANGE***: Added the `teams.crs.taskme` field in the scantron.yaml. This **MUST** be set to `true` if you want the competition server to send tasks to your CRS.
 - Added ability to optionally use SCANTRON_GITHUB_PAT environment variable rather than the `github.pat` field in scantron.yaml
 
 #### Fixed
+
 - Fixed lack of a check for the dynamic-stack-buffer-overflow caused by example-libpng's address fuzzer
 - Fixed race condition when reproducing more than one POV submission
 
 ### v1.1-rc3 - 2025-03-18
+
 #### Added
-- Added now required `api_host_and_port` scantron.yaml field to split the role of `listen_address`. This reverses the change made in v1.1-rc2 where `listen_address` was used to generate source tarball URLs and also used as the server's bind address. Now, `api_host_and_port` is used by the server when sending source tarballs to the CRSs, and `listen_address` is the address the server binds to.
+
+- Added now required `api_host_and_port` scantron.yaml field to split the role of `listen_address`. This reverses the change made in v1.1-rc2 where `listen_address` was used to generate source tarball URLs and also used
+  as the server's bind address. Now, `api_host_and_port` is used by the server when sending source tarballs to the CRSs, and `listen_address` is the address the server binds to.
 
 ### v1.1-rc2 - 2025-03-17
+
 #### Fixed
+
 - Fixed issue where competition server hardcoded `localhost` into the URLs for the source tarballs sent by the server during tasking. Now the `listen_address` field in scantron.yaml is used.
 
 ### v1.1-rc1 - 2025-03-14
+
 Initial release candidate.
 
 ## Overview
