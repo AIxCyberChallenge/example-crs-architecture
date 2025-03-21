@@ -8,7 +8,7 @@ All notable changes to the competition-test-api docker container will be noted h
 
 #### Added
 
-- ***BREAKING CHANGE***: Added the `teams.crs.taskme` field in the scantron.yaml. This **MUST** be set to `true` if you want the competition server to send tasks to your CRS.
+- **_BREAKING CHANGE_**: Added the `teams.crs.taskme` field in the scantron.yaml. This **MUST** be set to `true` if you want the competition server to send tasks to your CRS.
 - Added ability to optionally use SCANTRON_GITHUB_PAT environment variable rather than the `github.pat` field in scantron.yaml
 
 #### Fixed
