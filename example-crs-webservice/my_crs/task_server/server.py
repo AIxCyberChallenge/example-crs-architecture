@@ -18,6 +18,12 @@ from urllib3.exceptions import MaxRetryError, NewConnectionError
 
 from my_crs.openapi_client.api.ping_api import PingApi, TypesPingResponse
 from my_crs.openapi_client.api.pov_api import PovApi, TypesPOVSubmissionResponse
+from my_crs.openapi_client.api.patch_api import PatchApi
+from my_crs.openapi_client.api.bundle_api import BundleApi
+from my_crs.openapi_client.models.types_bundle_submission import TypesBundleSubmission
+from my_crs.openapi_client.models.types_bundle_submission_response import TypesBundleSubmissionResponse
+from my_crs.openapi_client.models.types_patch_submission import TypesPatchSubmission
+from my_crs.openapi_client.models.types_patch_submission_response import TypesPatchSubmissionResponse
 from my_crs.openapi_client.models.types_pov_submission import TypesPOVSubmission
 from my_crs.openapi_client.models.types_architecture import TypesArchitecture
 from my_crs.openapi_client.models.types_submission_status import TypesSubmissionStatus
@@ -153,7 +159,6 @@ def post_v1_sarif_(
     """
     pass
 
-
 @app.post(
     "/v1/task/",
     response_model=None,
@@ -219,13 +224,55 @@ async def post_v1_task_(
                 task_id=task_detail.task_id,
                 pov_id=status_check.pov_id
             )
-            logger.info(f"Status check id={status_check.pov_id}: {status_check.status}")
+            logger.info(f"POV Status check id={status_check.pov_id}: {status_check.status}")
 
         if status_check.status == TypesSubmissionStatus.PASSED:
-            logger.info("Submission passed :)")
+            logger.info("POV Submission passed :)")
         elif status_check.status == TypesSubmissionStatus.FAILED:
-            logger.error("Submision Failed :(")
+            logger.error("POV Submision Failed :(")
             return
+        
+        # Now we submit a patch
+        patch_api = PatchApi(api_client=api_client)
+
+        patch_submission_response = patch_api.v1_task_task_id_patch_post(
+            task_id=task_detail.task_id,
+            payload=TypesPatchSubmission(
+                patch="ZGlmZiAtLWdpdCBhL3BuZy5oIGIvcG5nLmgKaW5kZXggNjZjZWVlZmI0Li4zZTEzMGE5OTggMTAwNjQ0Ci0tLSBhL3BuZy5oCisrKyBiL3BuZy5oCkBAIC01MzgsNyArNTM4LDYgQEAgdHlwZWRlZiBzdHJ1Y3QgcG5nX3NQTFRfc3RydWN0CiB0eXBlZGVmIHBuZ19zUExUX3QgKiBwbmdfc1BMVF90cDsKIHR5cGVkZWYgY29uc3QgcG5nX3NQTFRfdCAqIHBuZ19jb25zdF9zUExUX3RwOwogdHlwZWRlZiBwbmdfc1BMVF90ICogKiBwbmdfc1BMVF90cHA7Ci10eXBlZGVmIHBuZ191aW50XzE2IHdwbmdfYnl0ZTsKIAogI2lmZGVmIFBOR19URVhUX1NVUFBPUlRFRAogLyogcG5nX3RleHQgaG9sZHMgdGhlIGNvbnRlbnRzIG9mIGEgdGV4dC96dHh0L2l0eHQgY2h1bmsgaW4gYSBQTkcgZmlsZSwKZGlmZiAtLWdpdCBhL3BuZ3J1dGlsLmMgYi9wbmdydXRpbC5jCmluZGV4IDAxZTA4YmZlNy4uN2M2MDliNGI0IDEwMDY0NAotLS0gYS9wbmdydXRpbC5jCisrKyBiL3BuZ3J1dGlsLmMKQEAgLTE0MTksMTMgKzE0MTksMTIgQEAgcG5nX2hhbmRsZV9pQ0NQKHBuZ19zdHJ1Y3RycCBwbmdfcHRyLCBwbmdfaW5mb3JwIGluZm9fcHRyLCBwbmdfdWludF8zMiBsZW5ndGgpCiAgICBpZiAoKHBuZ19wdHItPmNvbG9yc3BhY2UuZmxhZ3MgJiBQTkdfQ09MT1JTUEFDRV9IQVZFX0lOVEVOVCkgPT0gMCkKICAgIHsKICAgICAgIHVJbnQgcmVhZF9sZW5ndGgsIGtleXdvcmRfbGVuZ3RoOwotICAgICAgdUludCBtYXhfa2V5d29yZF93Ynl0ZXMgPSA0MTsKLSAgICAgIHdwbmdfYnl0ZSBrZXl3b3JkW21heF9rZXl3b3JkX3dieXRlc107CisgICAgICBjaGFyIGtleXdvcmRbODFdOwogCiAgICAgICAvKiBGaW5kIHRoZSBrZXl3b3JkOyB0aGUga2V5d29yZCBwbHVzIHNlcGFyYXRvciBhbmQgY29tcHJlc3Npb24gbWV0aG9kCi0gICAgICAgKiBieXRlcyBjYW4gYmUgYXQgbW9zdCA0MSB3aWRlIGNoYXJhY3RlcnMgbG9uZy4KKyAgICAgICAqIGJ5dGVzIGNhbiBiZSBhdCBtb3N0IDgxIGNoYXJhY3RlcnMgbG9uZy4KICAgICAgICAqLwotICAgICAgcmVhZF9sZW5ndGggPSBzaXplb2Yoa2V5d29yZCk7IC8qIG1heGltdW0gKi8KKyAgICAgIHJlYWRfbGVuZ3RoID0gODE7IC8qIG1heGltdW0gKi8KICAgICAgIGlmIChyZWFkX2xlbmd0aCA+IGxlbmd0aCkKICAgICAgICAgIHJlYWRfbGVuZ3RoID0gKHVJbnQpbGVuZ3RoOwogCkBAIC0xNDQzLDEyICsxNDQyLDEyIEBAIHBuZ19oYW5kbGVfaUNDUChwbmdfc3RydWN0cnAgcG5nX3B0ciwgcG5nX2luZm9ycCBpbmZvX3B0ciwgcG5nX3VpbnRfMzIgbGVuZ3RoKQogICAgICAgfQogCiAgICAgICBrZXl3b3JkX2xlbmd0aCA9IDA7Ci0gICAgICB3aGlsZSAoa2V5d29yZF9sZW5ndGggPCAocmVhZF9sZW5ndGgtMSkgJiYga2V5d29yZF9sZW5ndGggPCByZWFkX2xlbmd0aCAmJgorICAgICAgd2hpbGUgKGtleXdvcmRfbGVuZ3RoIDwgODAgJiYga2V5d29yZF9sZW5ndGggPCByZWFkX2xlbmd0aCAmJgogICAgICAgICAga2V5d29yZFtrZXl3b3JkX2xlbmd0aF0gIT0gMCkKICAgICAgICAgICsra2V5d29yZF9sZW5ndGg7CiAKICAgICAgIC8qIFRPRE86IG1ha2UgdGhlIGtleXdvcmQgY2hlY2tpbmcgY29tbW9uICovCi0gICAgICBpZiAoa2V5d29yZF9sZW5ndGggPj0gMSAmJiBrZXl3b3JkX2xlbmd0aCA8PSAocmVhZF9sZW5ndGgtMikpCisgICAgICBpZiAoa2V5d29yZF9sZW5ndGggPj0gMSAmJiBrZXl3b3JkX2xlbmd0aCA8PSA3OSkKICAgICAgIHsKICAgICAgICAgIC8qIFdlIG9ubHkgdW5kZXJzdGFuZCAnMCcgY29tcHJlc3Npb24gLSBkZWZsYXRlIC0gc28gaWYgd2UgZ2V0IGEKICAgICAgICAgICAqIGRpZmZlcmVudCB2YWx1ZSB3ZSBjYW4ndCBzYWZlbHkgZGVjb2RlIHRoZSBjaHVuay4KQEAgLTE0NzcsMTMgKzE0NzYsMTMgQEAgcG5nX2hhbmRsZV9pQ0NQKHBuZ19zdHJ1Y3RycCBwbmdfcHRyLCBwbmdfaW5mb3JwIGluZm9fcHRyLCBwbmdfdWludF8zMiBsZW5ndGgpCiAgICAgICAgICAgICAgICAgICBwbmdfdWludF8zMiBwcm9maWxlX2xlbmd0aCA9IHBuZ19nZXRfdWludF8zMihwcm9maWxlX2hlYWRlcik7CiAKICAgICAgICAgICAgICAgICAgIGlmIChwbmdfaWNjX2NoZWNrX2xlbmd0aChwbmdfcHRyLCAmcG5nX3B0ci0+Y29sb3JzcGFjZSwKLSAgICAgICAgICAgICAgICAgICAgICAoY2hhciopa2V5d29yZCwgcHJvZmlsZV9sZW5ndGgpICE9IDApCisgICAgICAgICAgICAgICAgICAgICAga2V5d29yZCwgcHJvZmlsZV9sZW5ndGgpICE9IDApCiAgICAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICAgICAvKiBUaGUgbGVuZ3RoIGlzIGFwcGFyZW50bHkgb2ssIHNvIHdlIGNhbiBjaGVjayB0aGUgMTMyCiAgICAgICAgICAgICAgICAgICAgICAgKiBieXRlIGhlYWRlci4KICAgICAgICAgICAgICAgICAgICAgICAqLwogICAgICAgICAgICAgICAgICAgICAgaWYgKHBuZ19pY2NfY2hlY2tfaGVhZGVyKHBuZ19wdHIsICZwbmdfcHRyLT5jb2xvcnNwYWNlLAotICAgICAgICAgICAgICAgICAgICAgICAgIChjaGFyKilrZXl3b3JkLCBwcm9maWxlX2xlbmd0aCwgcHJvZmlsZV9oZWFkZXIsCisgICAgICAgICAgICAgICAgICAgICAgICAga2V5d29yZCwgcHJvZmlsZV9sZW5ndGgsIHByb2ZpbGVfaGVhZGVyLAogICAgICAgICAgICAgICAgICAgICAgICAgIHBuZ19wdHItPmNvbG9yX3R5cGUpICE9IDApCiAgICAgICAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICAgICAgICAvKiBOb3cgcmVhZCB0aGUgdGFnIHRhYmxlOyBhIHZhcmlhYmxlIHNpemUgYnVmZmVyIGlzCkBAIC0xNTEzLDcgKzE1MTIsNyBAQCBwbmdfaGFuZGxlX2lDQ1AocG5nX3N0cnVjdHJwIHBuZ19wdHIsIHBuZ19pbmZvcnAgaW5mb19wdHIsIHBuZ191aW50XzMyIGxlbmd0aCkKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlmIChzaXplID09IDApCiAgICAgICAgICAgICAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpZiAocG5nX2ljY19jaGVja190YWdfdGFibGUocG5nX3B0ciwKLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAmcG5nX3B0ci0+Y29sb3JzcGFjZSwgKGNoYXIqKWtleXdvcmQsIHByb2ZpbGVfbGVuZ3RoLAorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICZwbmdfcHRyLT5jb2xvcnNwYWNlLCBrZXl3b3JkLCBwcm9maWxlX2xlbmd0aCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwcm9maWxlKSAhPSAwKQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLyogVGhlIHByb2ZpbGUgaGFzIGJlZW4gdmFsaWRhdGVkIGZvciBiYXNpYwo="
+            )
+        )
+
+        status_check = patch_submission_response.model_copy()
+        while status_check.status == TypesSubmissionStatus.ACCEPTED:
+            await asyncio.sleep(status_interval)
+            status_check=patch_api.v1_task_task_id_patch_patch_id_get(
+                task_id=task_detail.task_id,
+                patch_id=status_check.patch_id
+            )
+
+            logger.info(f"Patch Status check id={status_check.patch_id}: {status_check.status}")
+
+        if status_check.status == TypesSubmissionStatus.PASSED:
+            logger.info("Patch Submission passed :)")
+        elif status_check.status == TypesSubmissionStatus.FAILED:
+            logger.error("Patch Submision Failed :(")
+            return
+        
+        # Now submit the bundle
+        bundle_api = BundleApi(api_client=api_client)
+        bundle_submission_response = bundle_api.v1_task_task_id_bundle_post(
+            task_id=task_detail.task_id,
+            payload=TypesBundleSubmission(
+                pov_id=pov_submission_response.pov_id,
+                patch_id=patch_submission_response.patch_id
+            )
+        )
+
+        if (bundle_submission_response.status == TypesSubmissionStatus.ACCEPTED):
+            logger.info(f"Bundle Submission of id={bundle_submission_response.bundle_id} accepted :)")
+        else:
+            logger.error(f"Bundle Submission of id={bundle_submission_response.bundle_id} has status: {bundle_submission_response.status}")
+
         
 
 
