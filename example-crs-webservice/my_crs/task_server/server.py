@@ -83,14 +83,14 @@ def check_auth(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
     Reference: https://fastapi.tiangolo.com/advanced/security/http-basic-auth/
     """
     current_username_bytes = credentials.username.encode("utf8")
-    correct_username_bytes = CRS_API_KEY_ID  # FIXME: Change username as desired
+    correct_username_bytes = CRS_API_KEY_ID
     is_correct_username = secrets.compare_digest(
         current_username_bytes, correct_username_bytes
     )
 
     current_password_bytes = credentials.password.encode("utf8")
     correct_password_bytes = (
-        CRS_API_KEY_TOKEN  # FIXME: Change password as desired and use hash
+        CRS_API_KEY_TOKEN  # FIXME: Use hashed password
     )
     is_correct_password = secrets.compare_digest(
         current_password_bytes, correct_password_bytes
