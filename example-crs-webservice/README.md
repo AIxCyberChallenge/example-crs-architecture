@@ -43,27 +43,11 @@ $ pip install -e .[tests]
 
 The `example-competition-api` provides a mock implementation of the competition API which will validate input formats and provide example outputs.
 
-Run it using the container image:
-
-```bash
-$ docker pull ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc2 
-$ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-        -v ./example-competition-server/scantron.yaml:/etc/scantron/scantron.yaml \
-        -v /tmp:/tmp \
-        -p 1323:1323 \
-        -it \
-        --privileged \
-        --add-host=host.docker.internal:host-gateway \
-        ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc2 server
-```
-
-Alternatively, `docker compose up` from the `example-competition-server` directory may be used which will launch both the competition test api server as well as a local telemetry server.
-
 The complete instructions for running the `example-competition-server` are available under [example-competition-server/](https://github.com/aixcc-finals/example-crs-architecture/tree/main/example-competition-server).
 
- All endpoints use HTTP Basic authentication.  Use `11111111-1111-1111-1111-111111111111` and `secret` as the credentials. 
+All endpoints use HTTP Basic authentication.  Use `11111111-1111-1111-1111-111111111111` and `secret` as the credentials.
  
- A basic UI showing API interactions and formats is available at `http://localhost:1323/swagger/`.
+A basic UI showing API interactions and formats is available at `http://localhost:1323/swagger/`.
 
 Test the Competition API client example implemented in `test_ping_api.py`.
 
