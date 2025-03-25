@@ -79,7 +79,7 @@ The CRS API Web server can be started using the following commands:
 
 ```bash
 $ cd my_crs/task_server
-$ uvicorn server:app --reload
+$ uvicorn server:app --reload --port 1324 --log-config=../../log-conf.yaml --env-file=../../submission.env
 ```
 
 The web server will be accessible at `http://localhost:8000` by default.
