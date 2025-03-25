@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import asyncio
 from http.client import HTTPException
+import os
 import secrets
 from typing import Annotated, Optional
 from uuid import UUID
@@ -55,23 +56,33 @@ security = HTTPBasic()
 
 logger = logging.getLogger(__name__)
 
-# CHANGEME: This should be changed to be read from the environment
-COMPETITION_API_TEAM_ID = "11111111-1111-1111-1111-111111111111"
-COMPETITION_API_TEAM_SECRET = "secret"
+def get_environment_var(var: str) -> str:
+    if (var in os.environ):
+        return os.environ[var]
+    else:
+        logger.error(f"Environment variable unset: \"{var}\"")
+        exit(1)
+
+COMPETITION_API_TEAM_ID = get_environment_var("COMPETITION_API_TEAM_ID")
+COMPETITION_API_TEAM_SECRET = get_environment_var("COMPETITION_API_TEAM_SECRET")
+COMPETITION_API_ENPOINT = get_environment_var("COMPETITION_API_ENDPOINT")
+
+CRS_API_KEY_ID = get_environment_var("CRS_API_KEY_ID").encode("utf-8")
+CRS_API_KEY_TOKEN = get_environment_var("CRS_API_KEY_TOKEN").encode("utf-8")
 
 def check_auth(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
     """
     Reference: https://fastapi.tiangolo.com/advanced/security/http-basic-auth/
     """
     current_username_bytes = credentials.username.encode("utf8")
-    correct_username_bytes = b"api_key_id"  # FIXME: Change username as desired
+    correct_username_bytes = CRS_API_KEY_ID  # FIXME: Change username as desired
     is_correct_username = secrets.compare_digest(
         current_username_bytes, correct_username_bytes
     )
 
     current_password_bytes = credentials.password.encode("utf8")
     correct_password_bytes = (
-        b"api_key_token"  # FIXME: Change password as desired and use hash
+        CRS_API_KEY_TOKEN  # FIXME: Change password as desired and use hash
     )
     is_correct_password = secrets.compare_digest(
         current_password_bytes, correct_password_bytes
@@ -97,7 +108,7 @@ def get_status_(
     def is_competition_api_ready():
         is_ready = False
         configuration = Configuration(
-            host="http://localhost:1323",
+            host=COMPETITION_API_ENPOINT,
             username=COMPETITION_API_TEAM_ID,
             password=COMPETITION_API_TEAM_SECRET,
         )
@@ -173,24 +184,15 @@ async def post_v1_task_(
     """
     Submit Task
 
-    The following example submits a POV, Patch, and a Bundle for the example-libpng repo.
-   
-
-    The following submission only works for this curl command:
-    curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: application/json' -d '{
-        "challenge_repo_url": "https://github.com/aixcc-finals/example-libpng.git",
-        "challenge_repo_head_ref": "2c894c66108f0724331a9e5b4826e351bf2d094b",
-        "fuzz_tooling_url": "https://github.com/aixcc-finals/oss-fuzz-aixcc.git",
-        "fuzz_tooling_ref": "d5fbd68fca66e6fa4f05899170d24e572b01853d",
-        "fuzz_tooling_project_name": "libpng",
-        "duration": 3600
+    The following example submits a POV, Patch, and a Bundle, based on values set in the environment.
+    See example-crs-webservice/submission.env for an example.
     }'
     """
 
     async def submissions_task(task_detail: TaskDetail, status_interval: int = 1):
         logger.debug(f"Start submission for task \"{task_detail.task_id}\"")
         configuration = Configuration(
-            host="http://localhost:1323",
+            host=COMPETITION_API_ENPOINT,
             username=COMPETITION_API_TEAM_ID,
             password=COMPETITION_API_TEAM_SECRET,
         )
@@ -207,11 +209,11 @@ async def post_v1_task_(
         pov_submission_response = pov_api.v1_task_task_id_pov_post(
             task_id=task_detail.task_id,
             payload=TypesPOVSubmission(
-                architecture=TypesArchitecture.X86_64,
-                engine="libfuzzer",
-                fuzzer_name="libpng_read_fuzzer",
-                sanitizer="address",
-                testcase="iVBORw0KGgoAAAANSUhEUgAAACAAAAAgEAIAAACsiDHgAAAABHNCSVRnQU1BAAGGoDHoll9pQ0NQdFJOU////////569S9jEYlOYYsAWlqG1o2UjoXY8XB0iIEygVJTCutJSWgodHWUQGA43tzkHok40OnFkOmYMMWbMRONzD7a5qfH9f6A2WVC6Z0lGdMvljt73/3/////////////////////////////////////////////////////////////////////////////////////////////vO/H7/5z4rwO4WAuSwOfkADlNFqIUNg8JfE32kjpSQEpKHgZ1dXeArVvTwNiYCxw7NgUAAJbnSLAAAAAEZ0FNQQABhqAx6JZfAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAENvcHlyaWdodACpILYgnxaPEhfhWYu/dyxEWQv4cfcc4e+kC1fK//7r9B+bDPkeC/hx9xzh76QLV8r//uv0H5sM+R76omEaAAAgAElFTkSuQmCC"
+                architecture=get_environment_var("POV_ARCHITECTURE"),
+                engine=get_environment_var("POV_ENGINE"),
+                fuzzer_name=get_environment_var("POV_FUZZER_NAME"),
+                sanitizer=get_environment_var("POV_SANITIZER"),
+                testcase=get_environment_var("POV_TESTCASE")
             )
         )
 
@@ -238,7 +240,7 @@ async def post_v1_task_(
         patch_submission_response = patch_api.v1_task_task_id_patch_post(
             task_id=task_detail.task_id,
             payload=TypesPatchSubmission(
-                patch="ZGlmZiAtLWdpdCBhL3BuZy5oIGIvcG5nLmgKaW5kZXggNjZjZWVlZmI0Li4zZTEzMGE5OTggMTAwNjQ0Ci0tLSBhL3BuZy5oCisrKyBiL3BuZy5oCkBAIC01MzgsNyArNTM4LDYgQEAgdHlwZWRlZiBzdHJ1Y3QgcG5nX3NQTFRfc3RydWN0CiB0eXBlZGVmIHBuZ19zUExUX3QgKiBwbmdfc1BMVF90cDsKIHR5cGVkZWYgY29uc3QgcG5nX3NQTFRfdCAqIHBuZ19jb25zdF9zUExUX3RwOwogdHlwZWRlZiBwbmdfc1BMVF90ICogKiBwbmdfc1BMVF90cHA7Ci10eXBlZGVmIHBuZ191aW50XzE2IHdwbmdfYnl0ZTsKIAogI2lmZGVmIFBOR19URVhUX1NVUFBPUlRFRAogLyogcG5nX3RleHQgaG9sZHMgdGhlIGNvbnRlbnRzIG9mIGEgdGV4dC96dHh0L2l0eHQgY2h1bmsgaW4gYSBQTkcgZmlsZSwKZGlmZiAtLWdpdCBhL3BuZ3J1dGlsLmMgYi9wbmdydXRpbC5jCmluZGV4IDAxZTA4YmZlNy4uN2M2MDliNGI0IDEwMDY0NAotLS0gYS9wbmdydXRpbC5jCisrKyBiL3BuZ3J1dGlsLmMKQEAgLTE0MTksMTMgKzE0MTksMTIgQEAgcG5nX2hhbmRsZV9pQ0NQKHBuZ19zdHJ1Y3RycCBwbmdfcHRyLCBwbmdfaW5mb3JwIGluZm9fcHRyLCBwbmdfdWludF8zMiBsZW5ndGgpCiAgICBpZiAoKHBuZ19wdHItPmNvbG9yc3BhY2UuZmxhZ3MgJiBQTkdfQ09MT1JTUEFDRV9IQVZFX0lOVEVOVCkgPT0gMCkKICAgIHsKICAgICAgIHVJbnQgcmVhZF9sZW5ndGgsIGtleXdvcmRfbGVuZ3RoOwotICAgICAgdUludCBtYXhfa2V5d29yZF93Ynl0ZXMgPSA0MTsKLSAgICAgIHdwbmdfYnl0ZSBrZXl3b3JkW21heF9rZXl3b3JkX3dieXRlc107CisgICAgICBjaGFyIGtleXdvcmRbODFdOwogCiAgICAgICAvKiBGaW5kIHRoZSBrZXl3b3JkOyB0aGUga2V5d29yZCBwbHVzIHNlcGFyYXRvciBhbmQgY29tcHJlc3Npb24gbWV0aG9kCi0gICAgICAgKiBieXRlcyBjYW4gYmUgYXQgbW9zdCA0MSB3aWRlIGNoYXJhY3RlcnMgbG9uZy4KKyAgICAgICAqIGJ5dGVzIGNhbiBiZSBhdCBtb3N0IDgxIGNoYXJhY3RlcnMgbG9uZy4KICAgICAgICAqLwotICAgICAgcmVhZF9sZW5ndGggPSBzaXplb2Yoa2V5d29yZCk7IC8qIG1heGltdW0gKi8KKyAgICAgIHJlYWRfbGVuZ3RoID0gODE7IC8qIG1heGltdW0gKi8KICAgICAgIGlmIChyZWFkX2xlbmd0aCA+IGxlbmd0aCkKICAgICAgICAgIHJlYWRfbGVuZ3RoID0gKHVJbnQpbGVuZ3RoOwogCkBAIC0xNDQzLDEyICsxNDQyLDEyIEBAIHBuZ19oYW5kbGVfaUNDUChwbmdfc3RydWN0cnAgcG5nX3B0ciwgcG5nX2luZm9ycCBpbmZvX3B0ciwgcG5nX3VpbnRfMzIgbGVuZ3RoKQogICAgICAgfQogCiAgICAgICBrZXl3b3JkX2xlbmd0aCA9IDA7Ci0gICAgICB3aGlsZSAoa2V5d29yZF9sZW5ndGggPCAocmVhZF9sZW5ndGgtMSkgJiYga2V5d29yZF9sZW5ndGggPCByZWFkX2xlbmd0aCAmJgorICAgICAgd2hpbGUgKGtleXdvcmRfbGVuZ3RoIDwgODAgJiYga2V5d29yZF9sZW5ndGggPCByZWFkX2xlbmd0aCAmJgogICAgICAgICAga2V5d29yZFtrZXl3b3JkX2xlbmd0aF0gIT0gMCkKICAgICAgICAgICsra2V5d29yZF9sZW5ndGg7CiAKICAgICAgIC8qIFRPRE86IG1ha2UgdGhlIGtleXdvcmQgY2hlY2tpbmcgY29tbW9uICovCi0gICAgICBpZiAoa2V5d29yZF9sZW5ndGggPj0gMSAmJiBrZXl3b3JkX2xlbmd0aCA8PSAocmVhZF9sZW5ndGgtMikpCisgICAgICBpZiAoa2V5d29yZF9sZW5ndGggPj0gMSAmJiBrZXl3b3JkX2xlbmd0aCA8PSA3OSkKICAgICAgIHsKICAgICAgICAgIC8qIFdlIG9ubHkgdW5kZXJzdGFuZCAnMCcgY29tcHJlc3Npb24gLSBkZWZsYXRlIC0gc28gaWYgd2UgZ2V0IGEKICAgICAgICAgICAqIGRpZmZlcmVudCB2YWx1ZSB3ZSBjYW4ndCBzYWZlbHkgZGVjb2RlIHRoZSBjaHVuay4KQEAgLTE0NzcsMTMgKzE0NzYsMTMgQEAgcG5nX2hhbmRsZV9pQ0NQKHBuZ19zdHJ1Y3RycCBwbmdfcHRyLCBwbmdfaW5mb3JwIGluZm9fcHRyLCBwbmdfdWludF8zMiBsZW5ndGgpCiAgICAgICAgICAgICAgICAgICBwbmdfdWludF8zMiBwcm9maWxlX2xlbmd0aCA9IHBuZ19nZXRfdWludF8zMihwcm9maWxlX2hlYWRlcik7CiAKICAgICAgICAgICAgICAgICAgIGlmIChwbmdfaWNjX2NoZWNrX2xlbmd0aChwbmdfcHRyLCAmcG5nX3B0ci0+Y29sb3JzcGFjZSwKLSAgICAgICAgICAgICAgICAgICAgICAoY2hhciopa2V5d29yZCwgcHJvZmlsZV9sZW5ndGgpICE9IDApCisgICAgICAgICAgICAgICAgICAgICAga2V5d29yZCwgcHJvZmlsZV9sZW5ndGgpICE9IDApCiAgICAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICAgICAvKiBUaGUgbGVuZ3RoIGlzIGFwcGFyZW50bHkgb2ssIHNvIHdlIGNhbiBjaGVjayB0aGUgMTMyCiAgICAgICAgICAgICAgICAgICAgICAgKiBieXRlIGhlYWRlci4KICAgICAgICAgICAgICAgICAgICAgICAqLwogICAgICAgICAgICAgICAgICAgICAgaWYgKHBuZ19pY2NfY2hlY2tfaGVhZGVyKHBuZ19wdHIsICZwbmdfcHRyLT5jb2xvcnNwYWNlLAotICAgICAgICAgICAgICAgICAgICAgICAgIChjaGFyKilrZXl3b3JkLCBwcm9maWxlX2xlbmd0aCwgcHJvZmlsZV9oZWFkZXIsCisgICAgICAgICAgICAgICAgICAgICAgICAga2V5d29yZCwgcHJvZmlsZV9sZW5ndGgsIHByb2ZpbGVfaGVhZGVyLAogICAgICAgICAgICAgICAgICAgICAgICAgIHBuZ19wdHItPmNvbG9yX3R5cGUpICE9IDApCiAgICAgICAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICAgICAgICAvKiBOb3cgcmVhZCB0aGUgdGFnIHRhYmxlOyBhIHZhcmlhYmxlIHNpemUgYnVmZmVyIGlzCkBAIC0xNTEzLDcgKzE1MTIsNyBAQCBwbmdfaGFuZGxlX2lDQ1AocG5nX3N0cnVjdHJwIHBuZ19wdHIsIHBuZ19pbmZvcnAgaW5mb19wdHIsIHBuZ191aW50XzMyIGxlbmd0aCkKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlmIChzaXplID09IDApCiAgICAgICAgICAgICAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpZiAocG5nX2ljY19jaGVja190YWdfdGFibGUocG5nX3B0ciwKLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAmcG5nX3B0ci0+Y29sb3JzcGFjZSwgKGNoYXIqKWtleXdvcmQsIHByb2ZpbGVfbGVuZ3RoLAorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICZwbmdfcHRyLT5jb2xvcnNwYWNlLCBrZXl3b3JkLCBwcm9maWxlX2xlbmd0aCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwcm9maWxlKSAhPSAwKQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLyogVGhlIHByb2ZpbGUgaGFzIGJlZW4gdmFsaWRhdGVkIGZvciBiYXNpYwo="
+                patch=get_environment_var("PATCH")
             )
         )
 
