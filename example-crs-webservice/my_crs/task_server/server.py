@@ -108,7 +108,7 @@ def get_status_(
     def is_competition_api_ready():
         is_ready = False
         configuration = Configuration(
-            host=COMPETITION_API_ENPOINT,
+            host=COMPETITION_API_ENDPOINT,
             username=COMPETITION_API_TEAM_ID,
             password=COMPETITION_API_TEAM_SECRET,
         )
