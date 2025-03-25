@@ -65,7 +65,7 @@ def get_environment_var(var: str) -> str:
 
 COMPETITION_API_TEAM_ID = get_environment_var("COMPETITION_API_TEAM_ID")
 COMPETITION_API_TEAM_SECRET = get_environment_var("COMPETITION_API_TEAM_SECRET")
-COMPETITION_API_ENPOINT = get_environment_var("COMPETITION_API_ENDPOINT")
+COMPETITION_API_ENDPOINT = get_environment_var("COMPETITION_API_ENDPOINT")
 
 CRS_API_KEY_ID = get_environment_var("CRS_API_KEY_ID").encode("utf-8")
 CRS_API_KEY_TOKEN = get_environment_var("CRS_API_KEY_TOKEN").encode("utf-8")
@@ -116,7 +116,7 @@ def get_status_(
     def is_competition_api_ready():
         is_ready = False
         configuration = Configuration(
-            host=COMPETITION_API_ENPOINT,
+            host=COMPETITION_API_ENDPOINT,
             username=COMPETITION_API_TEAM_ID,
             password=COMPETITION_API_TEAM_SECRET,
         )
@@ -200,7 +200,7 @@ async def post_v1_task_(
     async def submissions_task(task_detail: TaskDetail, status_interval: int = 1):
         logger.debug(f"Start submission for task \"{task_detail.task_id}\"")
         configuration = Configuration(
-            host=COMPETITION_API_ENPOINT,
+            host=COMPETITION_API_ENDPOINT,
             username=COMPETITION_API_TEAM_ID,
             password=COMPETITION_API_TEAM_SECRET,
         )
