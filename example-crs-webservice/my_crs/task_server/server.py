@@ -70,6 +70,14 @@ COMPETITION_API_ENPOINT = get_environment_var("COMPETITION_API_ENDPOINT")
 CRS_API_KEY_ID = get_environment_var("CRS_API_KEY_ID").encode("utf-8")
 CRS_API_KEY_TOKEN = get_environment_var("CRS_API_KEY_TOKEN").encode("utf-8")
 
+POV_ARCHITECTURE = get_environment_var("POV_ARCHITECTURE")
+POV_ENGINE = get_environment_var("POV_ENGINE")
+POV_FUZZER_NAME = get_environment_var("POV_FUZZER_NAME")
+POV_SANITIZER = get_environment_var("POV_SANITIZER")
+POV_TESTCASE = get_environment_var("POV_TESTCASE")
+
+PATCH = get_environment_var("PATCH")
+
 def check_auth(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
     """
     Reference: https://fastapi.tiangolo.com/advanced/security/http-basic-auth/
@@ -209,11 +217,11 @@ async def post_v1_task_(
         pov_submission_response = pov_api.v1_task_task_id_pov_post(
             task_id=task_detail.task_id,
             payload=TypesPOVSubmission(
-                architecture=get_environment_var("POV_ARCHITECTURE"),
-                engine=get_environment_var("POV_ENGINE"),
-                fuzzer_name=get_environment_var("POV_FUZZER_NAME"),
-                sanitizer=get_environment_var("POV_SANITIZER"),
-                testcase=get_environment_var("POV_TESTCASE")
+                architecture=POV_ARCHITECTURE,
+                engine=POV_ENGINE,
+                fuzzer_name=POV_FUZZER_NAME,
+                sanitizer=POV_SANITIZER,
+                testcase=POV_TESTCASE
             )
         )
 
@@ -240,7 +248,7 @@ async def post_v1_task_(
         patch_submission_response = patch_api.v1_task_task_id_patch_post(
             task_id=task_detail.task_id,
             payload=TypesPatchSubmission(
-                patch=get_environment_var("PATCH")
+                patch=PATCH
             )
         )
 
