@@ -192,7 +192,7 @@ async def post_v1_task_(
     async def submissions_task(task_detail: TaskDetail, status_interval: int = 1):
         logger.debug(f"Start submission for task \"{task_detail.task_id}\"")
         configuration = Configuration(
-            host=COMPETITION_API_ENPOINT,
+            host=COMPETITION_API_ENDPOINT,
             username=COMPETITION_API_TEAM_ID,
             password=COMPETITION_API_TEAM_SECRET,
         )
