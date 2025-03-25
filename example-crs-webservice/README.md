@@ -37,6 +37,8 @@ Install the dependencies for the package using the following `pip` command:
 $ pip install -e .[tests]
 ```
 
+Instead of installing the dependencies on your local machine, you may also use the compose.yaml.
+
 #### Usage
 
 **Competition API Client**
@@ -62,11 +64,19 @@ $ pytest -s test_ping_api.py
 The CRS API Web server can be started using the following commands:
 
 ```bash
+docker compose up
+```
+
+The webserver will be accessible at `http://webservice:1324` in the `endpoint-network` docker network.
+
+Alternatively, if you have installed dependencies on your host machine, and wish to run the server on your host machine, you may run the following commands.
+
+```bash
 $ cd my_crs/task_server
 $ uvicorn server:app --reload --port 1324 --log-config=../../log-conf.yaml --env-file=../../submission.env
 ```
 
-The web server will be accessible at `http://localhost:8000` by default.
+The web server will be accessible at `http://localhost:1324` by default.
 
 The [generate-challenge-task](https://github.com/aixcc-finals/generate-challenge-task) script may be used to construct an HTTP request that the task server expects.
 
