@@ -65,7 +65,7 @@ def get_environment_var(var: str) -> str:
 
 COMPETITION_API_TEAM_ID = get_environment_var("COMPETITION_API_TEAM_ID")
 COMPETITION_API_TEAM_SECRET = get_environment_var("COMPETITION_API_TEAM_SECRET")
-COMPETITION_API_ENPOINT = get_environment_var("COMPETITION_API_ENDPOINT")
+COMPETITION_API_ENDPOINT = get_environment_var("COMPETITION_API_ENDPOINT")
 
 CRS_API_KEY_ID = get_environment_var("CRS_API_KEY_ID").encode("utf-8")
 CRS_API_KEY_TOKEN = get_environment_var("CRS_API_KEY_TOKEN").encode("utf-8")
