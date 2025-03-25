@@ -8,7 +8,7 @@ All notable changes to the competition-test-api docker container will be noted h
 
 #### Fixed
 
-- Fixed server error caused during a bundle submissions
+- Fixed server error caused during a bundle submission
 
 ### v1.1-rc4 - 2025-03-21
 
