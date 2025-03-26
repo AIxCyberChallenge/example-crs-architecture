@@ -15,7 +15,7 @@ This repository is currently under development. Documentation and examples are b
 | CRS API Spec v1.1                                                                        | ✅     |
 | Telemetry Spec v1.0                                                                      | ✅     |
 | <[Challenge Generation script](https://github.com/aixcc-finals/generate-challenge-task)> | ✅     |
-| End-to-end example webservice that implements specs                                      | ❌ WIP |
+| End-to-end example webservice that implements specs                                      | ✅     |
 
 ## Contributing
 
