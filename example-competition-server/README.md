@@ -1,5 +1,44 @@
 # Example Competition Server
 
+## Changelog
+
+All notable changes to the competition-test-api docker container will be noted here.
+
+### v1.1-rc5 - 2025-03-25
+
+#### Fixed
+
+- Fixed server error caused during a bundle submission
+
+### v1.1-rc4 - 2025-03-21
+
+#### Added
+
+- **_BREAKING CHANGE_**: Added the `teams.crs.taskme` field in the scantron.yaml. This **MUST** be set to `true` if you want the competition server to send tasks to your CRS.
+- Added ability to optionally use SCANTRON_GITHUB_PAT environment variable rather than the `github.pat` field in scantron.yaml
+
+#### Fixed
+
+- Fixed lack of a check for the dynamic-stack-buffer-overflow caused by example-libpng's address fuzzer
+- Fixed race condition when reproducing more than one POV submission
+
+### v1.1-rc3 - 2025-03-18
+
+#### Added
+
+- Added now required `api_host_and_port` scantron.yaml field to split the role of `listen_address`. This reverses the change made in v1.1-rc2 where `listen_address` was used to generate source tarball URLs and also used
+  as the server's bind address. Now, `api_host_and_port` is used by the server when sending source tarballs to the CRSs, and `listen_address` is the address the server binds to.
+
+### v1.1-rc2 - 2025-03-17
+
+#### Fixed
+
+- Fixed issue where competition server hardcoded `localhost` into the URLs for the source tarballs sent by the server during tasking. Now the `listen_address` field in scantron.yaml is used.
+
+### v1.1-rc1 - 2025-03-14
+
+Initial release candidate.
+
 ## Overview
 
 This folder allows users to run a full end-to-end competition server, as well as a signoz endpoint for which competitors may submit telemetry to for testing.
@@ -40,7 +79,7 @@ $ echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
 To check if it succeeded, try running the following:
 
 ```bash
-docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc2
+docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc5
 ```
 
 Docker will store your credentials in your OS's native keystore, so you should only have to run `docker login` on subsequent logins into the GitHub Container Repository
@@ -53,8 +92,10 @@ would be the following:
 - `api_keys.id`: You don't need to edit this, but this is the key the CRS must use to send submissions to the server
 - `crs`: This stores information the competition server uses to access the CRS
 - `github.pat`: The server must download fuzz tooling and challenge repositories from GitHub, so you must add a GitHub personal access token with repository read access here in order for the server to work. This token
-  must have the `repo` scope. You may use the same access token that you used for container registry, just as long as it has both the `repo` scope and the `read:packages` scope enabled.
+  must have the `repo` scope. You may use the same access token that you used for container registry, just as long as it has both the `repo` scope and the `read:packages` scope enabled. You may also set this value
+  through the environment variable `SCANTRON_GITHUB_PAT` within the scantron service.
 - `api_host_and_port`: This should be set to whatever host and port your CRS is using to send submissions to.
+- `teams.crs.taskme`: New as of rc4 is the `taskme` flag. You must set this to true if you want the competition server to send tasks to your CRS.
 
 ### `signoz/otel-collector-config.yaml`
 
@@ -90,7 +131,7 @@ docker run \
     --rm \
     --privileged \ # required, for Docker-out-of-docker
     --add-host=host.docker.internal:host-gateway \
-    ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc2 server
+    ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc5 server
 ```
 
 In the normal competition, the server would get a notification from GitHub via GitHub webhooks, and would fire off a task to
