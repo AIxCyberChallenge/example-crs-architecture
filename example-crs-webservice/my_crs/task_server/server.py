@@ -4,16 +4,30 @@
 
 from __future__ import annotations
 
+import asyncio
 from http.client import HTTPException
+import os
 import secrets
 from typing import Annotated, Optional
 from uuid import UUID
+import logging
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, status, BackgroundTasks
+from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from urllib3.exceptions import MaxRetryError, NewConnectionError
 
 from my_crs.openapi_client.api.ping_api import PingApi, TypesPingResponse
+from my_crs.openapi_client.api.pov_api import PovApi, TypesPOVSubmissionResponse
+from my_crs.openapi_client.api.patch_api import PatchApi
+from my_crs.openapi_client.api.bundle_api import BundleApi
+from my_crs.openapi_client.models.types_bundle_submission import TypesBundleSubmission
+from my_crs.openapi_client.models.types_bundle_submission_response import TypesBundleSubmissionResponse
+from my_crs.openapi_client.models.types_patch_submission import TypesPatchSubmission
+from my_crs.openapi_client.models.types_patch_submission_response import TypesPatchSubmissionResponse
+from my_crs.openapi_client.models.types_pov_submission import TypesPOVSubmission
+from my_crs.openapi_client.models.types_architecture import TypesArchitecture
+from my_crs.openapi_client.models.types_submission_status import TypesSubmissionStatus
 from my_crs.openapi_client.api_client import ApiClient
 from my_crs.openapi_client.configuration import Configuration
 from my_crs.task_server.models.types import (
@@ -22,6 +36,7 @@ from my_crs.task_server.models.types import (
     StatusState,
     StatusTasksState,
     Task,
+    TaskDetail,
 )
 
 app = FastAPI(
@@ -39,20 +54,43 @@ app = FastAPI(
 # Tokens should be stored using Argon2ID.
 security = HTTPBasic()
 
+logger = logging.getLogger(__name__)
+
+def get_environment_var(var: str) -> str:
+    if (var in os.environ):
+        return os.environ[var]
+    else:
+        logger.error(f"Environment variable unset: \"{var}\"")
+        exit(1)
+
+COMPETITION_API_TEAM_ID = get_environment_var("COMPETITION_API_TEAM_ID")
+COMPETITION_API_TEAM_SECRET = get_environment_var("COMPETITION_API_TEAM_SECRET")
+COMPETITION_API_ENDPOINT = get_environment_var("COMPETITION_API_ENDPOINT")
+
+CRS_API_KEY_ID = get_environment_var("CRS_API_KEY_ID").encode("utf-8")
+CRS_API_KEY_TOKEN = get_environment_var("CRS_API_KEY_TOKEN").encode("utf-8")
+
+POV_ARCHITECTURE = get_environment_var("POV_ARCHITECTURE")
+POV_ENGINE = get_environment_var("POV_ENGINE")
+POV_FUZZER_NAME = get_environment_var("POV_FUZZER_NAME")
+POV_SANITIZER = get_environment_var("POV_SANITIZER")
+POV_TESTCASE = get_environment_var("POV_TESTCASE")
+
+PATCH = get_environment_var("PATCH")
 
 def check_auth(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
     """
     Reference: https://fastapi.tiangolo.com/advanced/security/http-basic-auth/
     """
     current_username_bytes = credentials.username.encode("utf8")
-    correct_username_bytes = b"api_key_id"  # FIXME: Change username as desired
+    correct_username_bytes = CRS_API_KEY_ID
     is_correct_username = secrets.compare_digest(
         current_username_bytes, correct_username_bytes
     )
 
     current_password_bytes = credentials.password.encode("utf8")
     correct_password_bytes = (
-        b"api_key_token"  # FIXME: Change password as desired and use hash
+        CRS_API_KEY_TOKEN  # FIXME: Use hashed password
     )
     is_correct_password = secrets.compare_digest(
         current_password_bytes, correct_password_bytes
@@ -78,9 +116,9 @@ def get_status_(
     def is_competition_api_ready():
         is_ready = False
         configuration = Configuration(
-            host="http://localhost:1323",
-            username="11111111-1111-1111-1111-111111111111",
-            password="secret",
+            host=COMPETITION_API_ENDPOINT,
+            username=COMPETITION_API_TEAM_ID,
+            password=COMPETITION_API_TEAM_SECRET,
         )
         api_client = ApiClient(
             configuration=configuration,
@@ -140,21 +178,122 @@ def post_v1_sarif_(
     """
     pass
 
-
 @app.post(
     "/v1/task/",
     response_model=None,
     responses={"202": {"model": str}},
     tags=["task"],
 )
-def post_v1_task_(
+async def post_v1_task_(
     credentials: Annotated[HTTPBasicCredentials, Depends(check_auth)],
     body: Task,
+    background_tasks: BackgroundTasks
 ) -> Optional[str]:
     """
     Submit Task
+
+    The following example submits a POV, Patch, and a Bundle, based on values set in the environment.
+    See example-crs-webservice/submission.env for an example.
+    }'
     """
-    pass
+
+    async def submissions_task(task_detail: TaskDetail, status_interval: int = 1):
+        logger.debug(f"Start submission for task \"{task_detail.task_id}\"")
+        configuration = Configuration(
+            host=COMPETITION_API_ENDPOINT,
+            username=COMPETITION_API_TEAM_ID,
+            password=COMPETITION_API_TEAM_SECRET,
+        )
+        
+        api_client = ApiClient(
+            configuration=configuration,
+            header_name="ContentType",
+            header_value="application/json",
+        )
+        
+        pov_api = PovApi(api_client=api_client)
+
+        logger.debug(f"Submitting submission")
+        pov_submission_response = pov_api.v1_task_task_id_pov_post(
+            task_id=task_detail.task_id,
+            payload=TypesPOVSubmission(
+                architecture=POV_ARCHITECTURE,
+                engine=POV_ENGINE,
+                fuzzer_name=POV_FUZZER_NAME,
+                sanitizer=POV_SANITIZER,
+                testcase=POV_TESTCASE
+            )
+        )
+
+        logger.debug(f"Initial Submission response for id={pov_submission_response.pov_id}: {pov_submission_response.status}")
+
+        status_check = pov_submission_response.model_copy()
+        while status_check.status == TypesSubmissionStatus.ACCEPTED:
+            await asyncio.sleep(status_interval)
+            status_check=pov_api.v1_task_task_id_pov_pov_id_get(
+                task_id=task_detail.task_id,
+                pov_id=status_check.pov_id
+            )
+            logger.info(f"POV Status check id={status_check.pov_id}: {status_check.status}")
+
+        if status_check.status == TypesSubmissionStatus.PASSED:
+            logger.info("POV Submission passed :)")
+        elif status_check.status == TypesSubmissionStatus.FAILED:
+            logger.error("POV Submision Failed :(")
+            return
+        
+        # Now we submit a patch
+        patch_api = PatchApi(api_client=api_client)
+
+        patch_submission_response = patch_api.v1_task_task_id_patch_post(
+            task_id=task_detail.task_id,
+            payload=TypesPatchSubmission(
+                patch=PATCH
+            )
+        )
+
+        status_check = patch_submission_response.model_copy()
+        while status_check.status == TypesSubmissionStatus.ACCEPTED:
+            await asyncio.sleep(status_interval)
+            status_check=patch_api.v1_task_task_id_patch_patch_id_get(
+                task_id=task_detail.task_id,
+                patch_id=status_check.patch_id
+            )
+
+            logger.info(f"Patch Status check id={status_check.patch_id}: {status_check.status}")
+
+        if status_check.status == TypesSubmissionStatus.PASSED:
+            logger.info("Patch Submission passed :)")
+        elif status_check.status == TypesSubmissionStatus.FAILED:
+            logger.error("Patch Submision Failed :(")
+            return
+        
+        # Now submit the bundle
+        bundle_api = BundleApi(api_client=api_client)
+        bundle_submission_response = bundle_api.v1_task_task_id_bundle_post(
+            task_id=task_detail.task_id,
+            payload=TypesBundleSubmission(
+                pov_id=pov_submission_response.pov_id,
+                patch_id=patch_submission_response.patch_id
+            )
+        )
+
+        if (bundle_submission_response.status == TypesSubmissionStatus.ACCEPTED):
+            logger.info(f"Bundle Submission of id={bundle_submission_response.bundle_id} accepted :)")
+        else:
+            logger.error(f"Bundle Submission of id={bundle_submission_response.bundle_id} has status: {bundle_submission_response.status}")
+
+        
+
+
+    # We check that there is only one task 
+    if len(body.tasks) != 1:
+        logger.error("The e2e test only expects one task from the server")
+        return None
+    
+
+    background_tasks.add_task(submissions_task, body.tasks[0])
+    return JSONResponse(status_code=202, content="")
 
 
 @app.delete("/v1/task/", response_model=str, tags=["task"])

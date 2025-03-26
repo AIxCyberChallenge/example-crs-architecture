@@ -114,6 +114,10 @@ OTEL_EXPORTER_OTLP_PROTOCOL=grpc
 You can run the server and signoz by doing `docker compose up` from within the example-competition-server directory.
 If you wish to not run signoz, you can remove the `include` statement at the top of the compose.yaml in example-competition-server. NOTE: Signoz may take 2-5 minutes to fully start up.
 
+Through the Docker compose option, the server is available by default through `http://localhost:1324`. It's also available through `http://scantron:1324` within the `endpoint-network` Docker network. This Docker network
+is made available for teams who have their CRS within their own compose setup. An example of a webservice that uses this network is shown in the example-crs-webservice
+[compose.yaml](https://github.com/aixcc-finals/example-crs-architecture/blob/main/example-crs-webservice/compose.yaml).
+
 Alternatively, you may start the server directly with the command below.
 
 ```bash

@@ -1,0 +1,17 @@
+name: "example-crs-webservice"
+
+services:
+  webservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "1324:1324"
+    env_file: "submission.env"
+    networks:
+      - competition-endpoint
+
+networks:
+  competition-endpoint:
+    external:
+      name: "endpoint-network"

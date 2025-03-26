@@ -37,33 +37,19 @@ Install the dependencies for the package using the following `pip` command:
 $ pip install -e .[tests]
 ```
 
+Instead of installing the dependencies on your local machine, you may also use the compose.yaml.
+
 #### Usage
 
 **Competition API Client**
 
 The `example-competition-api` provides a mock implementation of the competition API which will validate input formats and provide example outputs.
 
-Run it using the container image:
-
-```bash
-$ docker pull ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc5
-$ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-        -v ./example-competition-server/scantron.yaml:/etc/scantron/scantron.yaml \
-        -v /tmp:/tmp \
-        -p 1323:1323 \
-        -it \
-        --privileged \
-        --add-host=host.docker.internal:host-gateway \
-        ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc5 server
-```
-
-Alternatively, `docker compose up` from the `example-competition-server` directory may be used which will launch both the competition test api server as well as a local telemetry server.
-
 The complete instructions for running the `example-competition-server` are available under [example-competition-server/](https://github.com/aixcc-finals/example-crs-architecture/tree/main/example-competition-server).
 
- All endpoints use HTTP Basic authentication.  Use `11111111-1111-1111-1111-111111111111` and `secret` as the credentials. 
+All endpoints use HTTP Basic authentication.  Use `11111111-1111-1111-1111-111111111111` and `secret` as the credentials.
  
- A basic UI showing API interactions and formats is available at `http://localhost:1323/swagger/`.
+A basic UI showing API interactions and formats is available at `http://localhost:1323/swagger/`.
 
 Test the Competition API client example implemented in `test_ping_api.py`.
 
@@ -78,11 +64,19 @@ $ pytest -s test_ping_api.py
 The CRS API Web server can be started using the following commands:
 
 ```bash
-$ cd my_crs/task_server
-$ uvicorn server:app --reload
+docker compose up
 ```
 
-The web server will be accessible at `http://localhost:8000` by default.
+The webserver will be accessible at `http://webservice:1324` in the `endpoint-network` docker network.
+
+Alternatively, if you have installed dependencies on your host machine, and wish to run the server on your host machine, you may run the following commands.
+
+```bash
+$ cd my_crs/task_server
+$ uvicorn server:app --reload --port 1324 --log-config=../../log-conf.yaml --env-file=../../submission.env
+```
+
+The web server will be accessible at `http://localhost:1324` by default.
 
 The [generate-challenge-task](https://github.com/aixcc-finals/generate-challenge-task) script may be used to construct an HTTP request that the task server expects.
 
