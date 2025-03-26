@@ -89,9 +89,9 @@ The example curl command below will stage a full scan task to the `example-compe
 ```bash
 curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: application/json' -d '{
     "challenge_repo_url": "git@github.com:<challenge repo here>.git",
-    "challenge_repo_head_ref": "2c894c66108f0724331a9e5b4826e351bf2d094b",
+    "challenge_repo_head_ref": "<head ref hash here>",
     "fuzz_tooling_url": "https://github.com/aixcc-finals/oss-fuzz-aixcc.git",
-    "fuzz_tooling_ref": "d5fbd68fca66e6fa4f05899170d24e572b01853d",
+    "fuzz_tooling_ref": "<fuzz-tooling ref hash here>",
     "fuzz_tooling_project_name": "<project name>",
     "duration": 3600
 }'
