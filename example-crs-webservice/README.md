@@ -127,7 +127,7 @@ $ sed -i -e 's/from openapi_client./from <new-package-path>.openapi_client./' *.
 $ sed -i -e 's/import openapi_client./import <new-package-path>./' *.py
 ```
 
-The HTTP client code can be tested against the provided `example-competition-api` available as a Docker container at `ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc5`. This container provides a mock Competition API on port 1323.
+The HTTP client code can be tested against the provided `example-competition-api` available as a Docker container at `ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc6`. This container provides a mock Competition API on port 1323.
 
 Example code for how to interact with the `example-competition-api` has been added under `test/test_ping_api.py`.
 

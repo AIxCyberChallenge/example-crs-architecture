@@ -4,6 +4,13 @@
 
 All notable changes to the competition-test-api docker container will be noted here.
 
+### v1.1-rc6 - 2025-03-26
+
+#### Fixed
+
+- Fixed incorrect directory naming for fuzz-tooling
+- Fixed crash detection for java projects
+
 ### v1.1-rc5 - 2025-03-25
 
 #### Fixed
@@ -79,7 +86,7 @@ $ echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
 To check if it succeeded, try running the following:
 
 ```bash
-docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc5
+docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc6
 ```
 
 Docker will store your credentials in your OS's native keystore, so you should only have to run `docker login` on subsequent logins into the GitHub Container Repository
@@ -131,7 +138,7 @@ docker run \
     --rm \
     --privileged \ # required, for Docker-out-of-docker
     --add-host=host.docker.internal:host-gateway \
-    ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc5 server
+    ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc6 server
 ```
 
 In the normal competition, the server would get a notification from GitHub via GitHub webhooks, and would fire off a task to
