@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0
+
+- revert to the default SARIF schema removing the required property on `ruleId`
+
 ## v1.1.1
 
 - correct typo in swagger docs tags for freeform submission
