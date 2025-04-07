@@ -269,7 +269,7 @@ curl -X 'POST' 'http://localhost:1323/webhook/sarif' -H 'Content-Type: applicati
           {
             "branch": "refs/heads/challenges/full-scan",
             "repositoryUri": "https://github.com/aixcc-finals/example-libpng",
-            "revisionId": "0fae79bd451de3dbbce3e317573f43be30125dff"
+            "revisionId": "fdacd5a1dcff42175117d674b0fda9f8a005ae88"
           }
         ]
       }
