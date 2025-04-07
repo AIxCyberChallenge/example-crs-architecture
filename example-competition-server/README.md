@@ -4,6 +4,16 @@
 
 All notable changes to the competition-test-api docker container will be noted here.
 
+### v1.1-rc7 - 2025-04-03
+
+#### Added
+
+- Added ability to trigger SARIF broadcasts
+
+#### Fixed
+
+- Fixed bug that caused freeform submissions to fail
+
 ### v1.1-rc6 - 2025-03-26
 
 #### Fixed
@@ -86,7 +96,7 @@ $ echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
 To check if it succeeded, try running the following:
 
 ```bash
-docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc6
+docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc7
 ```
 
 Docker will store your credentials in your OS's native keystore, so you should only have to run `docker login` on subsequent logins into the GitHub Container Repository
@@ -138,7 +148,7 @@ docker run \
     --rm \
     --privileged \ # required, for Docker-out-of-docker
     --add-host=host.docker.internal:host-gateway \
-    ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc6 server
+    ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc7 server
 ```
 
 In the normal competition, the server would get a notification from GitHub via GitHub webhooks, and would fire off a task to
@@ -167,6 +177,106 @@ curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: ap
     "fuzz_tooling_ref": "d5fbd68fca66e6fa4f05899170d24e572b01853d",
     "fuzz_tooling_project_name": "libpng",
     "duration": 3600
+}'
+```
+
+You can also request to send a SARIF broadcast. It two fields. The `task_id` field is the UUID of a previous task that was triggered through `/webhook/trigger_task`. The `sarif` field is in the form of a JSON object
+that follows [sarif-schema.json](../docs/api/sarif-schema.json). Below is an example request for example-libpng.
+
+```bash
+curl -X 'POST' 'http://localhost:1323/webhook/sarif' -H 'Content-Type: application/json' -d '{
+  "task_id": "<INSERT_TASK_ID_OF_FULL_SCAN_HERE>",
+  "sarif": {
+    "runs": [
+      {
+        "artifacts": [
+          {
+            "location": {
+              "index": 0,
+              "uri": "pngrutil.c"
+            }
+          }
+        ],
+        "automationDetails": {
+          "id": "/"
+        },
+        "conversion": {
+          "tool": {
+            "driver": {
+              "name": "GitHub Code Scanning"
+            }
+          }
+        },
+        "results": [
+          {
+            "correlationGuid": "9d13d264-74f2-48cc-a3b9-d45a8221b3e1",
+            "level": "error",
+            "locations": [
+              {
+                "physicalLocation": {
+                  "artifactLocation": {
+                    "index": 0,
+                    "uri": "pngrutil.c"
+                  },
+                  "region": {
+                    "endLine": 1447,
+                    "startColumn": 1,
+                    "startLine": 1421
+                  }
+                }
+              }
+            ],
+            "message": {
+              "text": "Associated risk: CWE-121"
+            },
+            "partialFingerprints": {
+              "primaryLocationLineHash": "22ac9f8e7c3a3bd8:8"
+            },
+            "properties": {
+              "github/alertNumber": 2,
+              "github/alertUrl": "https://api.github.com/repos/aixcc-finals/example-libpng/code-scanning/alerts/2"
+            },
+            "rule": {
+              "id": "CWE-121",
+              "index": 0
+            },
+            "ruleId": "CWE-121"
+          }
+        ],
+        "tool": {
+          "driver": {
+            "name": "CodeScan++",
+            "rules": [
+              {
+                "defaultConfiguration": {
+                  "level": "warning"
+                },
+                "fullDescription": {
+                  "text": "vulnerable to #CWE-121"
+                },
+                "helpUri": "https://example.com/help/png_handle_iCCP",
+                "id": "CWE-121",
+                "properties": {},
+                "shortDescription": {
+                  "text": "CWE #CWE-121"
+                }
+              }
+            ],
+            "version": "1.0.0"
+          }
+        },
+        "versionControlProvenance": [
+          {
+            "branch": "refs/heads/challenges/full-scan",
+            "repositoryUri": "https://github.com/aixcc-finals/example-libpng",
+            "revisionId": "fdacd5a1dcff42175117d674b0fda9f8a005ae88"
+          }
+        ]
+      }
+    ],
+    "": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+    "version": "2.1.0"
+  }
 }'
 ```
 
