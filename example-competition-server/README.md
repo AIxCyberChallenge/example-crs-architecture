@@ -185,7 +185,7 @@ that follows [sarif-schema.json](../docs/api/sarif-schema.json). Below is an exa
 
 ```bash
 curl -X 'POST' 'http://localhost:1323/webhook/sarif' -H 'Content-Type: application/json' -d '{
-  "task_id": "5007cb40-21f0-46cc-9bde-1ad1cf99a9c1",
+  "task_id": "<INSERT_TASK_ID_OF_FULL_SCAN_HERE>",
   "sarif": {
     "runs": [
       {
