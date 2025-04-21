@@ -3,6 +3,7 @@
 ## 1.2.0
 
 - revert to the default SARIF schema removing the required property on `ruleId`
+- add endpoint for requesting a test challenge
 
 ## v1.1.1
 
