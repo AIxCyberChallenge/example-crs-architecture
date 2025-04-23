@@ -20,7 +20,7 @@ Add the subscriptions IDs, one per line, to have the script iterate through its 
 
 `./network_access_control.sh --mode block` uses Azure CLI to:
 
-- Create a backup of all existing NSGs, AKS authorize networks, and Public IPs per subscription and stores them in the script directory at `../backups/<subscription ID>/`
+- Create a backup of all existing NSGs, AKS authorized networks, and Public IPs per subscription and stores them in the script directory at `../backups/<subscription ID>/`
 - Iterate through each subscription in subscriptions.txt.
 - Identify subscription resources.
 - Create NSGs with a deny-all inbound rule.
