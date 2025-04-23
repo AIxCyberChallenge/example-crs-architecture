@@ -10,7 +10,9 @@ This can be used by competitors to test the access restrictions that will be app
 
 ## Setup
 
-The scripts rely on subscriptions.txt to be populated with the subscriptions IDs that you want to manage. Add the subscriptions IDs, one per line, to have the script iterate through its resources and apply/revert the NSG rules and AKS API access controls.
+The scripts rely on subscriptions.txt to be populated with the subscriptions IDs that you want to manage.
+
+Add the subscriptions IDs, one per line, to have the script iterate through its resources and apply/revert the NSG rules and AKS API access controls.
 
 ## Usage
 
@@ -64,8 +66,12 @@ The logs provide a timestamp and START/SUCCESS/FAILURE status peres command acti
 
 ## Caveats
 
-Since the revert mode relies on restoring previous configuration from block mode. You need to ensure you don't run the script in block mode more than once without running in revert mode. Doing so will overwrite the previous backups with the original state of the resources access. Always run a single block followed by a revert, even if an error occurs.
+Since the revert mode relies on restoring previous configuration from block mode. You need to ensure you don't run the script in block mode more than once without running in revert mode.
+
+Doing so will overwrite the previous backups with the original state of the resources access. Always run a single block followed by a revert, even if an error occurs.
 
 Wherever (the machine) the block mode is run, the revert must also be run from as it relies upon the backups created from the block execution.
 
-Further, you want to have the same subscription IDs in `subscriptions.txt` between block and revert runs. Best practice, if you wish to add more subscriptions after you've already executed a block run; you should perform a revert first, update `subscriptions.txt`, then execute a block to avoid any issues.
+Further, you want to have the same subscription IDs in `subscriptions.txt` between block and revert runs. 
+
+Best practice, if you wish to add more subscriptions after you've already executed a block run; you should perform a revert first, update `subscriptions.txt`, then execute a block to avoid any issues.
