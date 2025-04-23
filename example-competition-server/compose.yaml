@@ -57,18 +57,18 @@ services:
     logging: *logging
 
 crs-status:
-    image: ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.2-rc1
-    platform: linux/amd64
-    privileged: true
-    volumes:
-      - "./scantron.yaml:/etc/scantron/scantron.yaml"
-    depends_on:
-      - scantron
-    command: crs-status
-    networks:
-      - external-internet
-    environment:
-      - SCANTRON_GITHUB_PAT=$CICD_PAT
+  image: ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.2-rc1
+  platform: linux/amd64
+  privileged: true
+  volumes:
+    - "./scantron.yaml:/etc/scantron/scantron.yaml"
+  depends_on:
+    - scantron
+  command: crs-status
+  networks:
+    - external-internet
+  environment:
+    - SCANTRON_GITHUB_PAT=$CICD_PAT
 
 networks:
   dind-internal:
