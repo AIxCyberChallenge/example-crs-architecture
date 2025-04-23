@@ -29,7 +29,7 @@ Add the subscriptions IDs, one per line, to have the script iterate through its 
 - Iterate through AKS clusters, if they exist.
 - Uses `az aks rotate-certs` to rotate existing AKS certifications, dropping existing connecitons.
 - Uses `az aks update` to set `--api-server-authorized-ip-ranges` `0.0.0.0/32`
-- Finds Public IP address for running resources and forces a change to a temportay IP to force disconnect existing inbound connections.
+- Finds Public IP address for running resources and forces a change to a temporary IP to force disconnect existing inbound connections.
 
 ### revert accesses
 
