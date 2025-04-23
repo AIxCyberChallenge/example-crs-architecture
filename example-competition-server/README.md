@@ -4,6 +4,19 @@
 
 All notable changes to the competition-test-api docker container will be noted here.
 
+### v1.2-rc1 - 2025-04-23
+
+This release makes the competition-test-api compliant with API spec v1.2. This includes the most notable
+change.
+
+#### Added
+
+- **_BREAKING CHANGE_**: Added the `v1/request/delta` endpoint. An working example of this endpoint is provided in the [Running the server](#running-the-server) section below. Alongside this new endpoint, is the new `generate` field in the scantron YAML config.
+
+- Added the `protocol` config option, which tells the competition server what protocol source TARs (i.e. the challenge and fuzz-tooling repositories) are sent over. This field can either be `http` or `https` If unset, this defaults to `http`.
+
+- Added the `crs-status` executable to the competition-test-api Docker image. `crs-status` polls the CRS's status endpoint at a fixed time interval. This fixed time interval is set by the `crs_status_poll_time_seconds` scantron YAML config field. If unset, this config field is set to `60`. An example of running the crs-status executable is provided in the example compose.yaml located [here](./compose.yaml).
+
 ### v1.1-rc7 - 2025-04-03
 
 #### Added
@@ -61,8 +74,8 @@ Initial release candidate.
 This folder allows users to run a full end-to-end competition server, as well as a signoz endpoint for which competitors may submit telemetry to for testing.
 This server simulates how the actual server will act in the competition. This means:
 
-- The example server supports the v1.1 competition server API, including endpoints for patches/POVs/sarif submissions, as well as endpoints for checking the patch/POV statuses.
-- As a correlary, the server also supports the v1.1 CRS API, meaning it can send tasks to CRSs
+- The example server supports the v1.2 competition server API, including endpoints for patches/POVs/sarif submissions, as well as endpoints for checking the patch/POV statuses.
+- As a correlary, the server also supports the v1.2 CRS API, meaning it can send tasks to CRSs
 - The `compose.yaml` given in this folder also brings up signoz for telemetry. Competitors may use this to send to telemetry to, much like how they would in a real competition round.
 
 ## Prerequisites
@@ -96,7 +109,7 @@ $ echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
 To check if it succeeded, try running the following:
 
 ```bash
-docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc7
+docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.2-rc1
 ```
 
 Docker will store your credentials in your OS's native keystore, so you should only have to run `docker login` on subsequent logins into the GitHub Container Repository
@@ -112,7 +125,21 @@ would be the following:
   must have the `repo` scope. You may use the same access token that you used for container registry, just as long as it has both the `repo` scope and the `read:packages` scope enabled. You may also set this value
   through the environment variable `SCANTRON_GITHUB_PAT` within the scantron service.
 - `api_host_and_port`: This should be set to whatever host and port your CRS is using to send submissions to.
-- `teams.crs.taskme`: New as of rc4 is the `taskme` flag. You must set this to true if you want the competition server to send tasks to your CRS.
+- `protocol`: This tells the competition server what protocol source TARs (i.e. the challenge and fuzz-tooling repositories) are sent over. This field can either be `http` or `https` If unset, this defaults to `http`.
+- `teams.crs.taskme`: New as of v1.1-rc4 is the `taskme` flag. You must set this to true if you want the competition server to send tasks to your CRS.
+- `generate`: New as of v1.2-rc1 is the `generate` field. These are the parameters used by the competition api when using the `/v1/request/delta` endpoint. This is **_REQUIRED_** for starting the competitor test api. We recommend that teams use the integration-test challenge repo, as it is nearly the same challenge repository as the one offered by the official competition API. Below is the config we recommend.
+
+  ```yaml
+  generate:
+    enabled: true
+    delta:
+      repo_url: "https://github.com/aixcc-finals/integration-test.git"
+      base_ref: "5ac0917575e20464b5aa86434dff2a7626b558b4"
+      head_ref: "challenges/integration-test-delta-01"
+      fuzz_tooling_url: "https://github.com/aixcc-finals/oss-fuzz-aixcc.git"
+      fuzz_tooling_ref: "v1.1.0"
+      fuzz_tooling_project_name: "integration-test"
+  ```
 
 ### `signoz/otel-collector-config.yaml`
 
@@ -148,7 +175,7 @@ docker run \
     --rm \
     --privileged \ # required, for Docker-out-of-docker
     --add-host=host.docker.internal:host-gateway \
-    ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.1-rc7 server
+    ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.2-rc1 server
 ```
 
 In the normal competition, the server would get a notification from GitHub via GitHub webhooks, and would fire off a task to
@@ -282,6 +309,12 @@ curl -X 'POST' 'http://localhost:1323/webhook/sarif' -H 'Content-Type: applicati
 
 Note: The Git repository specified in the curl command must have a shell script located at `.aixcc/test.sh`. This script is used to perform functionality tests on patches submitted to the competition API. This script
 should have a 0 exit code on success, and a non-zero exit code on failure.
+
+NEW as of v1.2-rc1 is the `/v1/request/delta` endpoint. Teams may use this endpoint to request a task hardcoded in the scantron YAML config from the server. An example curl is given below.
+
+```bash
+curl -X 'POST' -u "11111111-1111-1111-1111-111111111111:secret" 'http://localhost:1323/v1/request/delta'
+```
 
 ## Viewing Signoz Dashboard
 

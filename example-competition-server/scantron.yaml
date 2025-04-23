@@ -19,7 +19,7 @@ teams:
       taskme: true
       # The url of your CRS. If you are running your CRS on localhost, keep the
       # url as host.docker.internal
-      url: http://host.docker.internal:1324 # This should stay the same, so the scantron docker container can communicate with the outside world
+      url: http://host.docker.internal:1324
       api_key_id: api_key_id
       api_key_token: api_key_token
 
@@ -40,3 +40,12 @@ api_host_and_port: "localhost:1323"
 # recommend using the SCANTRON_GITHUB_PAT environment variable instead.
 # github:
 #   pat: github_pat_foobar
+generate:
+  enabled: true
+  delta:
+    repo_url: "https://github.com/aixcc-finals/integration-test.git"
+    base_ref: "5ac0917575e20464b5aa86434dff2a7626b558b4"
+    head_ref: "challenges/integration-test-delta-01"
+    fuzz_tooling_url: "https://github.com/aixcc-finals/oss-fuzz-aixcc.git"
+    fuzz_tooling_ref: "v1.1.0"
+    fuzz_tooling_project_name: "integration-test"
