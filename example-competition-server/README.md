@@ -11,11 +11,14 @@ change.
 
 #### Added
 
-- **_BREAKING CHANGE_**: Added the `v1/request/delta` endpoint. An working example of this endpoint is provided in the [Running the server](#running-the-server) section below. Alongside this new endpoint, is the new `generate` field in the scantron YAML config.
+- **_BREAKING CHANGE_**: Added the `v1/request/delta` endpoint. An working example of this endpoint is provided in the [Running the server](#running-the-server) section below. Alongside this new endpoint, is the new
+  `generate` field in the scantron YAML config.
 
-- Added the `protocol` config option, which tells the competition server what protocol source TARs (i.e. the challenge and fuzz-tooling repositories) are sent over. This field can either be `http` or `https` If unset, this defaults to `http`.
+- Added the `protocol` config option, which tells the competition server what protocol source TARs (i.e. the challenge and fuzz-tooling repositories) are sent over. This field can either be `http` or `https` If unset,
+  this defaults to `http`.
 
-- Added the `crs-status` executable to the competition-test-api Docker image. `crs-status` polls the CRS's status endpoint at a fixed time interval. This fixed time interval is set by the `crs_status_poll_time_seconds` scantron YAML config field. If unset, this config field is set to `60`. An example of running the crs-status executable is provided in the example compose.yaml located [here](./compose.yaml).
+- Added the `crs-status` executable to the competition-test-api Docker image. `crs-status` polls the CRS's status endpoint at a fixed time interval. This fixed time interval is set by the `crs_status_poll_time_seconds`
+  scantron YAML config field. If unset, this config field is set to `60`. An example of running the crs-status executable is provided in the example compose.yaml located [here](./compose.yaml).
 
 ### v1.1-rc7 - 2025-04-03
 
@@ -127,7 +130,8 @@ would be the following:
 - `api_host_and_port`: This should be set to whatever host and port your CRS is using to send submissions to.
 - `protocol`: This tells the competition server what protocol source TARs (i.e. the challenge and fuzz-tooling repositories) are sent over. This field can either be `http` or `https` If unset, this defaults to `http`.
 - `teams.crs.taskme`: New as of v1.1-rc4 is the `taskme` flag. You must set this to true if you want the competition server to send tasks to your CRS.
-- `generate`: New as of v1.2-rc1 is the `generate` field. These are the parameters used by the competition api when using the `/v1/request/delta` endpoint. This is **_REQUIRED_** for starting the competitor test api. We recommend that teams use the integration-test challenge repo, as it is nearly the same challenge repository as the one offered by the official competition API. Below is the config we recommend.
+- `generate`: New as of v1.2-rc1 is the `generate` field. These are the parameters used by the competition API when using the `/v1/request/delta` endpoint. This is **_REQUIRED_** for starting the competitor test API. We
+  recommend that teams use the integration-test challenge repository, as it is nearly the same challenge repository as the one offered by the official competition API. Below is the config we recommend.
 
   ```yaml
   generate:
