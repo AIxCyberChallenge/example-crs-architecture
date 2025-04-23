@@ -72,6 +72,6 @@ Doing so will overwrite the previous backups with the original state of the reso
 
 Wherever (the machine) the block mode is run, the revert must also be run from as it relies upon the backups created from the block execution.
 
-Further, you want to have the same subscription IDs in `subscriptions.txt` between block and revert runs. 
+Further, you want to have the same subscription IDs in `subscriptions.txt` between block and revert runs.
 
 Best practice, if you wish to add more subscriptions after you've already executed a block run; you should perform a revert first, update `subscriptions.txt`, then execute a block to avoid any issues.
