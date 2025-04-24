@@ -1,6 +1,27 @@
 #!/bin/bash
 set -euo pipefail
 
+usage() {
+	cat <<EOF
+Usage: $0 --mode [block|revert] [--rotate-certs]
+
+Options:
+  --mode [block|revert]     Required. Set the operational mode.
+                            block   → Restricts AKS API access, public IPs, and NSG rules.
+                            revert  → Restores previous configurations from backup.
+
+  --rotate-certs            Optional. If specified with --mode block,
+                            will rotate AKS API server certificates (disruptive, long runtime).
+
+  --help                    Show this help message.
+
+Examples:
+  $0 --mode block
+  $0 --mode block --rotate-certs
+  $0 --mode revert
+EOF
+}
+
 # ─── Setup paths ────────────────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKUP_ROOT="${SCRIPT_DIR}/backups"
@@ -9,6 +30,9 @@ mkdir -p "$BACKUP_ROOT" "$LOG_ROOT"
 
 SUBS_FILE="subscriptions.txt"
 MODE=""
+ROTATE_CERTS=false
+
+TS_SUFFIX="$(date '+%Y-%m-%d_%H-%M-%S')"
 
 # ─── Parse arguments ────────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
@@ -17,15 +41,24 @@ while [[ $# -gt 0 ]]; do
 		MODE="$2"
 		shift 2
 		;;
+	--rotate-certs)
+		ROTATE_CERTS=true
+		shift
+		;;
+	--help | -h)
+		usage
+		exit 0
+		;;
 	*)
-		echo "Usage: $0 --mode [block|revert]"
+		echo "Usage: $0 --mode [block|revert] [--rotate-certs]"
 		exit 1
 		;;
 	esac
 done
+
 if [[ "$MODE" != "block" && "$MODE" != "revert" ]]; then
 	echo "Invalid mode: $MODE" >&2
-	echo "Usage: $0 --mode [block|revert]" >&2
+	echo "Usage: $0 --mode [block|revert] [--rotate-certs]" >&2
 	exit 1
 fi
 
@@ -40,12 +73,12 @@ while read -r SUBSCRIPTION_ID; do
 	LOG_DIR="${LOG_ROOT}/${SUBSCRIPTION_ID}"
 	mkdir -p "$BACKUP_DIR" "$LOG_DIR"
 
-	NSG_LOG="${LOG_DIR}/nsg-${MODE}.log"
-	AKS_LOG="${LOG_DIR}/aks-${MODE}.log"
-	PUBIP_LOG="${LOG_DIR}/pubip-${MODE}.log"
-	: >"$NSG_LOG"
-	: >"$AKS_LOG"
-	: >"$PUBIP_LOG"
+	NSG_LOG="${LOG_DIR}/nsg-${MODE}-${TS_SUFFIX}.log"
+	AKS_LOG="${LOG_DIR}/aks-${MODE}-${TS_SUFFIX}.log"
+	PUBIP_LOG="${LOG_DIR}/pubip-${MODE}-${TS_SUFFIX}.log"
+	ln -sf "$(basename "$NSG_LOG")" "${LOG_DIR}/nsg-latest.log"
+	ln -sf "$(basename "$AKS_LOG")" "${LOG_DIR}/aks-latest.log"
+	ln -sf "$(basename "$PUBIP_LOG")" "${LOG_DIR}/pubip-latest.log"
 
 	run_nsg() {
 		desc="$1"
@@ -149,8 +182,8 @@ while read -r SUBSCRIPTION_ID; do
 		fi
 	done
 
-	# ── 2) AKS rotate certs + update ────────────────────────────────────────────────
-	if [[ "$MODE" == "block" ]]; then
+	# ── 2) AKS cert rotate (optional) + IP range update ────────────────────────────
+	if [[ "$MODE" == "block" && "$ROTATE_CERTS" == true ]]; then
 		run_aks "Begin AKS certificate rotation" true
 		readarray -t CLUSTERS < <(az aks list -o json --query "[].{n:name,rg:resourceGroup}" | jq -c '.[]')
 		for c in "${CLUSTERS[@]}"; do
