@@ -45,8 +45,7 @@ For more information, see:
 - Added optional `sarif_id` on patch submissions
 - Added large max sizes to most string fields on the Competition API
 - Added note that max sizes for base64 fields are before encoding
-- Added metadata fields to Task and SARIF broadcasts containing a string to string map that should be attached
-  to outputs like log messages and OpenTelemetry trace attributes for traceability
+- Added metadata fields to Task and SARIF broadcasts containing a string to string map that should be attached to outputs like log messages and OpenTelemetry trace attributes for traceability
 - Added `focus` and `project_name` to Task broadcasts.
   - Project name is the OSS Fuzz project name for the task.
   - Focus is the name of the directory in the `repo` tarball that vulns, patches, and SARIF broadcasts should be submitted against.

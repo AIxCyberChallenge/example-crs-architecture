@@ -1,12 +1,14 @@
 # Tailnet-accessible hosted Competitor Test Server
 
-The organizers have set up a test competition API server for each team that is reachable from the internet, but tasks your CRS hosted on the tailnet. Telemetry from these runs get forwarded to your team’s telemetry server.
+The organizers have set up a test competition API server for each team that is reachable from the internet, but tasks your CRS hosted on the tailnet. Telemetry from these runs get forwarded to your team’s telemetry
+server.
 
-It is intended that competitors may use this to task their CRS with challenges from prior rounds that are available in the aixcc-finals org. There are three changes to your CRS deployment that are required in order for you to use this server.
+It is intended that competitors may use this to task their CRS with challenges from prior rounds that are available in the aixcc-finals org. There are three changes to your CRS deployment that are required in order for
+you to use this server.
 
 1. Change the URL of the Competition API to `https://test-<team-moniker>-api.tail7e9b4c.ts.net`
-2. If you are using Kubernetes Tailscale Operator, add another Service for this test URL so that it can be accessible from your cluster.
-See [proxies.yaml](https://github.com/aixcc-finals/example-crs-architecture/blob/main/example-crs-architecture/k8s/base/tailscale-connections/proxies.yaml) for context.
+2. If you are using Kubernetes Tailscale Operator, add another Service for this test URL so that it can be accessible from your cluster. See
+   [proxies.yaml](https://github.com/aixcc-finals/example-crs-architecture/blob/main/example-crs-architecture/k8s/base/tailscale-connections/proxies.yaml) for context.
 3. Append `-testing` to your CRS hostname, for example `team-moniker-testing`. This is the URL that is configured by default.
 
 If you want to use a different CRS URL **for the tailscale-hosted competitor test server**, use the following:
