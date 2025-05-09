@@ -131,7 +131,7 @@ def main() -> None:
         print(f"Hmm, I don't see a file at `{input_path}`. Double check your entry.")
         sys.exit(1)
 
-    with open(input_path) as file_handle:
+    with open(input_path, "r", encoding="utf-8") as file_handle:
         data = file_handle.read()
     crash_state = crash_state_from_fuzz_artefact(fuzz_artefact=data)
     instrumentation_key = instrumentation_key_from_fuzz_artefact(fuzz_artefact=data)
@@ -150,7 +150,7 @@ def main() -> None:
     if args.output_file:
         output_path = Path(args.output_file)
         print(f"Writing these to disk at `{output_path}`.")
-        with open(output_path, "w") as file_handle:
+        with open(output_path, "w", encoding="utf-8") as file_handle:
             json.dump(
                 {
                     "crash_state": crash_state,

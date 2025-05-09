@@ -19,12 +19,12 @@ from pathlib import Path
 from typing import ClassVar, Sequence, cast
 
 import pydantic
+from clusterfuzz._internal.crash_analysis.crash_comparer import CrashComparer
 from pydantic import ValidationError
 from typing_extensions import TypedDict
 
-from clusterfuzz._internal.crash_analysis.crash_comparer import CrashComparer
 
-
+# pylint: disable=too-few-public-methods
 class PoVDuplicationReasons(StrEnum):
     """
     Reasons why a PoV may be considered a duplicate.
@@ -36,6 +36,7 @@ class PoVDuplicationReasons(StrEnum):
     SAME_FUZZER_INSTRUMENTATION_PATTERN = auto()
 
 
+# pylint: disable=too-few-public-methods
 class ExportPoV(TypedDict):
     """
     A stripped-down dictionary that represents a PoV submission.
@@ -54,6 +55,7 @@ class ExportPoV(TypedDict):
 export_pov_adapter = pydantic.TypeAdapter(ExportPoV)
 
 
+# pylint: disable=too-few-public-methods
 class PovAbstractDeduplicator(ABC):
     """
     A base for PoV deduplicators. Deduplicators are machines that accept a pair of
@@ -122,7 +124,6 @@ class InstrumentationKeyDeduplicator(PovAbstractDeduplicator):
 
 
 class PoVIsMatch(PovAbstractDeduplicator):
-    uuid: str
     """
     Deduplicator for determining whether one PoV's fields match another's fields.
     """
@@ -194,7 +195,7 @@ class PovDeduplicator:
         print(f"Deduplicating {len(pov_list)} PoVs")
 
         dup_list: list[str] = []
-        task_list = list(set([p["task_uuid"] for p in pov_list]))
+        task_list = {p["task_uuid"] for p in pov_list}
 
         for t in task_list:
             povs_for_task = [p for p in pov_list if p["task_uuid"] == t]
@@ -229,7 +230,7 @@ def from_file(file_path: Path) -> Sequence[ExportPoV]:
     message_your_data_is_wrong = (
         "We're expecting your PoVs as an array of objects in JSON format."
     )
-    with open(file_path) as file_handle:
+    with open(file_path, "r", encoding="utf-8") as file_handle:
         try:
             data = json.load(file_handle)
         except JSONDecodeError:
