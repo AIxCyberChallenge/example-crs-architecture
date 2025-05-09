@@ -39,3 +39,14 @@ Welcome to the documentation page for the AIxCC Final Competition.
   - [Verifying telemetry](telemetry/telemetry_best_practices.md#verifying-telemetry)
 - [Tailnet-accessible hosted Competitor Test Server](tailscale-hosted-competitor-test-server/hosted_competitor_test_server.md#tailnet-accessible-hosted-competitor-test-server)
 - [Tailscale Management Tools](tailscale-hosted-competitor-test-server/tailscale_management_tools.md#tailscale-management-tools)
+- [Round Information](round_info/README.md#round-information)
+
+  - [Exhibition Round 1](round_info/exhibition-round-1.md#exhibition-round-1)
+
+    - [Repositories](round_info/exhibition-round-1.md#repositories)
+    - [Challenge Sequencing](round_info/exhibition-round-1.md#challenge-sequencing)
+
+  - [Exhibition Round 2](round_info/exhibition-round-2.md#exhibition-round-2)
+    - [Repositories](round_info/exhibition-round-2.md#repositories)
+    - [Sequencing](round_info/exhibition-round-2.md#sequencing)
+    - [Notes](round_info/exhibition-round-2.md#notes)
