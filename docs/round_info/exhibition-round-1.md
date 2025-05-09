@@ -6,8 +6,8 @@
 
 The following repositories were used during the Round:
 
-* Libxml2 (C)
-* Zookeeper (Java)
+- Libxml2 (C)
+- Zookeeper (Java)
 
 ## Challenge Sequencing
 
