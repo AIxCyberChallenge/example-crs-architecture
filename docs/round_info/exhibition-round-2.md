@@ -15,6 +15,12 @@ The following repositories were used during the Round:
 - Zookeeper (Java)
 - Apache Commons Compress (Java)
 
+## Challenge Tasks Archive
+
+Download all challenge tasks that were sent during the Round: [exhibition2_challenge_tasks.tar.gz](./exhibition2_challenge_tasks.tar.gz).
+
+Note: Times included in tasks.json are descriptive of when the Competition API generated the task, and not the exact  times of when the message was broadcast to each CRS (it should be close though!).
+
 ## Sequencing
 
 ```mermaid
