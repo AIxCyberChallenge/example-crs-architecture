@@ -66,6 +66,6 @@ flowchart TD
 
 ## Notes
 
-\* Challenge Set #1 was re-run during Exhibition Round 2 due to an upstream outage at OpenAI from 7:07pm on May 6th, 2025 to 3:15pm on May 8th, 2025.
+\* Challenge Set #1 was re-run during Exhibition Round 2 due to an upstream outage at OpenAI from 7:07pm ET on May 6th, 2025 to 3:15pm ET on May 8th, 2025.
 As a result, CRS's using OpenAI were unable to make LLM API calls. The Organizers decided to re-run Challenge Set #1 as part of Exhibition 2 for 12 hours.
 Challenge Set #0 had run successfully for ~5 hours before the outage. When access was restored, we reset budget amounts for all teams for Azure and LLMs and added a re-run of Challenge Set #1.
