@@ -103,7 +103,6 @@ def determine_misc(config: dict, return_code: int, stderr_text: str, stdout_text
 
 
 # pylint: disable=too-many-arguments
-# pylint: disable=too-many-positional-arguments
 def interpret_return_code(
     config: dict,
     engine: str,
