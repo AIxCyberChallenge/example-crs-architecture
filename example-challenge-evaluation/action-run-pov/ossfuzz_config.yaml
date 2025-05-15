@@ -1,17 +1,14 @@
-
 # Significance Values from crash interpreter:
 #
 # - 0 => No significant crash recognized
 # - 211 => Recognized sanitizer crash
-# - 212 => Recognized non-sanitizer but notable crash 
+# - 212 => Recognized non-sanitizer but notable crash
 # - 213 => Recognized sanitizer signature despite return_code=0 (error)
 # - 214 => Recognized error in reproducing
 
 engines:
-
   - name: libfuzzer
     codes:
-
       # libfuzzer 0: Intended Case:
       #   1. This case is hit when no crash occurs
       # Conflicting Cases:
@@ -19,7 +16,7 @@ engines:
       #      a non-proper crash, so there are no conflicting cases
       #      that we care to worry about
 
-      0: 
+      0:
         msg: "No Crash (LibFuzzer)"
         significance: 0
 
@@ -30,7 +27,7 @@ engines:
       #      when using helper.py reproduce
       #      - Conflict is resolved by requiring a sanitizer in the logs
 
-      1: 
+      1:
         msg: "LibFuzzer Sanitizer crash"
         require_sanitizer: true
         significance: 211
@@ -40,7 +37,7 @@ engines:
       # Conflicting Cases:
       #   1. --
 
-      70: 
+      70:
         msg: "LibFuzzer Timeout"
         significance: 212
 
@@ -53,7 +50,7 @@ engines:
       #   - Jazzer triggers this case, but we call it a non-sanitizer crash,
       #     this is ok, just not totally clear.
 
-      77: 
+      77:
         msg: "LibFuzzer Default (OOM, leak, etc) and/or Jazzer Sanitizer Crash"
         significance: 212
 
@@ -96,7 +93,6 @@ sanitizers:
 
 misc_errors:
   codes:
-
     0:
       msg: "Command executed successfully"
       significance: 0
@@ -112,7 +108,7 @@ misc_errors:
     127:
       msg: "Command not found"
       significance: 214
-    128: 
+    128:
       msg: "Invalid exit signal."
       significance: 214
     130:

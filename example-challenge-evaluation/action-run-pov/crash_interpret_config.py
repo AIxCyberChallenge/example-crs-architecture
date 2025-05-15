@@ -4,11 +4,11 @@ Crash Analyzer Script:
 
 - 0 => No significant crash recognized
 - 211 => Recognized sanitizer crash
-- 212 => Recognized non-sanitizer but notable crash 
+- 212 => Recognized non-sanitizer but notable crash
 - 213 => Recognized sanitizer signature despite unrecognized return code (error)
 - 214 => Recognized error in reproducing
 
-Normal usage and the unit tests load the config from ./ossfuzz_config.yaml unless 
+Normal usage and the unit tests load the config from ./ossfuzz_config.yaml unless
 overridden by --config_path
 
 Ex:
@@ -25,6 +25,8 @@ Ex:
 import argparse
 import re
 import sys
+from typing import Any
+
 import yaml
 
 
@@ -109,7 +111,7 @@ def interpret_return_code(
     stderr_text: str,
     stdout_text: str,
     sanitizer_found: str,
-) -> str:
+) -> tuple[str | Any, Any | None]:
     """
     Interpret the results against the standard engine + sanitizer parsing config.
     """
@@ -153,7 +155,7 @@ def interpret_return_code(
 
 def detect_sanitizer_crash(
     config: dict, sanitizer: str, stderr_text: str, stdout_text: str
-) -> str:
+) -> str | None:
     """
     Match stdin and stderr against sanitizer regex in config.
     """

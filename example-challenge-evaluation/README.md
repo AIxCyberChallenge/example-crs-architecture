@@ -15,7 +15,7 @@ This set contains three primary scripts:
 
 ### Build CR
 
-```
+```bash
 usage: build_cr [OPTION] -p PROJECT_NAME -r LOCAL_PROJ_REPO -o LOCAL_OSS_FUZZ_REPO
 
 Options:
@@ -34,7 +34,7 @@ passed by `-r LOCAL_PROJ_REPO`.
 
 ### Run PoV
 
-```
+```bash
 usage: run_pov [OPTION] -p PROJECT_NAME -o LOCAL_OSS_FUZZ_REPO -b BLOB_PATH -f FUZZ_HARNESS -e ENGINE -s SANITIZER
 
 Options:
@@ -53,7 +53,7 @@ be set with the `-x` flag (use `-x` when a crash is _not_ expected).
 
 ### Run Tests
 
-```
+```bash
 usage: run_tests [OPTION] -p PROJECT_NAME -r LOCAL_PROJ_REPO
 
 Options:
