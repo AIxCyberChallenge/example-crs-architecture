@@ -4,6 +4,15 @@
 
 All notable changes to the competition-test-api docker container will be noted here.
 
+### v1.2-rc2 - 2025-05-19
+
+This release has no major changes. It only adds some bug fixes. This release should work with the Exhbition 2 challenges.
+
+#### Fixed
+
+- Fixed bug that prevents setting the correct sanitizer. This is similar to the bug that occurred in Exhibition 2 that caused non-`address` sanitizers to fail
+- Fixed race condition that caused issues when triggering the `request/delta` endpoint
+
 ### v1.2-rc1 - 2025-04-23
 
 This release makes the competition-test-api compliant with API spec v1.2. This includes the most notable
@@ -112,7 +121,7 @@ $ echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
 To check if it succeeded, try running the following:
 
 ```bash
-docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.2-rc1
+docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.2-rc2
 ```
 
 Docker will store your credentials in your OS's native keystore, so you should only have to run `docker login` on subsequent logins into the GitHub Container Repository
