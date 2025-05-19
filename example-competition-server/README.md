@@ -6,7 +6,7 @@ All notable changes to the competition-test-api docker container will be noted h
 
 ### v1.2-rc2 - 2025-05-19
 
-This release has no major changes. It only adds some bug fixes. This release should work with the Exhbition 2 challenges.
+This release has no major changes. It only adds some bugfixes. This release should work with the Exhbition 2 challenges.
 
 #### Fixed
 
