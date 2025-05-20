@@ -4,7 +4,14 @@
 
 All notable changes to the competition-test-api docker container will be noted here.
 
+### v1.2-rc3 - 2025-05-20
+
+This release includes the fixes intended for v1.2-rc2, but were mistakenly not included. Please see the "Fixed" section
+in the v1.2-rc2 release notes for details.
+
 ### v1.2-rc2 - 2025-05-19
+
+**UPDATE**: The fixes for this release were mistakenly not included in this release. Please use v1.2-rc3 for the below fixes
 
 This release has no major changes. It only adds some bugfixes. This release should work with the Exhbition 2 challenges.
 
@@ -121,7 +128,7 @@ $ echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
 To check if it succeeded, try running the following:
 
 ```bash
-docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.2-rc2
+docker pull --platform=linux/amd64 ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.2-rc3
 ```
 
 Docker will store your credentials in your OS's native keystore, so you should only have to run `docker login` on subsequent logins into the GitHub Container Repository
