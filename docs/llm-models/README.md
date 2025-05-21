@@ -6,3 +6,5 @@ All publicly available models from the following providers are approved for usag
 - Anthropic
 - Google Gemini
 - xAI
+
+> This is subject to change
