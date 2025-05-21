@@ -50,3 +50,5 @@ Welcome to the documentation page for the AIxCC Final Competition.
     - [Repositories](round_info/exhibition-round-2.md#repositories)
     - [Sequencing](round_info/exhibition-round-2.md#sequencing)
     - [Notes](round_info/exhibition-round-2.md#notes)
+
+- [LLM Models](llm-models/README.md#llm-providers-and-models)
