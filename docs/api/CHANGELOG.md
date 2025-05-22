@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.0
+
+- Update some descriptions to better highlight endpoint & field use
+- Introduce an explicit type for 200 responses
+
 ## 1.2.0
 
 - revert to the default SARIF schema removing the required property on `ruleId`
