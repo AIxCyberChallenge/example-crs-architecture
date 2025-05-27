@@ -2,7 +2,8 @@
 
 ## 1.3.0
 
-- Introduce `timeout_exceeded` submission status. This status highlights when a test job ran excessively long (8+ hours). It is meant to distinguish timeouts from failures and errors. A CRS should not conclude anything about their submission's quality when receiving this status. The status also highlights to the organizers that the submission needs manual review.
+- Introduce `timeout_exceeded` submission status. This status highlights when a test job ran excessively long (8+ hours). It is meant to distinguish timeouts from failures and errors. A CRS should not conclude anything
+  about their submission's quality when receiving this status. The status also highlights to the organizers that the submission needs manual review.
 - Update some descriptions to better highlight endpoint & field use
 - Introduce an explicit type for 200 responses
 
