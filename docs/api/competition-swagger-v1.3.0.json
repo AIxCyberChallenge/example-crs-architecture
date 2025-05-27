@@ -1105,20 +1105,29 @@
     },
     "types.SubmissionStatus": {
       "type": "string",
-      "enum": ["accepted", "passed", "failed", "deadline_exceeded", "errored"],
+      "enum": [
+        "accepted",
+        "passed",
+        "failed",
+        "deadline_exceeded",
+        "errored",
+        "timeout_exceeded"
+      ],
       "x-enum-comments": {
         "SubmissionStatusAccepted": "Successfully submitted",
         "SubmissionStatusDeadlineExceeded": "Task deadline exceeded. All submissions marked accepted before the deadline will be evaluated.",
         "SubmissionStatusErrored": "Server side error when testing submission",
         "SubmissionStatusFailed": "Submission failed testing",
-        "SubmissionStatusPassed": "Successfully evaluated submission"
+        "SubmissionStatusPassed": "Successfully evaluated submission",
+        "SubmissionStatusTimeoutExceeded": "Test continued running beyond timeout and will be manually reviewed after the round.  As a result this status is inconclusive."
       },
       "x-enum-varnames": [
         "SubmissionStatusAccepted",
         "SubmissionStatusPassed",
         "SubmissionStatusFailed",
         "SubmissionStatusDeadlineExceeded",
-        "SubmissionStatusErrored"
+        "SubmissionStatusErrored",
+        "SubmissionStatusTimeoutExceeded"
       ]
     }
   },

@@ -270,6 +270,7 @@ definitions:
       - failed
       - deadline_exceeded
       - errored
+      - timeout_exceeded
     type: string
     x-enum-comments:
       SubmissionStatusAccepted: Successfully submitted
@@ -279,12 +280,16 @@ definitions:
       SubmissionStatusErrored: Server side error when testing submission
       SubmissionStatusFailed: Submission failed testing
       SubmissionStatusPassed: Successfully evaluated submission
+      SubmissionStatusTimeoutExceeded:
+        Test continued running beyond timeout and will
+        be manually reviewed after the round.  As a result this status is inconclusive.
     x-enum-varnames:
       - SubmissionStatusAccepted
       - SubmissionStatusPassed
       - SubmissionStatusFailed
       - SubmissionStatusDeadlineExceeded
       - SubmissionStatusErrored
+      - SubmissionStatusTimeoutExceeded
 info:
   contact: {}
   title: Example Competition API
