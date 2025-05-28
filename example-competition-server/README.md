@@ -4,6 +4,12 @@
 
 All notable changes to the competition-test-api docker container will be noted here.
 
+### v1.2-rc4 - 2025-05-20
+
+#### Fixed
+
+- Our projects in oss-fuzz now use git-lfs to facilitate building fuzzers. In v1.2-rc3, we did not have git-lfs installed in the competitor-test-server Docker image. This is fixed in this release.
+
 ### v1.2-rc3 - 2025-05-20
 
 This release includes the fixes intended for v1.2-rc2, but were mistakenly not included. Please see the "Fixed" section
