@@ -32,5 +32,10 @@ $ echo $?
 $ ./identifier --language c --path ~/Source.java
 false
 $ echo $?
-130
+1
+
+$ ./identifier --language c --path ~/nonexistent
+Error: open /home/user/nonexistent
+$ echo $?
+201
 ```
