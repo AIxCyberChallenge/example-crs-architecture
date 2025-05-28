@@ -1111,15 +1111,15 @@
         "failed",
         "deadline_exceeded",
         "errored",
-        "timeout_exceeded"
+        "inconclusive"
       ],
       "x-enum-comments": {
         "SubmissionStatusAccepted": "Successfully submitted",
         "SubmissionStatusDeadlineExceeded": "Task deadline exceeded. All submissions marked accepted before the deadline will be evaluated.",
         "SubmissionStatusErrored": "Server side error when testing submission",
         "SubmissionStatusFailed": "Submission failed testing",
-        "SubmissionStatusPassed": "Successfully evaluated submission",
-        "SubmissionStatusTimeoutExceeded": "Test continued running beyond timeout and will be manually reviewed after the round.  As a result this status is inconclusive."
+        "SubmissionStatusInconclusive": "Test continued running beyond timeout and will be manually reviewed after the round.  As a result this status is inconclusive.",
+        "SubmissionStatusPassed": "Successfully evaluated submission"
       },
       "x-enum-varnames": [
         "SubmissionStatusAccepted",
@@ -1127,7 +1127,7 @@
         "SubmissionStatusFailed",
         "SubmissionStatusDeadlineExceeded",
         "SubmissionStatusErrored",
-        "SubmissionStatusTimeoutExceeded"
+        "SubmissionStatusInconclusive"
       ]
     }
   },

@@ -270,6 +270,7 @@ definitions:
       - failed
       - deadline_exceeded
       - errored
+      - inconclusive
     type: string
     x-enum-comments:
       SubmissionStatusAccepted: Successfully submitted
@@ -278,6 +279,9 @@ definitions:
         accepted before the deadline will be evaluated.
       SubmissionStatusErrored: Server side error when testing submission
       SubmissionStatusFailed: Submission failed testing
+      SubmissionStatusInconclusive:
+        Test continued running beyond timeout and will
+        be manually reviewed after the round.  As a result this status is inconclusive.
       SubmissionStatusPassed: Successfully evaluated submission
     x-enum-varnames:
       - SubmissionStatusAccepted
@@ -285,6 +289,7 @@ definitions:
       - SubmissionStatusFailed
       - SubmissionStatusDeadlineExceeded
       - SubmissionStatusErrored
+      - SubmissionStatusInconclusive
 info:
   contact: {}
   title: Example Competition API
