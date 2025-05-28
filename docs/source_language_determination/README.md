@@ -12,7 +12,7 @@ These can be found in the [dist](dist) folder.
 
 `identifier` accepts a language, either `java` or `c`, and a path to a source file. It returns both a string boolean and a return code indicating whether the source file is in the specified language.
 
-```
+```bash
 $ ./identifier --help
 Identifies file type
 
