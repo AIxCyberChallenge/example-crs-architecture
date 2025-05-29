@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## 2025-05-29
+
+- Updates tailscale operator manifest to v1.84.0
+
 ## 2025-03-07
 
 - Adds tailscale configuration for ingress
