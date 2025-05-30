@@ -4,7 +4,7 @@ Crash Analyzer Script:
 
 - 0 => No significant crash recognized
 - 211 => Recognized sanitizer crash
-- 212 => Recognized non-sanitizer but notable crash 
+- 212 => Recognized non-sanitizer but notable crash
 - 213 => Recognized sanitizer signature despite unrecognized return code (error)
 - 214 => Recognized error in reproducing
 
@@ -25,6 +25,7 @@ Ex:
 import argparse
 import re
 import sys
+
 import yaml
 
 
@@ -101,7 +102,6 @@ def determine_misc(config: dict, return_code: int, stderr_text: str, stdout_text
 
 
 # pylint: disable=too-many-arguments
-# pylint: disable=too-many-positional-arguments
 def interpret_return_code(
     config: dict,
     engine: str,
