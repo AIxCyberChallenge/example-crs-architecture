@@ -34,6 +34,8 @@ engines:
 
       # libfuzzer 70: Intended Case:
       #   1. This case is hit if libfuzzer detects a timeout
+      #      IF timeouts are disabled for the challenges, otherwise
+      #      libfuzzer is configured to exit 0.
       # Conflicting Cases:
       #   1. --
 
@@ -43,7 +45,8 @@ engines:
 
       # libfuzzer 77: Intended Case:
       #   1. This case is hit if libfuzzer detects an OOM, leak, etc.
-      #   2. This case is hit when Jazzer crashes via sanitizer trigger.
+      #   2. This case is hit on signals caught by libFuzzer, not sanitizers.
+      #   3. This case is hit when Jazzer crashes via sanitizer trigger.
       # Conflicting Cases:
       #   1. --
       # Known Issues:
@@ -54,6 +57,18 @@ engines:
         msg: "LibFuzzer Default (OOM, leak, etc) and/or Jazzer Sanitizer Crash"
         significance: 212
 
+      # timeout 124: Intended Case:
+      #   1. This case is hit if reproduce never resolves in our required
+      #      timeout window; this is likely caused by a hand, and we will
+      #      check for sanitizers and return accordingly.
+      # Conflicting Cases:
+      #   1. --
+
+      124:
+        msg: "Reproduce subprocess hung, but we found a sanitizer."
+        require_sanitizer: true
+        significance: 211
+
 sanitizers:
   address:
     patterns:
@@ -61,24 +76,84 @@ sanitizers:
         regex: "Java Exception: com.code_intelligence.jazzer"
       - crash_type: "unspecified catch-all asan"
         regex: "AddressSanitizer:"
+      - crash_type: "unspecified catch-all memorysan"
+        regex: "WARNING: MemorySanitizer:"
+      - crash_type: "unspecified catch-all ubsan"
+        regex: "runtime error:"
+      - crash_type: "alternate catch-all ubsan"
+        regex: "UndefinedBehaviorSanitizer:"
+      - crash_type: "unspecified catch-all threadsan"
+        regex: "WARNING: ThreadSanitizer:"
+      - crash_type: "unspecified catch-all hwasan"
+        regex: "ERROR: HWAddressSanitizer:"
 
   none:
-    patterns: []
+    patterns:
+      - crash_type: "unspecified catch-all jazzer"
+        regex: "Java Exception: com.code_intelligence.jazzer"
+      - crash_type: "unspecified catch-all asan"
+        regex: "AddressSanitizer:"
+      - crash_type: "unspecified catch-all memorysan"
+        regex: "WARNING: MemorySanitizer:"
+      - crash_type: "unspecified catch-all ubsan"
+        regex: "runtime error:"
+      - crash_type: "alternate catch-all ubsan"
+        regex: "UndefinedBehaviorSanitizer:"
+      - crash_type: "unspecified catch-all threadsan"
+        regex: "WARNING: ThreadSanitizer:"
+      - crash_type: "unspecified catch-all hwasan"
+        regex: "ERROR: HWAddressSanitizer:"
 
   memory:
     patterns:
+      - crash_type: "unspecified catch-all jazzer"
+        regex: "Java Exception: com.code_intelligence.jazzer"
+      - crash_type: "unspecified catch-all asan"
+        regex: "AddressSanitizer:"
       - crash_type: "unspecified catch-all memorysan"
         regex: "WARNING: MemorySanitizer:"
+      - crash_type: "unspecified catch-all ubsan"
+        regex: "runtime error:"
+      - crash_type: "alternate catch-all ubsan"
+        regex: "UndefinedBehaviorSanitizer:"
+      - crash_type: "unspecified catch-all threadsan"
+        regex: "WARNING: ThreadSanitizer:"
+      - crash_type: "unspecified catch-all hwasan"
+        regex: "ERROR: HWAddressSanitizer:"
 
   undefined:
     patterns:
+      - crash_type: "unspecified catch-all jazzer"
+        regex: "Java Exception: com.code_intelligence.jazzer"
+      - crash_type: "unspecified catch-all asan"
+        regex: "AddressSanitizer:"
+      - crash_type: "unspecified catch-all memorysan"
+        regex: "WARNING: MemorySanitizer:"
       - crash_type: "unspecified catch-all ubsan"
         regex: "runtime error:"
+      - crash_type: "alternate catch-all ubsan"
+        regex: "UndefinedBehaviorSanitizer:"
+      - crash_type: "unspecified catch-all threadsan"
+        regex: "WARNING: ThreadSanitizer:"
+      - crash_type: "unspecified catch-all hwasan"
+        regex: "ERROR: HWAddressSanitizer:"
 
   thread:
     patterns:
+      - crash_type: "unspecified catch-all jazzer"
+        regex: "Java Exception: com.code_intelligence.jazzer"
+      - crash_type: "unspecified catch-all asan"
+        regex: "AddressSanitizer:"
+      - crash_type: "unspecified catch-all memorysan"
+        regex: "WARNING: MemorySanitizer:"
+      - crash_type: "unspecified catch-all ubsan"
+        regex: "runtime error:"
+      - crash_type: "alternate catch-all ubsan"
+        regex: "UndefinedBehaviorSanitizer:"
       - crash_type: "unspecified catch-all threadsan"
         regex: "WARNING: ThreadSanitizer:"
+      - crash_type: "unspecified catch-all hwasan"
+        regex: "ERROR: HWAddressSanitizer:"
 
   coverage:
     patterns: []
@@ -88,6 +163,18 @@ sanitizers:
 
   hwaddress:
     patterns:
+      - crash_type: "unspecified catch-all jazzer"
+        regex: "Java Exception: com.code_intelligence.jazzer"
+      - crash_type: "unspecified catch-all asan"
+        regex: "AddressSanitizer:"
+      - crash_type: "unspecified catch-all memorysan"
+        regex: "WARNING: MemorySanitizer:"
+      - crash_type: "unspecified catch-all ubsan"
+        regex: "runtime error:"
+      - crash_type: "alternate catch-all ubsan"
+        regex: "UndefinedBehaviorSanitizer:"
+      - crash_type: "unspecified catch-all threadsan"
+        regex: "WARNING: ThreadSanitizer:"
       - crash_type: "unspecified catch-all hwasan"
         regex: "ERROR: HWAddressSanitizer:"
 

@@ -25,7 +25,6 @@ Ex:
 import argparse
 import re
 import sys
-from typing import Any
 
 import yaml
 
@@ -75,7 +74,9 @@ def load_config(config_path: str) -> dict:
         return yaml.safe_load(f) or {}
 
 
-def determine_misc(config: dict, return_code: int, stderr_text: str, stdout_text: str):
+def determine_misc(
+    config: dict, return_code: int, stderr_text: str, stdout_text: str
+) -> tuple[str | None, str | None]:
     """
     Parse results against the misc_errors section of the config.
     """
@@ -110,7 +111,7 @@ def interpret_return_code(
     stderr_text: str,
     stdout_text: str,
     sanitizer_found: str,
-) -> tuple[str | Any, Any | None]:
+) -> tuple[str | None, str | None]:
     """
     Interpret the results against the standard engine + sanitizer parsing config.
     """

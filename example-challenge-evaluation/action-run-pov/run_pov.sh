@@ -2,6 +2,8 @@
 
 #set -x
 
+#shellcheck disable=SC2086
+
 warn() {
 	echo "$*" >&2
 }
@@ -24,7 +26,7 @@ fail() {
 	exit 202
 }
 
-VERSION="v3.0.0"
+VERSION="v3.1.0"
 print_ver() {
 	echo "$VERSION"
 }
@@ -36,7 +38,9 @@ Options:
     -h                  show usage
     -v                  list current version
     -x                  CRASH_NOT_EXPECTED (we do not expect a crash)
+    -n                  run reproduce with --not_privileged set (docker priv removed)
     -a ARCHITECTURE     set arch for reproduce {i386,x86_64,aarch64}
+    -t TIMEOUT_SEC      override the default reproduce timeout in seconds (default: None)
 "
 }
 
@@ -47,9 +51,14 @@ run_pov() {
 
 	pushd "${LOCAL_OSS_FUZZ_REPO}" >/dev/null || die "Could not pushd"
 
+	PRIVILEGED_FLAG=${RUN_NOT_PRIVILEGED:+--not_privileged}
+	TIMEOUT_ARG=${TIMEOUT_SEC:+"--timeout ${TIMEOUT_SEC}"}
+
 	set +e
 	"${PYTHON}" infra/helper.py reproduce --architecture "${ARCHITECTURE}" \
 		--propagate_exit_codes \
+		${PRIVILEGED_FLAG} \
+		${TIMEOUT_ARG} \
 		--err_result 201 \
 		"${PROJECT_NAME}" "${FUZZ_HARNESS}" "${BLOB_ABS}" \
 		2> >(tee ${STDERR_FILE} >&2) | tee ${STDOUT_FILE}
@@ -137,7 +146,7 @@ run_pov() {
 
 }
 
-while getopts ":p:o:a:b:f:e:s:hvx" opt; do
+while getopts ":p:o:a:b:f:e:s:t:hvxn" opt; do
 	case ${opt} in
 	h)
 		print_usage
@@ -149,6 +158,9 @@ while getopts ":p:o:a:b:f:e:s:hvx" opt; do
 		;;
 	x)
 		CRASH_NOT_EXPECTED=1
+		;;
+	n)
+		RUN_NOT_PRIVILEGED=1
 		;;
 	p)
 		PROJECT_NAME="${OPTARG}"
@@ -170,6 +182,9 @@ while getopts ":p:o:a:b:f:e:s:hvx" opt; do
 		;;
 	s)
 		SANITIZER="${OPTARG}"
+		;;
+	t)
+		TIMEOUT_SEC="${OPTARG}"
 		;;
 	:)
 		print_usage && die "Option -${OPTARG} requires an argument."
@@ -193,6 +208,7 @@ done
 [ "${ARCHITECTURE}" == "null" ] && ARCHITECTURE="x86_64"
 
 # set other defaults
+# note: *not* defaulting TIMEOUT_SEC to keep it backwards compatible with oss-fuzz-aixcc v1.1.0
 : "${PYTHON:="python3"}"
 : "${ARCHITECTURE:="x86_64"}"
 

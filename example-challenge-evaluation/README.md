@@ -26,6 +26,7 @@ Options:
                           {address,none,memory,undefined,thread,coverage,introspector,hwaddress}
                           the default is address
     -a ARCHITECTURE     set arch for build {i386,x86_64,aarch64}
+    -d IMAGE_TAG        set the project docker image tag (default: latest)
 ```
 
 The `build_cr.sh` script builds a target challenge repository's image and harnesses, and  
@@ -41,7 +42,9 @@ Options:
     -h                  show usage
     -v                  list current version
     -x                  CRASH_NOT_EXPECTED (we do not expect a crash)
+    -n                  run reproduce with --not_privileged set (docker priv removed)
     -a ARCHITECTURE     set arch for reproduce {i386,x86_64,aarch64}
+    -t TIMEOUT_SEC      override the default reproduce timeout in seconds (default: None)
 ```
 
 The `run_pov.sh` script runs a target pov blob against a target challenge repository harness, parses a  
@@ -61,6 +64,8 @@ Options:
     -v                  list current version
     -t TEST_SCRIPT      pass the test script to run (default .aixcc/test.sh)
     -i DOCKER_IMAGE     set docker image name (default aixcc-afc/<proj_name>)
+                        overrides IMAGE_TAG
+    -d IMAGE_TAG        set docker image tag (default: latest)
     -x                  set -x when success is not expected, this affects exit code
 ```
 
@@ -86,12 +91,13 @@ action-build-cr/build_cr.sh -p integration-test \
     -o ./oss-fuzz-aixcc
 
 # run the provided PoV (expecting a crash)
-action-run-pov/run_pov.sh -p integration-test \
+action-run-pov/run_pov.sh -n -p integration-test \
     -o ./oss-fuzz-aixcc \
     -b ./integration-test/.aixcc/vulns/vuln_001/blobs/blobs.bin \
     -f fuzz_vuln \
     -e libfuzzer \
-    -s address
+    -s address \
+    -t 1800
 
 # apply the provided good patch
 git -C integration-test apply .aixcc/vulns/vuln_001/patches/good-patch.diff
@@ -102,13 +108,15 @@ action-build-cr/build_cr.sh -p integration-test \
     -o ./oss-fuzz-aixcc
 
 # re-run the provided PoV (not expecting a crash w/ -x)
-action-run-pov/run_pov.sh -x -p integration-test \
+action-run-pov/run_pov.sh -x -n -p integration-test \
     -o ./oss-fuzz-aixcc \
     -b ./integration-test/.aixcc/vulns/vuln_001/blobs/blobs.bin \
     -f fuzz_vuln \
     -e libfuzzer \
     -s address \
+    -t 1800
 
 # run functional tests provided with challenge
-action-run-tests/run_tests.sh -p integration-test -r ./integration-test
+action-run-tests/run_tests.sh -p integration-test \
+    -r ./integration-test
 ```

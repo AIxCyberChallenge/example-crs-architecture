@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#shellcheck disable=SC2086
+
 warn() {
 	echo "$*" >&2
 }
@@ -9,7 +11,7 @@ die() {
 	exit 1
 }
 
-VERSION="v1.5.5"
+VERSION="v1.6.0"
 print_ver() {
 	echo "$VERSION"
 }
@@ -24,19 +26,26 @@ Options:
     -s SANITIZER        set sanitizer for build 
                           {address,none,memory,undefined,thread,coverage,introspector,hwaddress}
                           the default is address
-    -a ARCHITECTURE     set arch for build {i386,x86_64,aarch64}"
+    -a ARCHITECTURE     set arch for build {i386,x86_64,aarch64}
+    -d IMAGE_TAG        set the project docker image tag (default: latest)"
 }
 
 build_challenge_repository() {
 
 	pushd "${LOCAL_OSS_FUZZ_REPO}" >/dev/null || die
 
+	DOCKER_IMAGETAG_ARG=${IMAGE_TAG:+"--docker_image_tag ${IMAGE_TAG}"}
+
 	## build_fuzzers calls build_image without --pull, so if we nix --pull we can nix this whole call
-	${PYTHON} infra/helper.py build_image --pull --architecture "${ARCHITECTURE}" "${PROJECT_NAME}" || die "Failed to build the Docker image"
+	${PYTHON} infra/helper.py build_image --pull \
+		--architecture "${ARCHITECTURE}" \
+		${DOCKER_IMAGETAG_ARG} \
+		"${PROJECT_NAME}" || die "Failed to build the Docker image"
 
 	${PYTHON} infra/helper.py build_fuzzers --clean \
 		--architecture "${ARCHITECTURE}" \
 		--sanitizer "${SANITIZER}" \
+		${DOCKER_IMAGETAG_ARG} \
 		"${PROJECT_NAME}" "${MY_LOCAL_PROJ_REPO}" || die "Failed to build the harness"
 
 	${PYTHON} infra/helper.py check_build \
@@ -49,7 +58,7 @@ build_challenge_repository() {
 	exit 0
 }
 
-while getopts ":p:r:o:s:a:l:hv" opt; do
+while getopts ":p:r:o:s:a:d:l:hv" opt; do
 	case ${opt} in
 	h)
 		print_usage
@@ -73,6 +82,9 @@ while getopts ":p:r:o:s:a:l:hv" opt; do
 		;;
 	a)
 		ARCHITECTURE="${OPTARG}"
+		;;
+	d)
+		IMAGE_TAG="${OPTARG}"
 		;;
 	l)
 		echo "locale flag is deprecated, doing nothing with its input."
@@ -103,8 +115,10 @@ fi
 # set default values if null is provided from github action
 [ "${SANITIZER}" == "null" ] && SANITIZER="address"
 [ "${ARCHITECTURE}" == "null" ] && ARCHITECTURE="x86_64"
+[ "${IMAGE_TAG}" == "null" ] && IMAGE_TAG="latest"
 
 # set defaults
+# note, *not* setting IMAGE_TAG default
 : "${PYTHON:="python3"}"
 : "${SANITIZER:="address"}"
 : "${ARCHITECTURE:="x86_64"}"

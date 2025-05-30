@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#shellcheck disable=SC2236
+
 warn() {
 	echo "$*" >&2
 }
@@ -9,7 +11,7 @@ die() {
 	exit 1
 }
 
-VERSION="v2.2.0"
+VERSION="v2.3.0"
 print_ver() {
 	echo "$VERSION"
 }
@@ -22,6 +24,8 @@ Options:
     -v                  list current version
     -t TEST_SCRIPT      pass the test script to run (default .aixcc/test.sh)
     -i DOCKER_IMAGE     set docker image name (default aixcc-afc/<proj_name>)
+                        overrides IMAGE_TAG
+    -d IMAGE_TAG        set docker image tag (default: latest)
     -x                  set -x when success is not expected, this affects exit code"
 }
 
@@ -65,7 +69,7 @@ run_tests() {
 
 }
 
-while getopts ":p:r:i:t:hvx" opt; do
+while getopts ":p:r:i:t:d:hvx" opt; do
 	case ${opt} in
 	h)
 		print_usage
@@ -87,6 +91,9 @@ while getopts ":p:r:i:t:hvx" opt; do
 	t)
 		TEST_SCRIPT="${OPTARG}"
 		;;
+	d)
+		IMAGE_TAG="${OPTARG}"
+		;;
 	x)
 		SUCCESS_NOT_EXPECTED=1
 		;;
@@ -104,7 +111,11 @@ done
 [ -z ${PROJECT_NAME+x} ] && print_usage && die "Must specify project name with -p"
 [ -z ${LOCAL_PROJ_REPO+x} ] && print_usage && die "Must specify local project repo with -r"
 
-: "${DOCKER_IMAGE:="aixcc-afc/${PROJECT_NAME}"}"
+[ ! -z ${DOCKER_IMAGE+x} ] && [ ! -z ${IMAGE_TAG+x} ] && print_usage &&
+	die "Setting both DOCKER_IMAGE and IMAGE_TAG is incompatible, just use DOCKER_IMAGE."
+
+: "${IMAGE_TAG:="latest"}"
+: "${DOCKER_IMAGE:="aixcc-afc/${PROJECT_NAME}:${IMAGE_TAG}"}"
 : "${TEST_SCRIPT:="${LOCAL_PROJ_REPO}/.aixcc/test.sh"}"
 
 LOCAL_PROJ_REPO_ABS=$(realpath "${LOCAL_PROJ_REPO}")
