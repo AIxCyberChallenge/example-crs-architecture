@@ -8,7 +8,7 @@ Crash Analyzer Script:
 - 213 => Recognized sanitizer signature despite unrecognized return code (error)
 - 214 => Recognized error in reproducing
 
-Normal usage and the unit tests load the config from ./ossfuzz_config.yaml unless 
+Normal usage and the unit tests load the config from ./ossfuzz_config.yaml unless
 overridden by --config_path
 
 Ex:
