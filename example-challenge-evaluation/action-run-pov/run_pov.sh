@@ -3,7 +3,6 @@
 #set -x
 
 #shellcheck disable=SC2086
-#shellcheck disable=SC2236
 
 warn() {
 	echo "$*" >&2
