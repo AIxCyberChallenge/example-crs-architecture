@@ -35,7 +35,7 @@ services:
       - shared-tmp:/tmp
 
   scantron:
-    image: ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.2-rc4
+    image: ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.2-rc5
     platform: linux/amd64
     privileged: true
     volumes:
@@ -56,19 +56,19 @@ services:
       - DOCKER_DEFAULT_PLATFORM=linux/amd64
     logging: *logging
 
-crs-status:
-  image: ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.2-rc4
-  platform: linux/amd64
-  privileged: true
-  volumes:
-    - "./scantron.yaml:/etc/scantron/scantron.yaml"
-  depends_on:
-    - scantron
-  command: crs-status
-  networks:
-    - external-internet
-  environment:
-    - SCANTRON_GITHUB_PAT=$CICD_PAT
+  crs-status:
+    image: ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.2-rc5
+    platform: linux/amd64
+    privileged: true
+    volumes:
+      - "./scantron.yaml:/etc/scantron/scantron.yaml"
+    depends_on:
+      - scantron
+    command: crs-status
+    networks:
+      - external-internet
+    environment:
+      - SCANTRON_GITHUB_PAT=$CICD_PAT
 
 networks:
   dind-internal:
