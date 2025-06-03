@@ -4,6 +4,13 @@
 
 All notable changes to the competition-test-api docker container will be noted here.
 
+### v1.2-rc5 - 2025-06-03
+
+#### Added
+
+- Added the optional `harnesses_included` flag to the `/webhook/trigger_task/` API. This boolean flag allows you to specify to the server whether you would like it to treat this challenge as a harnessed or unharnessed
+  flag. If unset, this flag defaults to true.
+
 ### v1.2-rc4 - 2025-05-20
 
 #### Fixed
@@ -230,6 +237,21 @@ curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: ap
     "fuzz_tooling_ref": "d5fbd68fca66e6fa4f05899170d24e572b01853d",
     "fuzz_tooling_project_name": "libpng",
     "duration": 3600
+}'
+```
+
+You may optionally specify whether the task is unharnessed using the `harnesses_include` flag, like below. If unset, the test server assumes `harnesses_include=true`
+
+```bash
+curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: application/json' -d '{
+  "challenge_repo_url": "git@github.com:aixcc-finals/integration-test.git",
+  "challenge_repo_base_ref": "4a714359c60858e3821bd478dc846de1d04dc977",
+  "challenge_repo_head_ref": "889cdb1b971b9a8a0338a89e50c51c051965bae5",
+  "fuzz_tooling_url": "https://github.com/aixcc-finals/oss-fuzz-aixcc.git",
+  "fuzz_tooling_ref": "challenge-state/integration-test-unharnessed-delta-01",
+  "fuzz_tooling_project_name": "integration-test",
+  "harnesses_included": false,
+  "duration": 3600
 }'
 ```
 
