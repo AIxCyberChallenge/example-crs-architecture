@@ -16,12 +16,6 @@ variable "sys_node_count" {
   default     = 2
 }
 
-variable "usr_node_count" {
-  type        = number
-  description = "The initial quantity of nodes for the node pool."
-  default     = 3
-}
-
 variable "username" {
   type        = string
   description = "The admin username for the new cluster."

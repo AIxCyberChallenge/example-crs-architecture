@@ -6,7 +6,7 @@ metadata:
   labels:
     app: crs-webapp
 spec:
-  replicas: 3
+  replicas: 3  # This is overridden by the HPA once deployed
   selector:
     matchLabels:
       app: crs-webapp
@@ -36,21 +36,12 @@ spec:
                 secretKeyRef:
                   name: crs-secrets
                   key: COMPETITION_API_KEY_TOKEN
-          livenessProbe:
-            httpGet:
-              path: "/"
-              port: "http"
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            timeoutSeconds: 3
-            failureThreshold: 3
-          readinessProbe:
-            httpGet:
-              path: "/"
-              port: "http"
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            timeoutSeconds: 3
-            failureThreshold: 1
+          resources:
+            requests:
+              cpu: "100m"	#Adjust as needed
+              memory: "512Mi"	#Adjust as needed
+            limits:
+              cpu: "500m"	#Adjust as needed
+              memory: "1Gi"	#Adjust as needed
       imagePullSecrets:
         - name: ghcr-secret

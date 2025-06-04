@@ -181,6 +181,52 @@ terraform {
 }
 ```
 
+## Autoscaling
+
+### Cluster Autoscaler (Node-level)
+
+`main.tf` includes an example implementation of autoscaling at the node level. This allows the number of nodes to scale up as thresholds are met.
+
+You will want to adjust the values for `min_count` and `max_count` to suit your needs.
+
+```bash
+resource "azurerm_kubernetes_cluster_node_pool" "user" {
+  name                  = "usr"
+  mode                  = "User"
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.primary.id
+  vm_size               = "Standard_D5_v2"
+  max_pods              = 100
+
+
+  auto_scaling_enabled  = true
+  min_count             = 3     #Adjust as needed
+  max_count             = 10    #Adjust as needed
+  
+  ...
+```
+
+### Horizontal Pod Autoscaler
+
+`deployment.template` includes and example implementation of autoscaling at the pod level. This scales the number of pods in a deployment based on CPU & memory usage.
+
+You will want to adjust the values for `cpu` and `memory`for both `requests` and `limits` to suit your needs.
+
+```bash
+	...
+          resources:
+            requests:
+              cpu: "100m"       #Adjust as needed
+              memory: "512Mi"   #Adjust as needed
+            limits:
+              cpu: "500m"       #Adjust as needed
+              memory: "1Gi"     #Adjust as needed
+	...
+```
+
+Additionally, the configuration also includes an `hpa.yaml` file that defines the autoscaler (HPA). The HPA controller watches metrics and scales your pods up or down to meet the specified thresholds.
+
+You can adjust values within this yaml to meet your needs.
+
 ## Makefile
 
 The deployment of the AKS cluster and its resources are performed by the `Makefile`, which leverages `crs-architecture.sh`. This wrapper utilizes several mechanisms to properly configure both the teraform and kubernetes environments.
