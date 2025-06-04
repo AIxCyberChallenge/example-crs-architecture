@@ -201,7 +201,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
   auto_scaling_enabled  = true
   min_count             = 3     #Adjust as needed
   max_count             = 10    #Adjust as needed
-  
+
   ...
 ```
 
@@ -212,7 +212,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
 You will want to adjust the values for `cpu` and `memory`for both `requests` and `limits` to suit your needs.
 
 ```bash
-	...
+...
           resources:
             requests:
               cpu: "100m"       #Adjust as needed
@@ -220,12 +220,12 @@ You will want to adjust the values for `cpu` and `memory`for both `requests` and
             limits:
               cpu: "500m"       #Adjust as needed
               memory: "1Gi"     #Adjust as needed
-	...
+...
 ```
 
 Additionally, the configuration also includes an `hpa.yaml` file that defines the autoscaler (HPA). The HPA controller watches metrics and scales your pods up or down to meet the specified thresholds.
 
-You can adjust values within this yaml to meet your needs.
+You can adjust values within this YAML to meet your needs.
 
 ## Makefile
 

@@ -99,8 +99,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
   kubernetes_cluster_id = azurerm_kubernetes_cluster.primary.id
   vm_size               = "Standard_D5_v2"
   max_pods              = 100
-
-  
+ 
   auto_scaling_enabled  = true
   min_count             = 3	#Adjust as needed
   max_count             = 10	#Adjust as needed
