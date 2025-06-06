@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## 2025-06-04
+
+- Added example cluster autoscaler (node-level scaling)
+- Added example horizontal pod autoscaler (pod-level scaling)
+- Updates to README.md
+
 ## 2025-05-29
 
 - Updates tailscale operator manifest to v1.84.0

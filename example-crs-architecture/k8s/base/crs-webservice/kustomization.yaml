@@ -9,6 +9,7 @@ resources:
   - secrets.yaml
   - service.yaml
   - ingress.yaml
+  - hpa.yaml
 
 secretGenerator:
   - name: ghcr-secret
