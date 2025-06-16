@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0
+
+- Added new request endpoint for rerunning real challenges
+
 ## 1.3.1
 
 - Document already-existing limit on accepted `engine` in PoVs
