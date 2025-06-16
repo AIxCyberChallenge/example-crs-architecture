@@ -367,7 +367,7 @@ paths:
       tags:
         - request
   /v1/request/list/:
-    post:
+    get:
       consumes:
         - application/json
       description: Get a list of available challenges to task

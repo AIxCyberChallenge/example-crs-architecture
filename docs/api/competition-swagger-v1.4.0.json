@@ -28,7 +28,7 @@
       }
     },
     "/v1/request/list/": {
-      "post": {
+      "get": {
         "security": [
           {
             "BasicAuth": []
