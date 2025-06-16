@@ -8,9 +8,9 @@ run-pov for libfuzzer oom (exit code 71).
 
 Version updates:
 
-- build\_cr: v1.6.0 -> v1.8.0
-- run\_tests: v2.3.0 -> v2.4.0
-- run\_pov: v3.1.0 -> 3.1.1
+- build_cr: v1.6.0 -> v1.8.0
+- run_tests: v2.3.0 -> v2.4.0
+- run_pov: v3.1.0 -> 3.1.1
 
 ## v1.1.0
 
