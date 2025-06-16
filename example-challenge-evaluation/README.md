@@ -19,14 +19,20 @@ This set contains three primary scripts:
 usage: build_cr [OPTION] -p PROJECT_NAME -r LOCAL_PROJ_REPO -o LOCAL_OSS_FUZZ_REPO
 
 Options:
-    -h                  show usage
-    -v                  list current version
-    -l LOCALE           set the locale to use within the containers (deprecated)
-    -s SANITIZER        set sanitizer for build
-                          {address,none,memory,undefined,thread,coverage,introspector,hwaddress}
-                          the default is address
-    -a ARCHITECTURE     set arch for build {i386,x86_64,aarch64}
-    -d IMAGE_TAG        set the project docker image tag (default: latest)
+    -h                        show usage
+    -v                        list current version
+    -l LOCALE                 set the locale to use within the containers (deprecated)
+    -s SANITIZER              set sanitizer for build
+                              {address,none,memory,undefined,thread,coverage,introspector,hwaddress}
+                              the default is address
+    -a ARCHITECTURE           set arch for build {i386,x86_64,aarch64}
+    -d IMAGE_TAG              set the project docker image tag (default: latest)
+    -e PROPAGATE_EXIT_CODE    propagate exit code from helper.py
+
+Exit Codes:
+    0       build_image, build_fuzzers, and check_build passed on all harnesses
+    201     an error occured during the build step, likely runtime or scripting error
+    202     a failure occured during the buidl step, likely compilation error
 ```
 
 The `build_cr.sh` script builds a target challenge repository's image and harnesses, and  

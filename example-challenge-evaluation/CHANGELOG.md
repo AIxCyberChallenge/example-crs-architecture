@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.2.0
+
+Optional, backwards-compatible flags added to propagate exit
+codes on build-cr and run-tests. Added mishandled case in
+run-pov for libfuzzer oom (exit code 71).
+
+Version updates:
+
+- build\_cr: v1.6.0 -> v1.8.0
+- run\_tests: v2.3.0 -> v2.4.0
+- run\_pov: v3.1.0 -> 3.1.1
+
 ## v1.1.0
 
 Optional flags have been added to support docker image tag
