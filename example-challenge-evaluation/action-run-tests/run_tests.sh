@@ -6,12 +6,17 @@ warn() {
 	echo "$*" >&2
 }
 
-die() {
+fail() {
 	warn "$*"
-	exit 1
+	exit 202
 }
 
-VERSION="v2.3.0"
+die() {
+	warn "$*"
+	exit 201
+}
+
+VERSION="v2.4.0"
 print_ver() {
 	echo "$VERSION"
 }
@@ -45,9 +50,8 @@ run_tests() {
 	EXITCODE=$?
 
 	case $EXITCODE in
-	125 | 126 | 127)
-		warn "Docker failed to mount and run the test script."
-		exit $EXITCODE
+	125 | 126 | 127 | 137)
+		die "Docker failed to mount and run the test script."
 		;;
 	esac
 
@@ -56,11 +60,11 @@ run_tests() {
 			echo "Tests passed as expected"
 			exit 0
 		else
-			die "Tests passed unexpectedly"
+			fail "Tests passed unexpectedly"
 		fi
 	else
 		if [ -z ${SUCCESS_NOT_EXPECTED+x} ]; then
-			die "Tests failed, but were expected to pass"
+			fail "Tests failed, but were expected to pass"
 		else
 			echo "Tests failed as expected"
 			exit 0
