@@ -46,7 +46,7 @@ Options:
 Exit Codes:
     0       build_image, build_fuzzers, and check_build passed on all harnesses
     201     an error occured during the build step, likely runtime or scripting error
-    202     a failure occured during the buidl step, likely compilation error
+    202     a failure occured during the build step, likely compilation error
 "
 }
 
