@@ -26,7 +26,7 @@ fail() {
 	exit 202
 }
 
-VERSION="v3.1.0"
+VERSION="v3.1.1"
 print_ver() {
 	echo "$VERSION"
 }
