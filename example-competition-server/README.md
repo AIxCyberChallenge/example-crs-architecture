@@ -6,7 +6,8 @@ All notable changes to the competition-test-api docker container will be noted h
 
 ### v1.4-rc1 - 2025-06-17
 
-This supports v1.4 of the competition API, with one exception. The new /v1/request changes are not present here, since we only intend for that to be used in the competition API. /v1/request/delta/ is still available for use in the competition-test-api
+This supports v1.4 of the competition API, with one exception. The new /v1/request changes are not present here, since we only intend for that to be used in the competition API. /v1/request/delta/ is still available
+for use in the competition-test-api
 
 #### Fixed
 
