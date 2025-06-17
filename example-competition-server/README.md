@@ -4,6 +4,15 @@
 
 All notable changes to the competition-test-api docker container will be noted here.
 
+### v1.4-rc1 - 2025-06-17
+
+This supports v1.4 of the competition API, with one exception. The new /v1/request changes are not present here, since we only intend for that to be used in the competition API. /v1/request/delta/ is still available for use in the competition-test-api
+
+#### Fixed
+
+- `git diff` behavior fixed that lead to bad diffs being sent out for certain Tika delta challenges
+- Fix improprely set flag that led to `/v1/request/delta/` challenges to be set as unharnessed challenges
+
 ### v1.2-rc5 - 2025-06-03
 
 #### Added
