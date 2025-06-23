@@ -16,6 +16,18 @@ variable "sys_node_count" {
   default     = 2
 }
 
+variable "user_vm_size" {
+  type        = string
+  default     = "Standard_D5_v2"
+  description = "The VM size profile for user pool."
+}
+
+variable "sys_vm_size" {
+  type        = string
+  default     = "Standard_D5_v2"
+  description = "The VM size profile for sys pool."
+}
+
 variable "username" {
   type        = string
   description = "The admin username for the new cluster."

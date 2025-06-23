@@ -58,6 +58,7 @@ resource "azurerm_kubernetes_cluster" "primary" {
   name                = random_pet.azurerm_kubernetes_cluster_name.id
   resource_group_name = azurerm_resource_group.rg.name
   dns_prefix          = random_pet.azurerm_kubernetes_cluster_dns_prefix.id
+  sku_tier            = "Standard"
 
   identity {
     type = "SystemAssigned"
@@ -65,7 +66,7 @@ resource "azurerm_kubernetes_cluster" "primary" {
 
   default_node_pool {
     name                         = "sys"
-    vm_size                      = "Standard_D5_v2"
+    vm_size                      = var.sys_vm_size
     max_pods                     = 100
     temporary_name_for_rotation  = "tempnodepool"
     only_critical_addons_enabled = true
@@ -97,7 +98,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
   name                  = "usr"
   mode                  = "User"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.primary.id
-  vm_size               = "Standard_D5_v2"
+  vm_size               = var.user_vm_size
   max_pods              = 100
   auto_scaling_enabled  = true
   min_count             = 3  # Adjust as needed
