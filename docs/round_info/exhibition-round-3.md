@@ -107,4 +107,7 @@ The challenges are:
 - tk-delta-03 (task_id: `01974bd4-0df0-7d96-aad6-4e3db89d190d`)
 - tk-delta-05 (task_id: `01974bd4-10e9-784a-b6c7-2c5dc5151cf6`)
 
-All of these challenges had diffs that would fail to apply. For tk-delta-03 and tk-delta-05, they would fail to apply because of binary contents within the diff. For tk-delta-01, the issue is related to inconsistent filenames in diff headers. We have fixed the root causes of the issues for these three challenges. These Competition API fixes are now available via the new request/challenges endpoint and competitor-test-api.
+All of these challenges had diffs that would fail to apply.
+For tk-delta-03 and tk-delta-05, they would fail to apply because of binary contents within the diff.
+For tk-delta-01, the issue is related to inconsistent filenames in diff headers. We have fixed the root causes of the issues for these three challenges.
+These Competition API fixes are now available via the new request/challenges endpoint and competitor-test-api.
