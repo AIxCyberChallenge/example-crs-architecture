@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## 2025-06-23
+
+- Update terraform provider to `1.12.2` in `providers.tf`
+- Update kubernetes `sku_tier` from default `free` to `standard`
+- Moves `vm_size` for sys and user pools to variables in `variables.tf`
+
 ## 2025-06-04
 
 - Added example cluster autoscaler (node-level scaling)

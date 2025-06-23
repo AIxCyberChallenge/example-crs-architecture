@@ -11,7 +11,7 @@ This configuration deploys an AKS cluster (`primary`) with two node pools:
 
 The resource group name is generated with the `"random_pet"` resource from the `hashicorp/random` provider; and are prefixed with `example`
 
-The VM Size for both pools are using `Standard_D5_v2` in this example. You can change this to suit your needs by editing the `vm_size` values in `main.tf`.
+The VM Size for both pools are using `Standard_D5_v2` in this example. You can change this to suit your needs by editing the `user_vm_size` and `sys_vm_size` values in `variables.tf`.
 
 The standard `azure` networking profile is used.
 
@@ -194,7 +194,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
   name                  = "usr"
   mode                  = "User"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.primary.id
-  vm_size               = "Standard_D5_v2"
+  vm_size               = var.user_vm_size
   max_pods              = 100
 
 
