@@ -51,6 +51,7 @@ Welcome to the documentation page for the AIxCC Final Competition.
     - [Challenge Sequencing](round_info/exhibition-round-1.md#challenge-sequencing)
 
   - [Exhibition Round 2](round_info/exhibition-round-2.md#exhibition-round-2)
+
     - [Repositories](round_info/exhibition-round-2.md#repositories)
     - [Challenge Tasks Archive](round_info/exhibition-round-2.md#challenge-tasks-archive)
     - [Sequencing](round_info/exhibition-round-2.md#sequencing)
