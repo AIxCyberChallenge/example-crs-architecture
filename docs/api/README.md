@@ -96,7 +96,7 @@ curl -u 11111111-1111-1111-1111-111111111111:pY8rLk7FvQ2hZm9GwUx3Ej5BnTcV4So0 -X
 
 ### Request Arbitrary Exhibition 3 Task
 
-We have updated the production Competition API's /v1/request/ endpoint to include all exhibition3 challenges. Exercising this endpoint should look the same as exercising the /v1/request/delta/ endpoint, but
+We have updated the production Competition API /v1/request/ endpoint to include all exhibition3 challenges. Exercising this endpoint should look the same as exercising the /v1/request/delta/ endpoint, but
 instead of putting delta in the URL path, you can input the challenge name.
 
 For example:
@@ -116,7 +116,8 @@ Some teams have noted that the hosted competitor test servers were having issues
 handle hundreds of POVs at the same time. So if you are running into any issues with the competitor test server, we highly recommend you use this new endpoint. We will still also still be updating the competitor test
 servers as we have been before when updates are made to evaluation scripts.
 
-Use the following URL/hostname configurations in order to use this new requesting feature (this will change to final from pre-final on June 24th at 15:00 UTC. If you encounter rate limits for pre-final, let us know and we can adjust):
+Use the following URL/hostname configurations in order to use this new requesting feature (this will change to final from pre-final on June 24th at 15:00 UTC. If you encounter rate limits for pre-final, let us know
+and we can adjust):
 
 **CRS API URL**: `https://<team-moniker>-pre-final.tail7e9b4c.ts.net`
 
