@@ -116,10 +116,9 @@ Some teams have noted that the hosted competitor test servers were having issues
 handle hundreds of POVs at the same time. So if you are running into any issues with the competitor test server, we highly recommend you use this new endpoint. We will still also still be updating the competitor test
 servers as we have been before when updates are made to evaluation scripts.
 
-Use the following URL/hostname configurations in order to use this new requesting feature (this will change to final from pre-final on June 24th at 15:00 UTC. If you encounter rate limits for pre-final, let us know
-and we can adjust):
+Use the following URL/hostname configurations in order to use this new requesting feature:
 
-**CRS API URL**: `https://<team-moniker>-pre-final.tail7e9b4c.ts.net`
+**CRS API URL**: `https://<team-moniker>-final.tail7e9b4c.ts.net`
 
 **Competition API URL**: `https://api.tail7e9b4c.ts.net`
 
