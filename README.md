@@ -14,7 +14,7 @@ This repository is currently under development. Documentation and examples are b
 | Competition API Spec v1.4.0                                                              | ✅     |
 | CRS API Spec v1.4.0                                                                      | ✅     |
 | Telemetry Spec v1.0                                                                      | ✅     |
-| <[Challenge Generation script](https://github.com/aixcc-finals/generate-challenge-task)> | ✅     |
+| <[Challenge Generation script](generate-challenge-task/README.md)> | ✅     |
 | End-to-end example webservice that implements specs                                      | ✅     |
 
 ## Contributing

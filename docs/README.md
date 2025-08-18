@@ -41,8 +41,6 @@ Welcome to the documentation page for the AIxCC Final Competition.
   - [Improving the structure of OTEL data](telemetry/telemetry_best_practices.md#improving-the-structure-of-otel-data)
   - [Verifying telemetry](telemetry/telemetry_best_practices.md#verifying-telemetry)
 - [Source File Language Determination](source_language_determination)
-- [Tailnet-accessible hosted Competitor Test Server](tailscale-hosted-competitor-test-server/hosted_competitor_test_server.md#tailnet-accessible-hosted-competitor-test-server)
-- [Tailscale Management Tools](tailscale-hosted-competitor-test-server/tailscale_management_tools.md#tailscale-management-tools)
 - [Round Information](round_info/README.md#round-information)
 
   - [Exhibition Round 1](round_info/exhibition-round-1.md#exhibition-round-1)
