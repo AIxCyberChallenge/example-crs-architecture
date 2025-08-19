@@ -96,7 +96,8 @@ Above will additionally tar and upload and reference in resultant curl a custom 
 
 `./generate-challenge-task.sh -t <url_to_target_git_repo> -p <project_name_in_oss_fuzz> -c <crs_url> -r mybranch|tag|commit_hash -l -o <oss-fuzz-tooling-repo-url>`
 
-Above will in lieu of uploading the tars to Azure Storage, will store them locally in a directory called `repo-tars` next to the script. The curl that results will not be usable since the tar paths in the curl will be replaced with placeholders.
+Above will in lieu of uploading the tars to Azure Storage, will store them locally in a directory called `repo-tars` next to the script. The curl that results will not be usable since the tar paths in the curl will be
+replaced with placeholders.
 
 `./generate-challenge-task.sh -c https://my.crs.crsdomain.com -t https://github.com/isc-projects/bind9.git -p bind9 -r bind-9.20 -v -b bind-9.18`
 
