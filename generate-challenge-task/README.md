@@ -1,6 +1,6 @@
 # generate-challenge-task
 
-This bash script will convert an OSS-Fuzz-compatible repo into the Challenge Task format.
+This bash script will convert an OSS-Fuzz-compatible repository into the Challenge Task format.
 
 It does not modify the source repository. In particular, it does not add challenges. We recommend using an exemplar repository if you want need your CRS to have a guaranteed vuln to find.
 
@@ -12,7 +12,7 @@ Ensure the following are all installed to your working environment:
 
 - [azure-cli](https://learn.microsoft.com/en-us/cli/azure/)
 - [jq](https://jqlang.github.io/jq/)
-- git
+- Git
 - tar
 - curl
 
