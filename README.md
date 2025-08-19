@@ -10,12 +10,12 @@ This repository is currently under development. Documentation and examples are b
 
 | Task                                                               | Version | Status |
 | ------------------------------------------------------------------ | ------- | ------ |
-| Example CRS Azure Kubernetes Service (AKS) Terraform               | N/A    | ✅      |
-| Competition API Spec                                               | v1.4.0 | ✅      |
-| CRS API Spec                                                       | v1.4.0 | ✅      |
-| Telemetry Spec                                                     | v1.0   | ✅      |
-| <[Challenge Generation script](generate-challenge-task/README.md)> | N/A    | ✅      |
-| End-to-end example webservice that implements specs                | N/A    | ✅      |
+| Example CRS Azure Kubernetes Service (AKS) Terraform               | N/A     | ✅     |
+| Competition API Spec                                               | v1.4.0  | ✅     |
+| CRS API Spec                                                       | v1.4.0  | ✅     |
+| Telemetry Spec                                                     | v1.0    | ✅     |
+| <[Challenge Generation script](generate-challenge-task/README.md)> | N/A     | ✅     |
+| End-to-end example webservice that implements specs                | N/A     | ✅     |
 
 ## Contributing
 
