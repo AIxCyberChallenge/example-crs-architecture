@@ -8,14 +8,14 @@ Version-controlled specifications for API Details are located in the `docs/api` 
 
 This repository is currently under development. Documentation and examples are being added as they are created.
 
-| Task                                                                                     | Status |
-| ---------------------------------------------------------------------------------------- | ------ |
-| Example CRS Azure Kubernetes Service (AKS) Terraform                                     | ✅     |
-| Competition API Spec v1.4.0                                                              | ✅     |
-| CRS API Spec v1.4.0                                                                      | ✅     |
-| Telemetry Spec v1.0                                                                      | ✅     |
+| Task                                                               | Status |
+| ------------------------------------------------------------------ | ------ |
+| Example CRS Azure Kubernetes Service (AKS) Terraform               | ✅     |
+| Competition API Spec v1.4.0                                        | ✅     |
+| CRS API Spec v1.4.0                                                | ✅     |
+| Telemetry Spec v1.0                                                | ✅     |
 | <[Challenge Generation script](generate-challenge-task/README.md)> | ✅     |
-| End-to-end example webservice that implements specs                                      | ✅     |
+| End-to-end example webservice that implements specs                | ✅     |
 
 ## Contributing
 
