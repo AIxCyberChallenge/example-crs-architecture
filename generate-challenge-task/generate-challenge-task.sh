@@ -67,6 +67,7 @@ parseargs() {
 
 getenvvars() {
     if [ -f ./.env ]; then
+        # shellcheck disable=SC1091
         source ./.env
     fi
     if [ $VERBOSE == 1 ]; then echo "Check for required environment variables"; fi
@@ -87,13 +88,14 @@ getenvvars() {
 }
 
 checkdeps() {
-    local required_version="2.58.0"
+    local required_version installed_version
+    required_version="2.58.0"
     if [ $VERBOSE == 1 ]; then echo "Checking dependencies..."; fi
     if ! (which az >/dev/null 2>&1); then
         echo "azure-cli not found and is a required dependency. Install azcli >= $required_version"
         exit 3
     fi
-    local installed_version=$(az version -o yaml | grep "azure-cli:" | sed 's/azure-cli: //')
+    installed_version=$(az version -o yaml | grep "azure-cli:" | sed 's/azure-cli: //')
     if [ "$(printf '%s\n' "$required_version" "$installed_version" | sort -V | head -n 1)" != $required_version ]; then
        echo "azcli version found: $installed_version is less than required: $required_version. Please ugrade."
        exit 3
@@ -121,7 +123,8 @@ repotar() {
     if [ -n "$2" ]; then
         local diff_ref=$2
     fi
-    local dirname=$(echo "$repo" | xargs -I {} basename {} .git )
+    local dirname
+    dirname=$(echo "$repo" | xargs -I {} basename {} .git )
     if [ $VERBOSE == 1 ]; then echo "Check out $repo"; fi
     mkdir -p "${REPO_WORK_DIR}"
     cd "${REPO_WORK_DIR}" || exit 5
@@ -160,7 +163,8 @@ repotar() {
             sed 's| '"$diff_dir/$dirname"'/| |g' >ref.diff
         set -e
         mkdir diff && mv -- ref.diff diff
-        tar czf "$TARS_DIR/diff-$(echo $diff_ref | sed 's|/|-|g').tar.gz" diff
+        # shellcheck disable=SC2001
+        tar czf "$TARS_DIR/diff-$(echo "$diff_ref" | sed 's|/|-|g').tar.gz" diff
     fi
     if [[ "$dirname" != *"oss-fuzz"* ]]; then
         cd "${REPO_WORK_DIR}/$dirname"
@@ -195,7 +199,7 @@ uploadtar() {
 
     #check tar type for pathing in Az storage
     if [[ "$tar" == *"oss-fuzz"* ]]; then
-        OSS_FUZZ_SHA256="$(sha256sum $tar | cut -d' ' -f1)"
+        OSS_FUZZ_SHA256="$(sha256sum "$tar" | cut -d' ' -f1)"
         OSS_FUZZ_TAR_NAME="$OSS_FUZZ_SHA256.tar.gz"
         if [ $VERBOSE == 1 ]; then echo "Uploading oss-fuzz tooling tar as $OSS_FUZZ_TAR_NAME"; fi
         az storage blob upload \
@@ -211,13 +215,13 @@ uploadtar() {
             --container-name "$CONTAINER_NAME" \
             --name "$OSS_FUZZ_TAR_NAME" \
             --permissions r \
-            --expiry $(date -u -d "4 hours" +"%Y-%m-%dT%H:%M:%SZ") \
+            --expiry "$(date -u -d "4 hours" +"%Y-%m-%dT%H:%M:%SZ")" \
             --output tsv \
             --connection-string "$CONNECTION_STRING" \
             --full-uri \
             )
     elif [[ "$tar" == *"diff"*"tar.gz"* ]]; then
-        DIFF_SHA256="$(sha256sum $tar | cut -d' ' -f1)"
+        DIFF_SHA256="$(sha256sum "$tar" | cut -d' ' -f1)"
         DIFF_TAR_NAME="$DIFF_SHA256.tar.gz"
         if [ $VERBOSE == 1 ]; then echo "Uploading diff tar as $DIFF_TAR_NAME"; fi
         az storage blob upload \
@@ -239,7 +243,7 @@ uploadtar() {
             --full-uri
             )
     else
-        REPO_SHA256="$(sha256sum $tar | cut -d' ' -f1)"
+        REPO_SHA256="$(sha256sum "$tar" | cut -d' ' -f1)"
         REPO_TAR_NAME="$REPO_SHA256.tar.gz"
         if [ $VERBOSE == 1 ]; then echo "Uploading target repo tar as $REPO_TAR_NAME"; fi
         az storage blob upload \
@@ -268,9 +272,12 @@ generatecurl(){
     local project_name=$2
     local target_sas_url=$3
     local oss_fuzz_sas_url=$4
-    local msgid="$(uuidgen)"
-    local taskid="$(uuidgen)"
+    local msgid
+    msgid="$(uuidgen)"
+    local taskid
+    taskid="$(uuidgen)"
     local currtime="$(($(date +%s) * 1000))"
+    # shellcheck disable=SC2004
     local duetime="$(($currtime + 14400000))"
     local harnesses_included=$HARNESSES_INCLUDED
     if [ -n "${5+x}" ]; then
