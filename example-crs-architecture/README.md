@@ -234,7 +234,7 @@ The deployment of the AKS cluster and its resources are performed by the `Makefi
 ## Deploy
 
 - Log into your Azure tenant with `az login --tenant aixcc.tech`
-- Clone this repository if needed: `git clone git@github.com:aixcc-finals/example-crs-architecture.git /<local_dir>`
+- Clone this repository if needed: `git clone git@github.com:AIxCyberChallenge/example-crs-architecture.git /<local_dir>`
 - Make required changes to `backend.tf`
 - Make any wanted changes to `main.tf`, `outputs.tf`, `providers.tf`, and `variables.tf`
 - Update `./env` with accurate values for each variable
