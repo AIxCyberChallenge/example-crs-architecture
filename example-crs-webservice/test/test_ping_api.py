@@ -24,7 +24,7 @@ class TestPingApi(unittest.TestCase):
 
     def setUp(self) -> None:
         configuration = Configuration(
-            host="http://localhost:1323",
+            host="http://localhost:30080",
             username="11111111-1111-1111-1111-111111111111",
             password="secret",
         )
