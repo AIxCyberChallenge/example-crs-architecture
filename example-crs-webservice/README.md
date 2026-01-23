@@ -37,19 +37,21 @@ Install the dependencies for the package using the following `pip` command:
 $ pip install -e .[tests]
 ```
 
-Instead of installing the dependencies on your local machine, you may also use the compose.yaml.
+Instead of installing the dependencies on your local machine, you may also use the compose.yaml. **Please note**: `competition-api` uses Podman, whereas the compose.yaml uses Docker. In order to use `docker compose` without having the
+Docker daemon conflict with Podman, you may have to point the `DOCKER_HOST` environment variable to a podman socket. Please see instructions at this link for details:
+https://podman-desktop.io/docs/migrating-from-docker/using-the-docker_host-environment-variable.
 
 #### Usage
 
 **Competition API Client**
 
-The `example-competition-api` provides a mock implementation of the competition API which will validate input formats and provide example outputs.
+The `competition-api` provides a implementation of the competition API which will validate input formats and provide example outputs.
 
-The complete instructions for running the `example-competition-server` are available under [example-competition-server/](https://github.com/AIxCyberChallenge/example-crs-architecture/tree/main/example-competition-server).
+The complete instructions for running the `competition-api` are available at https://github.com/AIxCyberChallenge/competition-api.
 
 All endpoints use HTTP Basic authentication.  Use `11111111-1111-1111-1111-111111111111` and `secret` as the credentials.
  
-A basic UI showing API interactions and formats is available at `http://localhost:1323/swagger/`.
+A basic UI showing API interactions and formats is available at `http://localhost:30080/swagger/`.
 
 Test the Competition API client example implemented in `test_ping_api.py`.
 
@@ -80,21 +82,9 @@ The web server will be accessible at `http://localhost:1324` by default.
 
 The [generate-challenge-task](https://github.com/AIxCyberChallenge/example-crs-architecture/tree/main/generate-challenge-task) script may be used to construct an HTTP request that the task server expects.
 
-Alternatively, the `example-competition-server` may be used to generate and send tasks to the task server.
+Alternatively, the `competition-api` may be used to generate and send tasks to the task server. `competition-api` is set up such that it receives events from Github via a webhook, and uses those events to generate
+tasks. Please see the above link for details
 
-This can be performed by sending a web request to the `example-competition-server` which in turn will then send a request over the CRS API to the task server.
-
-The example curl command below will stage a full scan task to the `example-competition-server` which will then send the task over to the task server.
-
-```bash
-curl -X 'POST' 'http://localhost:1323/webhook/trigger_task' -H 'Content-Type: application/json' -d '{
-    "challenge_repo_url": "git@github.com:<challenge repo here>.git",
-    "challenge_repo_head_ref": "<head ref hash here>",
-    "fuzz_tooling_url": "https://github.com/aixcc-finals/oss-fuzz-aixcc.git",
-    "fuzz_tooling_ref": "<fuzz-tooling ref hash here>",
-    "fuzz_tooling_project_name": "<project name>",
-    "duration": 3600
-}'
 ```
 
 #### Reproducing this repository
@@ -127,9 +117,9 @@ $ sed -i -e 's/from openapi_client./from <new-package-path>.openapi_client./' *.
 $ sed -i -e 's/import openapi_client./import <new-package-path>./' *.py
 ```
 
-The HTTP client code can be tested against the provided `example-competition-api` available as a Docker container at `ghcr.io/aixcc-finals/example-crs-architecture/competition-test-api:v1.4-rc1`. This container provides a mock Competition API on port 1323.
+The HTTP client code can be tested against `competition-api` available at https://github.com/AIxCyberChallenge/competition-api/tree/main. This container provides a mock Competition API on port 30080.
 
-Example code for how to interact with the `example-competition-api` has been added under `test/test_ping_api.py`.
+Example code for how to interact with the `competition-api` has been added under `test/test_ping_api.py`.
 
 **CRS API Web Server**
 
